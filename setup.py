@@ -7,6 +7,8 @@ setup(name='plone.app.contentmenu',
       version=version,
       description="Plone's content menu implementation",
       long_description="""\
+plone.app.contentmenu contains the logic that powers Plone's content menu
+(the green one with the drop-down menus).
 """,
       classifiers=[], # Get strings from http://www.python.org/pypi?%3Aaction=list_classifiers
       keywords='plone contentmenu menu',
