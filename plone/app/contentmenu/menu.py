@@ -1,10 +1,11 @@
 from zope.interface import implements
-from zope.component import getMultiAdapter
+from zope.component import getMultiAdapter, queryUtility
 
 from zope.app.publisher.browser.menu import BrowserMenu
 from zope.app.publisher.browser.menu import BrowserMenuItem
 from zope.app.publisher.browser.menu import BrowserSubMenuItem
 
+from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize.instance import memoize
 
 from Products.CMFCore.interfaces import IActionsTool
@@ -508,10 +509,11 @@ class FactoriesMenu(BrowserMenu):
             if constraints.canSetConstrainTypes():
                 haveSettings = True
 
+        idnormalizer = queryUtility(IIDNormalizer)
         for t in allowedTypes:
             typeId = t.getId()
             if typeId not in exclude and (include is None or typeId in include):
-                cssClass = 'contenttype-%s' % utils.normalizeString(typeId, context=context)
+                cssClass = 'contenttype-%s' % idnormalizer.normalize(typeId)
                 url = '%s/createObject?type_name=%s' % (addContext.absolute_url(), typeId,)
                 icon = t.getIcon()
                 if icon:
