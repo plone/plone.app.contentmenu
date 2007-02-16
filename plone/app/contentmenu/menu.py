@@ -1,9 +1,14 @@
 from zope.interface import implements
-from zope.component import getMultiAdapter, queryUtility
+from zope.component import getMultiAdapter, queryMultiAdapter, getAdapters, queryUtility
+
+from zope.component.interfaces import IFactory
+from zope.app.container.constraints import checkFactory
+from zope.app.publisher.interfaces.browser import AddMenu
 
 from zope.app.publisher.browser.menu import BrowserMenu
 from zope.app.publisher.browser.menu import BrowserMenuItem
 from zope.app.publisher.browser.menu import BrowserSubMenuItem
+from zope.app.publisher.browser.menu import getMenu
 
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize.instance import memoize
@@ -418,11 +423,18 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
     
     @property
     def action(self):
+        addContext = self._addContext()
+        baseUrl = addContext.absolute_url()
         if self._hideChildren():
-            typeName = self._itemsToAdd()[0].getId()
-            return self._addContext().absolute_url() + '/createObject?type_name=%s' % (typeName,)
+            fti = self._itemsToAdd()[0]
+            addingview = queryMultiAdapter((addContext, self.request), name='+')
+            if addingview is not None:
+                addview = queryMultiAdapter((addingview, self.request), name=fti.factory)
+                if addview is not None:
+                    return '%s/+/%s' % (baseUrl, fti.factory,)
+            return '%s/createObject?type_name=%s' % (baseUrl, fti.factory)
         else:
-            return self._addContext().absolute_url() + '/folder_factories'
+            return '%s/folder_factories' % (baseUrl,)
     
     @property
     def icon(self):
@@ -488,6 +500,7 @@ class FactoriesMenu(BrowserMenu):
         
         portal_url = portal_state.portal_url()
         addContext = context_state.folder()
+        baseUrl = addContext.absolute_url()
         
         allowedTypes = addContext.allowedContentTypes()
         
@@ -509,12 +522,37 @@ class FactoriesMenu(BrowserMenu):
             if constraints.canSetConstrainTypes():
                 haveSettings = True
 
+        # If there is an add view available, use that instead of createObject
+        # Note: that this depends on the convention that the add view and the
+        # factory have the same name, and it still only applies where there
+        # is an FTI in portal_types to begin with. Alas, FTI-less content
+        # is pretty much a no-go in CMF.
+        
+        addviews = {}
+        addingview = queryMultiAdapter((addContext, request), name='+')
+        if addingview is not None:
+            for name, item in getAdapters((addingview, request), AddMenu):
+                if item.extra:
+                    factory_name = item.extra.get('factory')
+                    if factory_name:
+                        factory = queryUtility(IFactory, factory_name)
+                        if factory and checkFactory(addContext, None, factory):
+                            addviews[factory_name] = '%s/+/%s' % (baseUrl, item.action,)
+        
+        # XXX: Would be easier, but the add menu is not actually registered,
+        # and this would depend on zope 3 security checks :-(
+        # if addingview is not None:
+        #     for item in addingview.addingInfo():
+        #         factory = item['extra']['factory']
+        #         addviews[factory] = '%s/+/%s' % (addContext.absolute_url(), item['action'],)
+
         idnormalizer = queryUtility(IIDNormalizer)
         for t in allowedTypes:
             typeId = t.getId()
             if typeId not in exclude and (include is None or typeId in include):
                 cssClass = 'contenttype-%s' % idnormalizer.normalize(typeId)
-                url = '%s/createObject?type_name=%s' % (addContext.absolute_url(), typeId,)
+                factory = t.factory
+                url = addviews.get(factory, '%s/createObject?type_name=%s' % (baseUrl, typeId,))
                 icon = t.getIcon()
                 if icon:
                     icon = '%s/%s' % (portal_url, icon)
