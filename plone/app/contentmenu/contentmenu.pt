@@ -31,6 +31,7 @@
                       i18n:translate="">
                     State title
                 </span>
+                <span class="arrowDownAlternative">&#9660;</span>
             </a>
           </dt>
           <dd class="actionMenuContent"
@@ -52,7 +53,8 @@
                                              alt subMenuItem/description"
                              i18n:attributes="alt;"/>
                         <span tal:content="subMenuItem/title"
-                              i18n:translate="">
+                              i18n:translate=""
+                              class="subMenuTitle">
                             Title
                         </span>
                     </a>
