@@ -432,7 +432,7 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
                 addview = queryMultiAdapter((addingview, self.request), name=fti.factory)
                 if addview is not None:
                     return '%s/+/%s' % (baseUrl, fti.factory,)
-            return '%s/createObject?type_name=%s' % (baseUrl, fti.factory)
+            return '%s/createObject?type_name=%s' % (baseUrl, fti.getId())
         else:
             return '%s/folder_factories' % (baseUrl,)
     
