@@ -31,7 +31,8 @@
                       i18n:translate="">
                     State title
                 </span>
-                <span class="arrowDownAlternative">&#9660;</span>
+                <span class="arrowDownAlternative" 
+                      tal:condition="not:menuItem/extra/hideChildren | nothing">&#9660;</span>
             </a>
           </dt>
           <dd class="actionMenuContent"
