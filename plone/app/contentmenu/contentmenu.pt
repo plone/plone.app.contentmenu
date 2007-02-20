@@ -8,7 +8,9 @@
         <dl class="actionMenu"
             tal:attributes="id menuItem/extra/id"
             tal:omit-tag="menuItem/extra/hideChildren | nothing">
-          <dt class="actionMenuHeader"
+          <dt tal:define="state_class menuItem/extra/class | nothing;
+						  state_class python:state_class and state_class or ''"
+			  tal:attributes="class string:actionMenuHeader label-${state_class}"
               tal:omit-tag="menuItem/extra/hideChildren | nothing">
             <a href="#"
                tal:omit-tag="not:menuItem/action"
