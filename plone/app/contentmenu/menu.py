@@ -468,7 +468,7 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
                 
     @memoize
     def _addingToParent(self):
-        return (self._addContext().absolute_url() == self.context.absolute_url())
+        return (self._addContext().absolute_url() != self.context.absolute_url())
         
     @memoize
     def _showConstrainOptions(self):
