@@ -394,9 +394,9 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
         showConstrainOptions = self._showConstrainOptions()
         if showConstrainOptions or len(itemsToAdd) > 1:
             if addingToParent:
-                return _(u'label_add_new_item_in_folder', default=u'Add to folder')
+                return _(u'label_add_new_item_in_folder', default=u'Add to folder\u2026')
             else:
-                return _(u'label_add_new_item', default=u'Add item')
+                return _(u'label_add_new_item', default=u'Add new\u2026')
         elif len(itemsToAdd) == 1:
             itemTitle = itemsToAdd[0].Title()
             if addingToParent:
@@ -404,7 +404,7 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
             else:
                 return _(u'label_add_type', default='Add ${type}', mapping={'type' : itemTitle})
         else:
-            return _(u'label_add_new_item', default=u'Add item')
+            return _(u'label_add_new_item', default=u'Add new\u2026')
     
     @property
     def description(self):
@@ -576,7 +576,7 @@ class FactoriesMenu(BrowserMenu):
 
         if haveMore:
             url = '%s/folder_factories' % (addContext.absolute_url(),)
-            results.append({ 'title'        : _(u'folder_add_more', default=u'More...'),
+            results.append({ 'title'        : _(u'folder_add_more', default=u'More\u2026'),
                              'description'  : _(u'Show all available content types'),
                              'action'       : url,
                              'selected'     : False,
@@ -587,7 +587,7 @@ class FactoriesMenu(BrowserMenu):
 
         if haveSettings:
             url = '%s/folder_constraintypes_form' % (addContext.absolute_url(),)
-            results.append({'title'        : _(u'folder_add_settings', default=u'Restrict...'),
+            results.append({'title'        : _(u'folder_add_settings', default=u'Restrictions\u2026'),
                             'description'  : _(u'title_configure_addable_content_types', default=u'Configure which content types can be added here'),
                             'action'       : url,
                             'selected'     : False,
