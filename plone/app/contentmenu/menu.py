@@ -1,5 +1,6 @@
 from zope.interface import implements
-from zope.component import getMultiAdapter, queryMultiAdapter, getAdapters, queryUtility
+from zope.component import getMultiAdapter, queryMultiAdapter, getAdapters
+from zope.component import getUtility, queryUtility
 
 from zope.component.interfaces import IFactory
 from zope.i18n import translate
@@ -20,12 +21,11 @@ from Products.CMFCore.interfaces import IActionInfo
 from Products.CMFCore.interfaces import IWorkflowTool
 from Products.CMFCore.interfaces import IMembershipTool
 
-from Products.CMFCore.utils import getToolByName
-
 from Products.CMFDynamicViewFTI.interface import ISelectableBrowserDefault
 
 from Products.CMFPlone.browser.interfaces import IPlone
 
+from Products.CMFPlone.interfaces import IPloneTool
 from Products.CMFPlone.interfaces.structure import INonStructuralFolder
 from Products.CMFPlone.interfaces.constrains import IConstrainTypes
 from Products.CMFPlone.interfaces.constrains import ISelectableConstrainTypes
@@ -89,7 +89,7 @@ class ActionsMenu(BrowserMenu):
         if editActions is None:
             return []
         
-        plone_utils = getToolByName(context, 'plone_utils')
+        plone_utils = getUtility(IPloneTool)
         portal_url = portal_state.portal_url()
         
         for a in editActions:
