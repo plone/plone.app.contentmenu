@@ -2,6 +2,7 @@ from zope.interface import implements
 from zope.component import getMultiAdapter, queryMultiAdapter, getAdapters, queryUtility
 
 from zope.component.interfaces import IFactory
+from zope.i18n import translate
 from zope.app.container.constraints import checkFactory
 from zope.app.publisher.interfaces.browser import AddMenu
 
@@ -567,10 +568,7 @@ class FactoriesMenu(BrowserMenu):
                                 })
 
         # Sort the addable content types based on their translated title
-        # BBB addContext.translate should be replaced by a translate call of
-        # "from zope.i18n import translate", once we use only the Zope3
-        # translation machinery
-        results = [(addContext.translate(ctype['title']), ctype) for ctype in results]
+        results = [(translate(ctype['title'], context=addContext), ctype) for ctype in results]
         results.sort()
         results = [ctype[-1] for ctype in results]
 
