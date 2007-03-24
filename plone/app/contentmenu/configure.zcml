@@ -85,7 +85,11 @@
            provides=".interfaces.IContentMenuItem" />
            
   <!-- Content provider -->
-           
+  
+  <adapter factory=".view.BlankContentMenuProvider"
+           name="plone.contentmenu"
+           provides="zope.contentprovider.interfaces.IContentProvider"/>
+                    
   <adapter factory=".view.ContentMenuProvider"
            name="plone.contentmenu"
            provides="zope.contentprovider.interfaces.IContentProvider"/>

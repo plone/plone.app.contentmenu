@@ -66,7 +66,6 @@ class TestDisplayMenu(ptc.PloneTestCase):
         actions = self.menu.getMenuItems(self.folder.f1, self.request)
         self.assertEqual(len(actions), 0)
         
-
     def testDefaultPageIncludesParentOnlyWhenItemHasSingleView(self):
         self.folder.invokeFactory('Document', 'doc1')
         self.folder.setDefaultPage('doc1')
