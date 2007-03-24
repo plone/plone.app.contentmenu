@@ -554,19 +554,20 @@ class FactoriesMenu(BrowserMenu):
         for t in allowedTypes:
             typeId = t.getId()
             if typeId not in exclude and (include is None or typeId in include):
-                cssClass = 'contenttype-%s' % idnormalizer.normalize(typeId)
+                cssId = idnormalizer.normalize(typeId)
+                cssClass = 'contenttype-%s' % cssId
                 factory = t.factory
                 url = addviews.get(factory, '%s/createObject?type_name=%s' % (baseUrl, typeId,))
                 icon = t.getIcon()
                 if icon:
                     icon = '%s/%s' % (portal_url, icon)
-                 
+
                 results.append({ 'title'        : t.Title(),
                                  'description'  : t.Description(),
                                  'action'       : url,
                                  'selected'     : False,
                                  'icon'         : icon,
-                                 'extra'        : {'id' : typeId, 'separator' : None, 'class' : cssClass},
+                                 'extra'        : {'id' : cssId, 'separator' : None, 'class' : cssClass},
                                  'submenu'      : None,
                                 })
 

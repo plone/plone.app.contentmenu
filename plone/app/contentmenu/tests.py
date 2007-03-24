@@ -181,13 +181,13 @@ class TestFactoriesMenu(ptc.PloneTestCase):
         
     def testMenuIncludesFactories(self):
         actions = self.menu.getMenuItems(self.folder, self.request)
-        self.failUnless('Image' in [a['extra']['id'] for a in actions])
+        self.failUnless('image' in [a['extra']['id'] for a in actions])
         
     def testMenuIncludesFactoriesOnNonFolderishContext(self):
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
         img = None
         for a in actions:
-            if a['extra']['id'] == 'Image':
+            if a['extra']['id'] == 'image':
                 img = a
                 break
         self.failIf(img is None)
@@ -208,7 +208,7 @@ class TestFactoriesMenu(ptc.PloneTestCase):
         constraints.setImmediatelyAddableTypes(('Document',))
         actions = self.menu.getMenuItems(self.folder, self.request)
         self.assertEqual(len(actions), 2)
-        self.assertEqual(actions[0]['extra']['id'], 'Document')
+        self.assertEqual(actions[0]['extra']['id'], 'document')
         self.assertEqual(actions[1]['extra']['id'], '_settings')
         
     def testSettingsIncluded(self):
@@ -226,8 +226,8 @@ class TestFactoriesMenu(ptc.PloneTestCase):
         constraints.setLocallyAllowedTypes(('Document', 'Image',))
         constraints.setImmediatelyAddableTypes(('Document',))
         actions = self.menu.getMenuItems(self.folder, self.request)
-        self.failIf('Image' in [a['extra']['id'] for a in actions])
-        self.failUnless('Document' in [a['extra']['id'] for a in actions])
+        self.failIf('image' in [a['extra']['id'] for a in actions])
+        self.failUnless('document' in [a['extra']['id'] for a in actions])
         self.failUnless('_more' in [a['extra']['id'] for a in actions])
         self.failUnless('_settings' in [a['extra']['id'] for a in actions])
 
@@ -238,7 +238,7 @@ class TestFactoriesMenu(ptc.PloneTestCase):
         constraints.setImmediatelyAddableTypes(('Document',))
         actions = self.menu.getMenuItems(self.folder, self.request)
         self.assertEqual(len(actions), 2)
-        self.assertEqual(actions[0]['extra']['id'], 'Document')
+        self.assertEqual(actions[0]['extra']['id'], 'document')
         self.assertEqual(actions[1]['extra']['id'], '_settings')
         
     def testNonStructualFolderShowsParent(self):
@@ -256,7 +256,7 @@ class TestFactoriesMenu(ptc.PloneTestCase):
         constraints.setLocallyAllowedTypes(('Document',))
         constraints.setImmediatelyAddableTypes(('Document',))
         actions = self.menu.getMenuItems(self.folder.folder1, self.request)
-        self.failUnless('Event' in actions[0]['extra']['id'])
+        self.failUnless('event' in actions[0]['extra']['id'])
 
 
 class TestWorkflowMenu(ptc.PloneTestCase):

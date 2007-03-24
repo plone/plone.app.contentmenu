@@ -2,7 +2,14 @@ Changelog for plone.app.contentmenu
 
     (name of developer listed in brackets)
 
-plone.app.contentmenu - 0.1 Unreleased
+plone.app.contentmenu - Unreleased
+
+    - Normalized typeIds on the factories menu, as these are used as CSS ids
+      and would otherwise fail W3C validation for types with a space in the
+      name. This closes http://dev.plone.org/plone/ticket/6259.
+      [hannosch]
+
+plone.app.contentmenu - 1.0b1 Released March 5, 2007
 
     - Initial package structure.
       [zopeskel]
