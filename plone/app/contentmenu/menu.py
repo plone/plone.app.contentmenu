@@ -139,7 +139,10 @@ class DisplaySubMenuItem(BrowserSubMenuItem):
         if self.disabled():
             return ''
         else:
-            return self.context.absolute_url() + '/select_default_view'
+            if self.context_state.is_default_page():
+                return self.context_state.parent().absolute_url() + '/select_default_view'
+            else:
+                return self.context.absolute_url() + '/select_default_view'
     
     @memoize
     def available(self):
