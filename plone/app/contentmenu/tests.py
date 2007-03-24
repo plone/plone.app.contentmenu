@@ -19,6 +19,7 @@ from plone.app.contentmenu.interfaces import IWorkflowMenu
 from Products.CMFPlone.utils import _createObjectByType
 from Products.CMFPlone.tests import dummy
 
+
 class TestActionsMenu(ptc.PloneTestCase):
 
     def afterSetUp(self):
@@ -164,6 +165,7 @@ class TestDisplayMenu(ptc.PloneTestCase):
         self.failIf('_folderHeader' in ids)
         self.failIf('_contextHeader' in ids)
 
+
 class TestFactoriesMenu(ptc.PloneTestCase):
     
     def afterSetUp(self):
@@ -240,6 +242,13 @@ class TestFactoriesMenu(ptc.PloneTestCase):
         self.assertEqual(actions[1]['extra']['id'], '_settings')
         
     def testNonStructualFolderShowsParent(self):
+        # Cope with an unfortunate side-effect of running all plone.* tests at
+        # once. Some tests setup the Archetypes examples types and don't use
+        # their own layer for it :(
+        for t in ('ATBIFolder', 'ComplexType', 'DDocument'):
+            if t in self.portal.portal_types.keys():
+                self.portal.portal_types[t].global_allow = False
+
         self.folder.invokeFactory('Folder', 'folder1')
         directlyProvides(self.folder.folder1, INonStructuralFolder)
         constraints = ISelectableConstrainTypes(self.folder.folder1)
@@ -248,7 +257,8 @@ class TestFactoriesMenu(ptc.PloneTestCase):
         constraints.setImmediatelyAddableTypes(('Document',))
         actions = self.menu.getMenuItems(self.folder.folder1, self.request)
         self.failUnless('Event' in actions[0]['extra']['id'])
-        
+
+
 class TestWorkflowMenu(ptc.PloneTestCase):
     
     def afterSetUp(self):
@@ -281,6 +291,7 @@ class TestWorkflowMenu(ptc.PloneTestCase):
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
         url = self.folder.doc1.absolute_url() + '/placeful_workflow_configuration'
         self.failUnless(url in [a['action'] for a in actions])
+
 
 class TestContentMenu(ptc.PloneTestCase):
 
@@ -418,6 +429,7 @@ class TestContentMenu(ptc.PloneTestCase):
         self.folder.invokeFactory('Document', 'doc1')
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
         self.failIf('plone.contentmenu.workflow.menu' in [a['extra']['id'] for a in actions])
+
 
 def test_suite():
     from unittest import TestSuite, makeSuite
