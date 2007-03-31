@@ -43,12 +43,15 @@
                 <tal:block repeat="subMenuItem menuItem/submenu">
                   <li tal:attributes="class subMenuItem/extra/separator">
                     <a href="#"
-                       tal:omit-tag="not:subMenuItem/action"
+                       tal:condition="subMenuItem/action"
                        tal:attributes="href subMenuItem/action;
                                        title subMenuItem/description;
                                        id subMenuItem/extra/id | nothing;
                                        class subMenuItem/extra/class | nothing"
                        i18n:attributes="title">
+                        <span tal:omit-tag=""
+                          tal:condition="subMenuItem/selected"
+                          >&bull;</span>
                         <img width="16"
                              height="16"
                              tal:condition="subMenuItem/icon"
@@ -61,6 +64,24 @@
                             Title
                         </span>
                     </a>
+                    <div tal:condition="not:subMenuItem/action"
+                         tal:attributes="id subMenuItem/extra/id | nothing;
+                                         class subMenuItem/extra/class | nothing">
+                        <span tal:omit-tag=""
+                          tal:condition="subMenuItem/selected"
+                          >&bull;</span>
+                        <img width="16"
+                             height="16"
+                             tal:condition="subMenuItem/icon"
+                             tal:attributes="src subMenuItem/icon;
+                                             alt subMenuItem/description"
+                             i18n:attributes="alt;"/>
+                        <span tal:content="subMenuItem/title"
+                              i18n:translate=""
+                              class="subMenuTitle">
+                            Title
+                        </span>
+                    </div>
                   </li>
                 </tal:block>
             </ul>
