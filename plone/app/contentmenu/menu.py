@@ -1,3 +1,5 @@
+from urllib import quote_plus
+
 from zope.interface import implements
 from zope.component import getMultiAdapter, queryMultiAdapter, getAdapters
 from zope.component import getUtility, queryUtility
@@ -436,7 +438,7 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
                 addview = queryMultiAdapter((addingview, self.request), name=fti.factory)
                 if addview is not None:
                     return '%s/+/%s' % (baseUrl, fti.factory,)
-            return '%s/createObject?type_name=%s' % (baseUrl, fti.getId())
+            return '%s/createObject?type_name=%s' % (baseUrl, quote_plus(fti.getId()),)
         else:
             return '%s/folder_factories' % (baseUrl,)
     
@@ -557,7 +559,7 @@ class FactoriesMenu(BrowserMenu):
                 cssId = idnormalizer.normalize(typeId)
                 cssClass = 'contenttype-%s' % cssId
                 factory = t.factory
-                url = addviews.get(factory, '%s/createObject?type_name=%s' % (baseUrl, typeId,))
+                url = addviews.get(factory, '%s/createObject?type_name=%s' % (baseUrl, quote_plus(typeId),))
                 icon = t.getIcon()
                 if icon:
                     icon = '%s/%s' % (portal_url, icon)

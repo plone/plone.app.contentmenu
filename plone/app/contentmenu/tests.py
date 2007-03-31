@@ -183,6 +183,10 @@ class TestFactoriesMenu(ptc.PloneTestCase):
         actions = self.menu.getMenuItems(self.folder, self.request)
         self.failUnless('image' in [a['extra']['id'] for a in actions])
         
+    def testTypeNameIsURLQuoted(self):
+        actions = self.menu.getMenuItems(self.folder, self.request)
+        self.failUnless(self.folder.absolute_url() + '/createObject?type_name=News+Item' in [a['action'] for a in actions])
+        
     def testMenuIncludesFactoriesOnNonFolderishContext(self):
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
         img = None
