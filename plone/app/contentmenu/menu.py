@@ -10,22 +10,17 @@ from zope.app.container.constraints import checkFactory
 from zope.app.publisher.interfaces.browser import AddMenu
 
 from zope.app.publisher.browser.menu import BrowserMenu
-from zope.app.publisher.browser.menu import BrowserMenuItem
 from zope.app.publisher.browser.menu import BrowserSubMenuItem
-from zope.app.publisher.browser.menu import getMenu
 
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize.instance import memoize
 
-from Products.CMFCore.interfaces import IActionsTool
-from Products.CMFCore.interfaces import IActionInfo
+from Acquisition import aq_inner
 
-from Products.CMFCore.interfaces import IWorkflowTool
-from Products.CMFCore.interfaces import IMembershipTool
+from Products.CMFCore.interfaces import IActionsTool
+from Products.CMFCore.interfaces import IConfigurableWorkflowTool
 
 from Products.CMFDynamicViewFTI.interface import ISelectableBrowserDefault
-
-from Products.CMFPlone.browser.interfaces import IPlone
 
 from Products.CMFPlone.interfaces import IPloneTool
 from Products.CMFPlone.interfaces.structure import INonStructuralFolder
@@ -68,8 +63,9 @@ class ActionsSubMenuItem(BrowserSubMenuItem):
     
     @memoize
     def available(self):
-        editActions = self.context_state.actions().get('object_buttons', None)        
-        return (editActions is not None and len(editActions) >= 0)
+        actions_tool = getUtility(IActionsTool)
+        editActions = actions_tool.listActionInfos(object=aq_inner(self.context), categories=('object_buttons', ), max=1)
+        return len(editActions) > 0
 
     def selected(self):
         return False
@@ -81,27 +77,25 @@ class ActionsMenu(BrowserMenu):
     def getMenuItems(self, context, request):
         """Return menu item entries in a TAL-friendly form."""
         results = []
-                
+
         portal_state = getMultiAdapter((context, request), name='plone_portal_state')
-        context_state = getMultiAdapter((context, request), name='plone_context_state')
-                
-        actions = context_state.actions()
-        editActions = actions.get('object_buttons', None)
-        
-        if editActions is None:
+
+        actions_tool = getUtility(IActionsTool)
+        editActions = actions_tool.listActionInfos(object=aq_inner(context), categories=('object_buttons', ))
+
+        if not editActions:
             return []
-        
+
         plone_utils = getUtility(IPloneTool)
         portal_url = portal_state.portal_url()
         
-        for a in editActions:
-            action = IActionInfo(a)
+        for action in editActions:
             if action['allowed']:
                 cssClass = 'actionicon-object_buttons-%s' % action['id']
                 icon = plone_utils.getIconFor('object_buttons', action['id'], None)
                 if icon:
                     icon = '%s/%s' % (portal_url, icon)
-                    
+
                 results.append({ 'title'        : action['title'],
                                  'description'  : '',
                                  'action'       : action['url'],
@@ -652,8 +646,9 @@ class WorkflowSubMenuItem(BrowserSubMenuItem):
 
     @memoize
     def _transitions(self):
-        return self.context_state.actions().get('workflow', [])
-        
+        wf_tool = getUtility(IConfigurableWorkflowTool)
+        return wf_tool.listActionInfos(object=aq_inner(self.context), max=1)
+
     @memoize
     def _currentStateTitle(self):
         state = self.context_state.workflow_state()
@@ -683,23 +678,22 @@ class WorkflowMenu(BrowserMenu):
     def getMenuItems(self, context, request):
         """Return menu item entries in a TAL-friendly form."""
         results = []
-        
-        context_state = getMultiAdapter((context, request), name='plone_context_state')
-        
-        workflowActions = context_state.actions().get('workflow', None)
 
-        if workflowActions is None:
+        wf_tool = getUtility(IConfigurableWorkflowTool)
+        workflowActions = wf_tool.listActionInfos(object=aq_inner(context))
+
+        if not workflowActions:
             return []
 
-        for a in workflowActions:
-            action = IActionInfo(a)
+        for action in workflowActions:
             actionUrl = action['url']
-            
+
             for bogus in self.BOGUS_WORKFLOW_ACTIONS:
                 if actionUrl.endswith(bogus):
                     if getattr(context, bogus, None) is None:
                         actionUrl = '%s/content_status_modify?workflow_action=%s' % (context.absolute_url(), action['id'],)
-            
+                    break
+
             if action['allowed']:
                 results.append({ 'title'        : action['title'],
                                  'description'  : '',
