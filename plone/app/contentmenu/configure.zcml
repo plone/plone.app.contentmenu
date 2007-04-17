@@ -113,5 +113,16 @@
       name="plone.contentmenu"
       provides="zope.contentprovider.interfaces.IContentProvider"
       />
-           
+      
+  <!-- The displayviews menu used to register user-visible titles -->
+    
+  <browser:menu
+      id="plone.contentmenu.displayviews"
+      title="Zope3 Views used as selectable content views"
+      description="Menu listing Zope3 views registered for use as dynamic views
+                   on CMF Content. Currently the only purpose of this menu is
+                   the registration of user-visible titles for these views"
+      class=".displayviewsmenu.DisplayViewsMenu"
+      />
+
 </configure>

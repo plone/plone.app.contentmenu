@@ -1,3 +1,5 @@
+import unittest
+
 from Products.PloneTestCase import PloneTestCase as ptc
 ptc.setupPloneSite()
 
@@ -5,6 +7,7 @@ from zope.interface import directlyProvides
 from zope.component import getUtility
 
 from zope.app.publisher.interfaces.browser import IBrowserMenu
+from zope.app.testing.placelesssetup import PlacelessSetup
 
 from Products.CMFCore.Expression import Expression
 from Products.CMFPlone.interfaces import IBrowserDefault
@@ -435,6 +438,50 @@ class TestContentMenu(ptc.PloneTestCase):
         self.failIf('plone.contentmenu.workflow.menu' in [a['extra']['id'] for a in actions])
 
 
+class TestDisplayViewsMenu(PlacelessSetup, unittest.TestCase):
+    def setUp(self):
+        from Products.Five import zcml
+        import Products.Five
+        import plone.app.contentmenu
+        zcml.load_config("meta.zcml", Products.Five)
+        zcml.load_config('configure.zcml', plone.app.contentmenu)
+        zcml.load_config('tests.zcml', plone.app.contentmenu)
+        self.menu = getUtility(IBrowserMenu, 'plone.contentmenu.displayviews')
+        
+    def _getMenuItemByAction(self, action):
+        from zope.publisher.browser import TestRequest
+        context = dummy.Dummy()
+        request = TestRequest()
+        return self.menu.getMenuItemByAction(context, request, action)
+        
+    def testInterface(self):
+        """A DisplayViewsMenu implements an extended interface""" 
+        from interfaces import IDisplayViewsMenu
+        self.assertTrue(IDisplayViewsMenu.providedBy(self.menu))
+        
+    def testSimpleAction(self):
+        """Retrieve a registered IBrowserMenuItem"""
+        item = self._getMenuItemByAction('foo.html')
+        self.assertFalse(item is None)
+        self.assertEqual(item.title, 'Test Menu Item')
+        
+    def testViewAction(self):
+        """Retrieve a registered IBrowserMenuItem"""
+        item = self._getMenuItemByAction('bar.html')
+        self.assertFalse(item is None)
+        self.assertEqual(item.title, 'Another Test Menu Item')
+        
+        item = self._getMenuItemByAction('@@bar.html')
+        self.assertEqual(item.title, 'Another Test Menu Item')
+        item = self._getMenuItemByAction('++view++bar.html')
+        self.assertEqual(item.title, 'Another Test Menu Item')
+        
+    def testNonExisting(self):
+        """Attempt to retrieve a non-registered IBrowserMenuItem"""
+        item = self._getMenuItemByAction('nonesuch.html')
+        self.assertTrue(item is None)
+
+
 def test_suite():
     from unittest import TestSuite, makeSuite
     suite = TestSuite()
@@ -443,6 +490,7 @@ def test_suite():
     suite.addTest(makeSuite(TestFactoriesMenu))
     suite.addTest(makeSuite(TestWorkflowMenu))
     suite.addTest(makeSuite(TestContentMenu))
+    suite.addTest(makeSuite(TestDisplayViewsMenu))
     return suite
 
 if __name__ == '__main__':

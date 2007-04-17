@@ -99,3 +99,14 @@ class IWorkflowMenu(IBrowserMenu):
     This gets its menu items from the list of possible transitions in 
     portal_workflow.
     """
+    
+class IDisplayViewsMenu(IBrowserMenu):
+    """A menu listing Zope3 views registered as content views
+
+    Currently used only to register user-visible titles.
+    
+    """
+    
+    def getMenuItemByAction(object, request, action):
+        """Return the first IBrowserMenuItem for the given action""" 
+
