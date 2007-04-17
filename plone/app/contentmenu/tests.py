@@ -26,7 +26,7 @@ from Products.CMFPlone.tests import dummy
 class TestActionsMenu(ptc.PloneTestCase):
 
     def afterSetUp(self):
-        self.menu = getUtility(IBrowserMenu, name='plone.contentmenu.actions.menu', context=self.folder)
+        self.menu = getUtility(IBrowserMenu, name='plone_contentmenu_actions', context=self.folder)
         self.request = self.app.REQUEST
 
     def testActionsMenuImplementsIBrowserMenu(self):
@@ -42,7 +42,7 @@ class TestActionsMenu(ptc.PloneTestCase):
 class TestDisplayMenu(ptc.PloneTestCase):
     
     def afterSetUp(self):
-        self.menu = getUtility(IBrowserMenu, name='plone.contentmenu.display.menu', context=self.folder)
+        self.menu = getUtility(IBrowserMenu, name='plone_contentmenu_display', context=self.folder)
         self.request = self.app.REQUEST
 
     def testActionsMenuImplementsIBrowserMenu(self):
@@ -173,7 +173,7 @@ class TestFactoriesMenu(ptc.PloneTestCase):
     
     def afterSetUp(self):
         self.folder.invokeFactory('Document', 'doc1')
-        self.menu = getUtility(IBrowserMenu, name='plone.contentmenu.factories.menu', context=self.folder)
+        self.menu = getUtility(IBrowserMenu, name='plone_contentmenu_factory', context=self.folder)
         self.request = self.app.REQUEST
 
     def testMenuImplementsIBrowserMenu(self):
@@ -270,7 +270,7 @@ class TestWorkflowMenu(ptc.PloneTestCase):
     
     def afterSetUp(self):
         self.folder.invokeFactory('Document', 'doc1')
-        self.menu = getUtility(IBrowserMenu, name='plone.contentmenu.workflow.menu', context=self.folder)
+        self.menu = getUtility(IBrowserMenu, name='plone_contentmenu_workflow', context=self.folder)
         self.request = self.app.REQUEST
 
     def testMenuImplementsIBrowserMenu(self):
@@ -303,7 +303,7 @@ class TestWorkflowMenu(ptc.PloneTestCase):
 class TestContentMenu(ptc.PloneTestCase):
 
     def afterSetUp(self):
-        self.menu = getUtility(IBrowserMenu, name='plone.contentmenu', context=self.folder)
+        self.menu = getUtility(IBrowserMenu, name='plone_contentmenu', context=self.folder)
         self.request = self.app.REQUEST
         
     # Actions sub-menu
@@ -435,7 +435,7 @@ class TestContentMenu(ptc.PloneTestCase):
         self.portal.portal_workflow.setChainForPortalTypes(('Document',), ())
         self.folder.invokeFactory('Document', 'doc1')
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
-        self.failIf('plone.contentmenu.workflow.menu' in [a['extra']['id'] for a in actions])
+        self.failIf('plone_contentmenu_workflow' in [a['extra']['id'] for a in actions])
 
 
 class TestDisplayViewsMenu(PlacelessSetup, unittest.TestCase):
@@ -446,7 +446,7 @@ class TestDisplayViewsMenu(PlacelessSetup, unittest.TestCase):
         zcml.load_config("meta.zcml", Products.Five)
         zcml.load_config('configure.zcml', plone.app.contentmenu)
         zcml.load_config('tests.zcml', plone.app.contentmenu)
-        self.menu = getUtility(IBrowserMenu, 'plone.contentmenu.displayviews')
+        self.menu = getUtility(IBrowserMenu, 'plone_displayviews')
         
     def _getMenuItemByAction(self, action):
         from zope.publisher.browser import TestRequest

@@ -45,7 +45,7 @@ class ActionsSubMenuItem(BrowserSubMenuItem):
     
     title = _(u'label_actions_menu', default=u'Actions')
     description = _(u'title_actions_menu', default=u'Actions for the current content item')
-    submenuId = 'plone.contentmenu.actions.menu'
+    submenuId = 'plone_contentmenu_actions'
     
     order = 10
     extra = {'id' : 'plone-contentmenu-actions'}
@@ -111,7 +111,7 @@ class DisplaySubMenuItem(BrowserSubMenuItem):
     implements(IDisplaySubMenuItem)
     
     title = _(u'label_choose_template', default=u'Display')
-    submenuId = 'plone.contentmenu.display.menu'
+    submenuId = 'plone_contentmenu_display'
     
     order = 20
     
@@ -375,7 +375,7 @@ class DisplayMenu(BrowserMenu):
 class FactoriesSubMenuItem(BrowserSubMenuItem):
     implements(IFactoriesSubMenuItem)
     
-    submenuId = 'plone.contentmenu.factories.menu'
+    submenuId = 'plone_contentmenu_factory'
     order = 30
     
     def __init__(self, context, request):
@@ -602,7 +602,7 @@ class WorkflowSubMenuItem(BrowserSubMenuItem):
     MANAGE_SETTINGS_PERMISSION = 'Manage portal'
     
     title = _(u'label_state', default=u'State:')
-    submenuId = 'plone.contentmenu.workflow.menu'
+    submenuId = 'plone_contentmenu_workflow'
     order = 40
 
     def __init__(self, context, request):

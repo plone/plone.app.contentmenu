@@ -5,7 +5,7 @@
 
 <browser:menuItems
     for="*"
-    menu="plone.contentmenu.displayviews"
+    menu="plone_displayviews"
     >
   <browser:menuItem
       title="Test Menu Item"

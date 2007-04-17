@@ -57,7 +57,7 @@ class ContentMenuProvider(Explicit):
         return True
         
     def menu(self):
-        menu = getUtility(IBrowserMenu, name='plone.contentmenu')
+        menu = getUtility(IBrowserMenu, name='plone_contentmenu')
         items = menu.getMenuItems(self.context, self.request)
         items.reverse()
         return items

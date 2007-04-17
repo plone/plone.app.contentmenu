@@ -5,7 +5,7 @@
 
   <!-- Top level menu -->
   <browser:menu
-    id="plone.contentmenu"
+    id="plone_contentmenu"
     title="Content menu - contains contextual actions related to the content"
     interface=".interfaces.IContentMenuItem"
     />
@@ -13,25 +13,25 @@
   <!-- Sub-menus -->
 
   <browser:menu
-    id="plone.contentmenu.actions.menu"
+    id="plone_contentmenu_actions"
     title="The 'actions' menu - allows the user to execute actions on an object"
     class=".menu.ActionsMenu"
     />  
 
   <browser:menu
-    id="plone.contentmenu.display.menu"
+    id="plone_contentmenu_display"
     title="The 'display' menu - allows the user to select the view of an object"
     class=".menu.DisplayMenu"
     />
   
    <browser:menu
-    id="plone.contentmenu.factories.menu"
+    id="plone_contentmenu_factory"
     title="The 'add' menu - allows the user to add new content items in the context"
     class=".menu.FactoriesMenu"
     />
 
   <browser:menu
-    id="plone.contentmenu.workflow.menu"
+    id="plone_contentmenu_workflow"
     title="The 'workflow' menu - allows the user to execute workflow transitions"
     class=".menu.WorkflowMenu"
     />
@@ -117,7 +117,7 @@
   <!-- The displayviews menu used to register user-visible titles -->
     
   <browser:menu
-      id="plone.contentmenu.displayviews"
+      id="plone_displayviews"
       title="Zope3 Views used as selectable content views"
       description="Menu listing Zope3 views registered for use as dynamic views
                    on CMF Content. Currently the only purpose of this menu is
