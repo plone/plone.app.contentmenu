@@ -1,8 +1,8 @@
 from urllib import quote_plus
 
 from zope.interface import implements
-from zope.component import getMultiAdapter, queryMultiAdapter, getAdapters
-from zope.component import getUtility, queryUtility
+from zope.component import getMultiAdapter, queryMultiAdapter, getAdapters, queryUtility
+from zope.app.component.hooks import getSite
 
 from zope.component.interfaces import IFactory
 from zope.i18n import translate
@@ -17,12 +17,10 @@ from plone.memoize.instance import memoize
 
 from Acquisition import aq_inner
 
-from Products.CMFCore.interfaces import IActionsTool
-from Products.CMFCore.interfaces import IConfigurableWorkflowTool
+from Products.CMFCore.utils import getToolByName
 
 from Products.CMFDynamicViewFTI.interface import ISelectableBrowserDefault
 
-from Products.CMFPlone.interfaces import IPloneTool
 from Products.CMFPlone.interfaces.structure import INonStructuralFolder
 from Products.CMFPlone.interfaces.constrains import IConstrainTypes
 from Products.CMFPlone.interfaces.constrains import ISelectableConstrainTypes
@@ -54,6 +52,9 @@ class ActionsSubMenuItem(BrowserSubMenuItem):
         BrowserSubMenuItem.__init__(self, context, request)
         self.context_state = getMultiAdapter((context, request), name='plone_context_state')
     
+    def getToolByName(self, tool):
+        return getToolByName(getSite(), tool)
+
     @property
     def action(self):
         folder = self.context
@@ -63,7 +64,7 @@ class ActionsSubMenuItem(BrowserSubMenuItem):
     
     @memoize
     def available(self):
-        actions_tool = getUtility(IActionsTool)
+        actions_tool = self.getToolByName("portal_actions")
         editActions = actions_tool.listActionInfos(object=aq_inner(self.context), categories=('object_buttons', ), max=1)
         return len(editActions) > 0
 
@@ -80,13 +81,13 @@ class ActionsMenu(BrowserMenu):
 
         portal_state = getMultiAdapter((context, request), name='plone_portal_state')
 
-        actions_tool = getUtility(IActionsTool)
+        actions_tool = getToolByName(aq_inner(context), "portal_actions")
         editActions = actions_tool.listActionInfos(object=aq_inner(context), categories=('object_buttons', ))
 
         if not editActions:
             return []
 
-        plone_utils = getUtility(IPloneTool)
+        plone_utils = getToolByName(context, 'plone_utils')
         portal_url = portal_state.portal_url()
         
         for action in editActions:
@@ -608,6 +609,7 @@ class WorkflowSubMenuItem(BrowserSubMenuItem):
     def __init__(self, context, request):
         BrowserSubMenuItem.__init__(self, context, request)
         self.tools = getMultiAdapter((context, request), name='plone_tools')
+        self.context = context
         self.context_state = getMultiAdapter((context, request), name='plone_context_state')
 
     @property
@@ -646,7 +648,7 @@ class WorkflowSubMenuItem(BrowserSubMenuItem):
 
     @memoize
     def _transitions(self):
-        wf_tool = getUtility(IConfigurableWorkflowTool)
+        wf_tool = getToolByName(aq_inner(self.context), "portal_workflow")
         return wf_tool.listActionInfos(object=aq_inner(self.context), max=1)
 
     @memoize
@@ -679,7 +681,7 @@ class WorkflowMenu(BrowserMenu):
         """Return menu item entries in a TAL-friendly form."""
         results = []
 
-        wf_tool = getUtility(IConfigurableWorkflowTool)
+        wf_tool = getToolByName(aq_inner(context), "portal_workflow")
         workflowActions = wf_tool.listActionInfos(object=aq_inner(context))
 
         if not workflowActions:
