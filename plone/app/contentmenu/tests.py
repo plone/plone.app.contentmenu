@@ -1,7 +1,7 @@
 import unittest
 
 from Products.PloneTestCase import PloneTestCase as ptc
-ptc.setupPloneSite()
+ptc.setupPloneSite(extension_profiles=['Products.CMFPlone:testfixture'])
 
 from zope.interface import directlyProvides
 from zope.component import getUtility
