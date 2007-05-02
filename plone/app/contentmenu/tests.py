@@ -492,6 +492,3 @@ def test_suite():
     suite.addTest(makeSuite(TestContentMenu))
     suite.addTest(makeSuite(TestDisplayViewsMenu))
     return suite
-
-if __name__ == '__main__':
-    framework()
