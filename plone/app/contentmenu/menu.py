@@ -685,12 +685,12 @@ class WorkflowMenu(BrowserMenu):
         wf_tool = getToolByName(context, "portal_workflow")
         workflowActions = wf_tool.listActionInfos(object=context)
 
-        if not workflowActions:
-            return []
-
         for action in workflowActions:
+            if action['category'] != 'workflow':
+                continue
+            
             actionUrl = action['url']
-
+            
             for bogus in self.BOGUS_WORKFLOW_ACTIONS:
                 if actionUrl.endswith(bogus):
                     if getattr(context, bogus, None) is None:
@@ -706,10 +706,10 @@ class WorkflowMenu(BrowserMenu):
                                  'extra'        : {'id' : 'workflow-transition-%s' % action['id'], 'separator' : None, 'class' : ''},
                                  'submenu'      : None,
                                  })
-
+        
         url = context.absolute_url()
-
-        if len(workflowActions) > 0:
+        
+        if len(results) > 0:
             results.append({ 'title'         : _(u'label_advanced', default=u'Advanced...'),
                              'description'   : '',
                              'action'        : url + '/content_status_history',
@@ -719,14 +719,14 @@ class WorkflowMenu(BrowserMenu):
                              'submenu'       : None,
                             })
 
-            if getToolByName(context, 'portal_placeful_workflow', None) is not None:
-                results.append({ 'title'         : _(u'workflow_policy', default=u'Policy...'),
-                                 'description'   : '',
-                                 'action'        : url + '/placeful_workflow_configuration',
-                                 'selected'      : False,
-                                 'icon'          : None,
-                                 'extra'         : {'id' : '_policy', 'separator' : None, 'class' : 'kssIgnore'},
-                                 'submenu'       : None,
-                                })
+        if getToolByName(context, 'portal_placeful_workflow', None) is not None:
+            results.append({ 'title'         : _(u'workflow_policy', default=u'Policy...'),
+                             'description'   : '',
+                             'action'        : url + '/placeful_workflow_configuration',
+                             'selected'      : False,
+                             'icon'          : None,
+                             'extra'         : {'id' : '_policy', 'separator' : None, 'class' : 'kssIgnore'},
+                             'submenu'       : None,
+                            })
 
         return results
