@@ -294,9 +294,12 @@ class TestWorkflowMenu(ptc.PloneTestCase):
         url = self.folder.doc1.absolute_url() + '/content_status_history'
         self.failUnless(url in [a['action'] for a in actions])
         
-    def testPolicyIncluded(self):
+    def testPolicyIncludedIfCMFPWIsInstalled(self):
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
         url = self.folder.doc1.absolute_url() + '/placeful_workflow_configuration'
+        self.failIf(url in [a['action'] for a in actions])
+        self.portal.portal_quickinstaller.installProduct('CMFPlacefulWorkflow')
+        actions = self.menu.getMenuItems(self.folder.doc1, self.request)
         self.failUnless(url in [a['action'] for a in actions])
 
 

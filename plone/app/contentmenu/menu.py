@@ -680,16 +680,22 @@ class WorkflowMenu(BrowserMenu):
     def getMenuItems(self, context, request):
         """Return menu item entries in a TAL-friendly form."""
         results = []
-
-        wf_tool = getToolByName(aq_inner(context), "portal_workflow")
-        workflowActions = wf_tool.listActionInfos(object=aq_inner(context))
-
-        if not workflowActions:
-            return []
+        context = aq_inner(context)
+        
+        wf_tool = getToolByName(context, "portal_workflow")
+        workflowActions = wf_tool.listActionInfos(object=context)
 
         for action in workflowActions:
+            if action['category'] != 'workflow':
+                continue
+            
             actionUrl = action['url']
-
+            description = ''
+            
+            transition = action.get('transition', None)
+            if transition is not None:
+                description = transition.description
+            
             for bogus in self.BOGUS_WORKFLOW_ACTIONS:
                 if actionUrl.endswith(bogus):
                     if getattr(context, bogus, None) is None:
@@ -698,17 +704,17 @@ class WorkflowMenu(BrowserMenu):
 
             if action['allowed']:
                 results.append({ 'title'        : action['title'],
-                                 'description'  : '',
+                                 'description'  : description,
                                  'action'       : actionUrl,
                                  'selected'     : False,
                                  'icon'         : None,
                                  'extra'        : {'id' : 'workflow-transition-%s' % action['id'], 'separator' : None, 'class' : ''},
                                  'submenu'      : None,
                                  })
-
+        
         url = context.absolute_url()
-
-        if len(workflowActions) > 0:
+        
+        if len(results) > 0:
             results.append({ 'title'         : _(u'label_advanced', default=u'Advanced...'),
                              'description'   : '',
                              'action'        : url + '/content_status_history',
@@ -717,6 +723,8 @@ class WorkflowMenu(BrowserMenu):
                              'extra'         : {'id' : '_advanced', 'separator' : 'actionSeparator', 'class' : 'kssIgnore'},
                              'submenu'       : None,
                             })
+
+        if getToolByName(context, 'portal_placeful_workflow', None) is not None:
             results.append({ 'title'         : _(u'workflow_policy', default=u'Policy...'),
                              'description'   : '',
                              'action'        : url + '/placeful_workflow_configuration',
