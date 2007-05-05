@@ -690,6 +690,11 @@ class WorkflowMenu(BrowserMenu):
                 continue
             
             actionUrl = action['url']
+            description = ''
+            
+            transition = action.get('transition', None)
+            if transition is not None:
+                description = transition.description
             
             for bogus in self.BOGUS_WORKFLOW_ACTIONS:
                 if actionUrl.endswith(bogus):
@@ -699,7 +704,7 @@ class WorkflowMenu(BrowserMenu):
 
             if action['allowed']:
                 results.append({ 'title'        : action['title'],
-                                 'description'  : '',
+                                 'description'  : description,
                                  'action'       : actionUrl,
                                  'selected'     : False,
                                  'icon'         : None,
