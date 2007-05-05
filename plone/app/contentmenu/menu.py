@@ -680,9 +680,10 @@ class WorkflowMenu(BrowserMenu):
     def getMenuItems(self, context, request):
         """Return menu item entries in a TAL-friendly form."""
         results = []
-
-        wf_tool = getToolByName(aq_inner(context), "portal_workflow")
-        workflowActions = wf_tool.listActionInfos(object=aq_inner(context))
+        context = aq_inner(context)
+        
+        wf_tool = getToolByName(context, "portal_workflow")
+        workflowActions = wf_tool.listActionInfos(object=context)
 
         if not workflowActions:
             return []
@@ -717,13 +718,15 @@ class WorkflowMenu(BrowserMenu):
                              'extra'         : {'id' : '_advanced', 'separator' : 'actionSeparator', 'class' : 'kssIgnore'},
                              'submenu'       : None,
                             })
-            results.append({ 'title'         : _(u'workflow_policy', default=u'Policy...'),
-                             'description'   : '',
-                             'action'        : url + '/placeful_workflow_configuration',
-                             'selected'      : False,
-                             'icon'          : None,
-                             'extra'         : {'id' : '_policy', 'separator' : None, 'class' : 'kssIgnore'},
-                             'submenu'       : None,
-                            })
+
+            if getToolByName(context, 'portal_placeful_workflow', None) is not None:
+                results.append({ 'title'         : _(u'workflow_policy', default=u'Policy...'),
+                                 'description'   : '',
+                                 'action'        : url + '/placeful_workflow_configuration',
+                                 'selected'      : False,
+                                 'icon'          : None,
+                                 'extra'         : {'id' : '_policy', 'separator' : None, 'class' : 'kssIgnore'},
+                                 'submenu'       : None,
+                                })
 
         return results
