@@ -689,16 +689,15 @@ class WorkflowMenu(BrowserMenu):
         for action in workflowActions:
             if action['category'] != 'workflow':
                 continue
-            
-        if workflowActions is None:
-            return []
 
         locking_info = getMultiAdapter((context, request), name='plone_lock_info')
         if locking_info and locking_info.is_locked_for_current_user():
-                return []
+            return []
 
-        for a in workflowActions:
-            action = IActionInfo(a)
+        for action in workflowActions:
+            if action['category'] != 'workflow':
+                continue
+            
             actionUrl = action['url']
             description = ''
             
