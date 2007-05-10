@@ -18,6 +18,7 @@ from plone.memoize.instance import memoize
 from Acquisition import aq_inner
 
 from Products.CMFCore.utils import getToolByName
+from Products.CMFCore.interfaces import IActionInfo
 
 from Products.CMFDynamicViewFTI.interface import ISelectableBrowserDefault
 
@@ -689,6 +690,15 @@ class WorkflowMenu(BrowserMenu):
             if action['category'] != 'workflow':
                 continue
             
+        if workflowActions is None:
+            return []
+
+        locking_info = getMultiAdapter((context, request), name='plone_lock_info')
+        if locking_info and locking_info.is_locked_for_current_user():
+                return []
+
+        for a in workflowActions:
+            action = IActionInfo(a)
             actionUrl = action['url']
             description = ''
             

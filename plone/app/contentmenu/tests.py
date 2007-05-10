@@ -11,6 +11,7 @@ from zope.app.testing.placelesssetup import PlacelessSetup
 
 from Products.CMFCore.Expression import Expression
 from Products.CMFPlone.interfaces import IBrowserDefault
+from Products.CMFCore.interfaces import IMembershipTool
 from Products.CMFPlone.interfaces import ISelectableConstrainTypes
 from Products.CMFPlone.interfaces import INonStructuralFolder
 
@@ -18,6 +19,8 @@ from plone.app.contentmenu.interfaces import IActionsMenu
 from plone.app.contentmenu.interfaces import IDisplayMenu
 from plone.app.contentmenu.interfaces import IFactoriesMenu
 from plone.app.contentmenu.interfaces import IWorkflowMenu
+
+from plone.locking.interfaces import ILockable
 
 from Products.CMFPlone.utils import _createObjectByType
 from Products.CMFPlone.tests import dummy
@@ -288,7 +291,16 @@ class TestWorkflowMenu(ptc.PloneTestCase):
         self.logout()
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
         self.assertEqual(len(actions), 0)
-        
+
+    def testLockedItem(self):
+        membership_tool = getUtility(IMembershipTool)
+        membership_tool.addMember('anotherMember', 'secret', ['Member'], [])
+        locking = ILockable(self.folder.doc1)
+        locking.lock()
+        self.login('anotherMember')
+        actions = self.menu.getMenuItems(self.folder.doc1, self.request)
+        self.assertEqual(len(actions), 0)
+
     def testAdvancedIncluded(self):
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
         url = self.folder.doc1.absolute_url() + '/content_status_history'
