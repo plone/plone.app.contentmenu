@@ -4,6 +4,10 @@ Changelog for plone.app.contentmenu
 
 plone.app.contentmenu - Unreleased
 
+    - Fixed variable name in the label_item_selected message id. This closes
+      http://dev.plone.org/plone/ticket/6584.
+      [hannosch]
+
     - Normalized typeIds on the factories menu, as these are used as CSS ids
       and would otherwise fail W3C validation for types with a space in the
       name. This closes http://dev.plone.org/plone/ticket/6259.

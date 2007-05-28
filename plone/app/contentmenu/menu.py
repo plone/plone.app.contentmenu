@@ -283,7 +283,7 @@ class DisplayMenu(BrowserMenu):
                                      'submenu'      : None,
                                      })
             # Display the selected item (i.e. the context)
-            results.append({ 'title'        : _(u'label_item_selected', default=u'Item: ${title}', mapping={'title' : context.Title()}),
+            results.append({ 'title'        : _(u'label_item_selected', default=u'Item: ${contentitem}', mapping={'contentitem' : context.Title()}),
                              'description'  : '',
                              'action'       : None,
                              'selected'     : True,
