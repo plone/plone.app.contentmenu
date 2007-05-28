@@ -293,7 +293,7 @@ class DisplayMenu(BrowserMenu):
                              })
             # Let the user change the selection
             if folderCanSetDefaultPage:
-                results.append({ 'title'        : _(u'label_change_item', default=u'Change content item\nas default view...'),
+                results.append({ 'title'        : _(u'label_change_default_item', default=u'Change content item\nas default view...'),
                                  'description'  : _(u'title_change_default_view_item', default=u'Change the item used as default view in this folder'),
                                  'action'       : '%s/select_default_page' % (folderUrl,),
                                  'selected'     : False,
