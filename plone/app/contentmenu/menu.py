@@ -14,12 +14,11 @@ from zope.app.publisher.browser.menu import BrowserSubMenuItem
 
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize.instance import memoize
+from plone.memoize.methods import memoize_diy_request
 
 from Acquisition import aq_inner
 
 from Products.CMFCore.utils import getToolByName
-from Products.CMFCore.interfaces import IActionInfo
-
 from Products.CMFDynamicViewFTI.interface import ISelectableBrowserDefault
 
 from Products.CMFPlone.interfaces.structure import INonStructuralFolder
@@ -38,6 +37,12 @@ from interfaces import IWorkflowMenu
 
 from Products.CMFPlone import PloneMessageFactory as _
 from Products.CMFPlone import utils
+
+
+@memoize_diy_request(arg=0)
+def _allowedTypes(request, context):
+    return context.allowedContentTypes()
+
 
 class ActionsSubMenuItem(BrowserSubMenuItem):
     implements(IActionsSubMenuItem)
@@ -74,7 +79,6 @@ class ActionsSubMenuItem(BrowserSubMenuItem):
 
 class ActionsMenu(BrowserMenu):
     implements(IActionsMenu)
-    
     
     def getMenuItems(self, context, request):
         """Return menu item entries in a TAL-friendly form."""
@@ -204,7 +208,7 @@ class DisplaySubMenuItem(BrowserSubMenuItem):
 
 class DisplayMenu(BrowserMenu):
     implements(IDisplayMenu)
-    
+
     def getMenuItems(self, obj, request):
         """Return menu item entries in a TAL-friendly form."""
         results = []
@@ -461,12 +465,13 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
     @memoize
     def _itemsToAdd(self):
         addContext = self._addContext()
+        allowed_types = _allowedTypes(self.request, addContext)
         constrain = IConstrainTypes(addContext, None)
         if constrain is None:
-            return addContext.allowedContentTypes()
+            return allowed_types
         else:
             locallyAllowed = constrain.getLocallyAllowedTypes()
-            return [fti for fti in addContext.allowedContentTypes() if fti.getId() in locallyAllowed]
+            return [fti for fti in allowed_types if fti.getId() in locallyAllowed]
                 
     @memoize
     def _addingToParent(self):
@@ -492,7 +497,6 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
 class FactoriesMenu(BrowserMenu):
     implements(IFactoriesMenu)
 
-    
     def getMenuItems(self, context, request):
         """Return menu item entries in a TAL-friendly form."""
         results = []
@@ -504,7 +508,7 @@ class FactoriesMenu(BrowserMenu):
         addContext = context_state.folder()
         baseUrl = addContext.absolute_url()
         
-        allowedTypes = addContext.allowedContentTypes()
+        allowedTypes = _allowedTypes(request, addContext)
         
         # XXX: This is calling a pyscript (which we encourage people to customise TTW)
         exclude = addContext.getNotAddableTypes()
@@ -597,7 +601,8 @@ class FactoriesMenu(BrowserMenu):
                             })
 
         return results
-        
+
+
 class WorkflowSubMenuItem(BrowserSubMenuItem):
     implements(IWorkflowSubMenuItem)
     
@@ -677,7 +682,7 @@ class WorkflowMenu(BrowserMenu):
         'content_show_form',
         'content_submit_form',
     )
-    
+
     def getMenuItems(self, context, request):
         """Return menu item entries in a TAL-friendly form."""
         results = []
