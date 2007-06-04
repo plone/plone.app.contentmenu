@@ -14,7 +14,7 @@ from zope.app.publisher.browser.menu import BrowserSubMenuItem
 
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize.instance import memoize
-from plone.memoize.methods import memoize_diy_request
+from plone.memoize.request import memoize_diy_request
 
 from Acquisition import aq_inner
 
