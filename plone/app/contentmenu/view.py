@@ -12,26 +12,6 @@ from Acquisition import Explicit
 from Products.CMFPlone import utils
 from Products.Five.browser.pagetemplatefile import ZopeTwoPageTemplateFile
 
-class BlankContentMenuProvider(Explicit):
-    """Default/fallback content menu provider: displays nothing
-    """
-    
-    implements(IContentMenuView)
-
-    def __init__(self, context, request, view):
-        self.__parent__ = view
-        self.view = view
-        self.context = context
-        self.request = request
-
-    # From IContentProvider
-
-    def update(self):
-        pass
-        
-    def render(self):
-        return u""
-
 class ContentMenuProvider(Explicit):
     """Content menu provider for the "view" tab: displays the menu
     """

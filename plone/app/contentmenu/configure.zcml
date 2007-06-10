@@ -84,31 +84,12 @@
            factory=".menu.WorkflowSubMenuItem"
            provides=".interfaces.IContentMenuItem" />
            
-  <!-- Content providers - show a blank menu unless we're on the view
-    or in folder_contents
-    -->
+  <!-- A content provider showing the menu -->
   
-  <adapter 
+  <adapter
       for="*
            zope.publisher.interfaces.browser.IDefaultBrowserLayer
            *"
-      factory=".view.BlankContentMenuProvider"
-      name="plone.contentmenu"
-      provides="zope.contentprovider.interfaces.IContentProvider"/>
-  
-  <adapter
-      for="*
-           zope.publisher.interfaces.browser.IDefaultBrowserLayer
-           plone.app.layout.globals.interfaces.IViewView"
-      factory=".view.ContentMenuProvider"
-      name="plone.contentmenu"
-      provides="zope.contentprovider.interfaces.IContentProvider"
-      />
-                    
-  <adapter
-      for="*
-           zope.publisher.interfaces.browser.IDefaultBrowserLayer
-           plone.app.content.browser.interfaces.IFolderContentsView"
       factory=".view.ContentMenuProvider"
       name="plone.contentmenu"
       provides="zope.contentprovider.interfaces.IContentProvider"
