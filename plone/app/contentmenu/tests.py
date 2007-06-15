@@ -286,7 +286,23 @@ class TestWorkflowMenu(ptc.PloneTestCase):
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
         self.failUnless('workflow-transition-submit' in
                         [a['extra']['id'] for a in actions])
-        
+        self.failUnless('http://nohost/plone/Members/test_user_1_/doc1/content_status_modify?workflow_action=submit' in
+                        [a['action'] for a in actions])
+
+        # Let us try that again but with an empty url action, like is
+        # usual in older workflows, and which is nice to keep
+        # supporting.
+        from Products.CMFCore.utils import getToolByName
+        context = self.folder.doc1
+        wf_tool = getToolByName(context, "portal_workflow")
+        submit = wf_tool.plone_workflow.transitions['submit']
+        submit.actbox_url = ""
+        actions = self.menu.getMenuItems(self.folder.doc1, self.request)
+        self.failUnless('workflow-transition-submit' in
+                        [a['extra']['id'] for a in actions])
+        self.failUnless('http://nohost/plone/Members/test_user_1_/doc1/content_status_modify?workflow_action=submit' in
+                        [a['action'] for a in actions])
+
     def testNoTransitions(self):
         self.logout()
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)

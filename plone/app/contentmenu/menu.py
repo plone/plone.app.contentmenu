@@ -704,6 +704,9 @@ class WorkflowMenu(BrowserMenu):
                 continue
             
             actionUrl = action['url']
+            if actionUrl == "":
+                actionUrl = '%s/content_status_modify?workflow_action=%s' % (context.absolute_url(), action['id'])
+
             description = ''
             
             transition = action.get('transition', None)
