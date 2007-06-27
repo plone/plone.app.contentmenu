@@ -10,10 +10,8 @@ from zope.app.publisher.interfaces.browser import IBrowserMenu
 from zope.app.testing.placelesssetup import PlacelessSetup
 
 from Products.CMFCore.Expression import Expression
-from Products.CMFCore.interfaces import IMembershipTool
 from Products.CMFCore.utils import getToolByName
 
-from Products.CMFPlone.interfaces import IBrowserDefault
 from Products.CMFPlone.interfaces import ISelectableConstrainTypes
 from Products.CMFPlone.interfaces import INonStructuralFolder
 
