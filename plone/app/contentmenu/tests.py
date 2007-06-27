@@ -10,8 +10,10 @@ from zope.app.publisher.interfaces.browser import IBrowserMenu
 from zope.app.testing.placelesssetup import PlacelessSetup
 
 from Products.CMFCore.Expression import Expression
-from Products.CMFPlone.interfaces import IBrowserDefault
 from Products.CMFCore.interfaces import IMembershipTool
+from Products.CMFCore.utils import getToolByName
+
+from Products.CMFPlone.interfaces import IBrowserDefault
 from Products.CMFPlone.interfaces import ISelectableConstrainTypes
 from Products.CMFPlone.interfaces import INonStructuralFolder
 
@@ -292,7 +294,6 @@ class TestWorkflowMenu(ptc.PloneTestCase):
         # Let us try that again but with an empty url action, like is
         # usual in older workflows, and which is nice to keep
         # supporting.
-        from Products.CMFCore.utils import getToolByName
         context = self.folder.doc1
         wf_tool = getToolByName(context, "portal_workflow")
         submit = wf_tool.plone_workflow.transitions['submit']
@@ -309,7 +310,7 @@ class TestWorkflowMenu(ptc.PloneTestCase):
         self.assertEqual(len(actions), 0)
 
     def testLockedItem(self):
-        membership_tool = getUtility(IMembershipTool)
+        membership_tool = getToolByName(self.folder, 'portal_membership')
         membership_tool.addMember('anotherMember', 'secret', ['Member'], [])
         locking = ILockable(self.folder.doc1)
         locking.lock()
