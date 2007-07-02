@@ -38,11 +38,7 @@ from interfaces import IWorkflowMenu
 from Products.CMFPlone import PloneMessageFactory as _
 from Products.CMFPlone import utils
 
-
-@memoize_diy_request(arg=0)
-def _allowedTypes(request, context):
-    return context.allowedContentTypes()
-
+from plone.app.content.browser.folderfactories import _allowedTypes
 
 class ActionsSubMenuItem(BrowserSubMenuItem):
     implements(IActionsSubMenuItem)
@@ -499,85 +495,22 @@ class FactoriesMenu(BrowserMenu):
 
     def getMenuItems(self, context, request):
         """Return menu item entries in a TAL-friendly form."""
-        results = []
-        
-        portal_state = getMultiAdapter((context, request), name='plone_portal_state')
-        context_state = getMultiAdapter((context, request), name='plone_context_state')
-        
-        portal_url = portal_state.portal_url()
-        addContext = context_state.folder()
-        baseUrl = addContext.absolute_url()
-        
-        allowedTypes = _allowedTypes(request, addContext)
-        
-        # XXX: This is calling a pyscript (which we encourage people to customise TTW)
-        exclude = addContext.getNotAddableTypes()
-        include = None
+        factories_view = getMultiAdapter((context, request), name="folder_factories")
         
         haveMore = False
-        haveSettings = False
+        include = None
+        
+        addContext = factories_view.add_context()
+        allowedTypes = _allowedTypes(request, addContext)
         
         constraints = IConstrainTypes(addContext, None)
         if constraints is not None:
             include = constraints.getImmediatelyAddableTypes()
             if len(include) < len(allowedTypes):
                 haveMore = True
-
-        constraints = ISelectableConstrainTypes(addContext, None)
-        if constraints is not None:
-            if constraints.canSetConstrainTypes():
-                haveSettings = True
-
-        # If there is an add view available, use that instead of createObject
-        # Note: that this depends on the convention that the add view and the
-        # factory have the same name, and it still only applies where there
-        # is an FTI in portal_types to begin with. Alas, FTI-less content
-        # is pretty much a no-go in CMF.
-        
-        addviews = {}
-        addingview = queryMultiAdapter((addContext, request), name='+')
-        if addingview is not None:
-            for name, item in getAdapters((addingview, request), AddMenu):
-                if item.extra:
-                    factory_name = item.extra.get('factory')
-                    if factory_name:
-                        factory = queryUtility(IFactory, factory_name)
-                        if factory and checkFactory(addContext, None, factory):
-                            addviews[factory_name] = '%s/+/%s' % (baseUrl, item.action,)
-        
-        # XXX: Would be easier, but the add menu is not actually registered,
-        # and this would depend on zope 3 security checks :-(
-        # if addingview is not None:
-        #     for item in addingview.addingInfo():
-        #         factory = item['extra']['factory']
-        #         addviews[factory] = '%s/+/%s' % (addContext.absolute_url(), item['action'],)
-
-        idnormalizer = queryUtility(IIDNormalizer)
-        for t in allowedTypes:
-            typeId = t.getId()
-            if typeId not in exclude and (include is None or typeId in include):
-                cssId = idnormalizer.normalize(typeId)
-                cssClass = 'contenttype-%s' % cssId
-                factory = t.factory
-                url = addviews.get(factory, '%s/createObject?type_name=%s' % (baseUrl, quote_plus(typeId),))
-                icon = t.getIcon()
-                if icon:
-                    icon = '%s/%s' % (portal_url, icon)
-
-                results.append({ 'title'        : t.Title(),
-                                 'description'  : t.Description(),
-                                 'action'       : url,
-                                 'selected'     : False,
-                                 'icon'         : icon,
-                                 'extra'        : {'id' : cssId, 'separator' : None, 'class' : cssClass},
-                                 'submenu'      : None,
-                                })
-
-        # Sort the addable content types based on their translated title
-        results = [(translate(ctype['title'], context=addContext), ctype) for ctype in results]
-        results.sort()
-        results = [ctype[-1] for ctype in results]
-
+                
+        results = factories_view.addable_types(include=include)
+                
         if haveMore:
             url = '%s/folder_factories' % (addContext.absolute_url(),)
             results.append({ 'title'        : _(u'folder_add_more', default=u'More\u2026'),
@@ -589,19 +522,20 @@ class FactoriesMenu(BrowserMenu):
                              'submenu'      : None,
                             })
 
-        if haveSettings:
-            url = '%s/folder_constraintypes_form' % (addContext.absolute_url(),)
-            results.append({'title'        : _(u'folder_add_settings', default=u'Restrictions\u2026'),
-                            'description'  : _(u'title_configure_addable_content_types', default=u'Configure which content types can be added here'),
-                            'action'       : url,
-                            'selected'     : False,
-                            'icon'         : None,
-                            'extra'        : {'id' : '_settings', 'separator' : None, 'class' : ''},
-                            'submenu'      : None,
-                            })
-
+        constraints = ISelectableConstrainTypes(addContext, None)
+        if constraints is not None:
+            if constraints.canSetConstrainTypes():
+                url = '%s/folder_constraintypes_form' % (addContext.absolute_url(),)
+                results.append({'title'        : _(u'folder_add_settings', default=u'Restrictions\u2026'),
+                                'description'  : _(u'title_configure_addable_content_types', default=u'Configure which content types can be added here'),
+                                'action'       : url,
+                                'selected'     : False,
+                                'icon'         : None,
+                                'extra'        : {'id' : '_settings', 'separator' : None, 'class' : ''},
+                                'submenu'      : None,
+                                })
+                            
         return results
-
 
 class WorkflowSubMenuItem(BrowserSubMenuItem):
     implements(IWorkflowSubMenuItem)
