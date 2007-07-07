@@ -391,33 +391,22 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
     
     @property
     def title(self):
-        addingToParent = self._addingToParent()
         itemsToAdd = self._itemsToAdd()
         showConstrainOptions = self._showConstrainOptions()
         if showConstrainOptions or len(itemsToAdd) > 1:
-            if addingToParent:
-                return _(u'label_add_new_item_in_folder', default=u'Add to folder\u2026')
-            else:
-                return _(u'label_add_new_item', default=u'Add new\u2026')
+            return _(u'label_add_new_item', default=u'Add new\u2026')
         elif len(itemsToAdd) == 1:
             itemTitle = itemsToAdd[0].Title()
-            if addingToParent:
-                return _(u'label_add_type_to_folder', default='Add ${type} to folder', mapping={'type' : itemTitle})
-            else:
-                return _(u'label_add_type', default='Add ${type}', mapping={'type' : itemTitle})
+            return _(u'label_add_type', default='Add ${type}', mapping={'type' : itemTitle})
         else:
             return _(u'label_add_new_item', default=u'Add new\u2026')
     
     @property
     def description(self):
-        addingToParent = self._addingToParent()
         itemsToAdd = self._itemsToAdd()
         showConstrainOptions = self._showConstrainOptions()
         if showConstrainOptions or len(itemsToAdd) > 1:
-            if addingToParent:
-                return _(u'title_add_new_items_inside_folder', default=u'Add new items in the same folder as this item')
-            else:
-                return _(u'title_add_new_items_inside_item', default=u'Add new items inside this item')
+            return _(u'title_add_new_items_inside_item', default=u'Add new items inside this item')
         elif len(itemsToAdd) == 1:
             return itemsToAdd[0].Description()
         else:
@@ -449,6 +438,8 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
     def available(self):
         itemsToAdd = self._itemsToAdd()
         showConstrainOptions = self._showConstrainOptions()
+        if self._addingToParent() and not self.context_state.is_default_page():
+            return False
         return (len(itemsToAdd) > 0 or showConstrainOptions)
 
     def selected(self):
