@@ -4,6 +4,10 @@ Changelog for plone.app.contentmenu
 
 plone.app.contentmenu - Unreleased
 
+    - Fixed display menu to properly show content item titles with non-ascii
+      chars. This closes http://dev.plone.org/plone/ticket/6838.
+      [hannosch]
+
     - Do not show the add item menu anymore on normal content, but just on
       folderish and default pages. This closes
       http://dev.plone.org/plone/ticket/6744.
