@@ -624,7 +624,7 @@ class WorkflowMenu(BrowserMenu):
             if action['category'] != 'workflow':
                 continue
 
-        locking_info = getMultiAdapter((context, request), name='plone_lock_info')
+        locking_info = queryMultiAdapter((context, request), name='plone_lock_info')
         if locking_info and locking_info.is_locked_for_current_user():
             return []
 
