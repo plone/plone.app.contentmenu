@@ -40,6 +40,13 @@ from Products.CMFPlone import utils
 
 from plone.app.content.browser.folderfactories import _allowedTypes
 
+
+def _safe_unicode(text):
+    if not isinstance(text, unicode):
+        text = unicode(text, 'utf-8', 'ignore')
+    return text
+
+
 class ActionsSubMenuItem(BrowserSubMenuItem):
     implements(IActionsSubMenuItem)
     
@@ -282,12 +289,8 @@ class DisplayMenu(BrowserMenu):
                                      'extra'        : {'id' : id, 'separator' : None, 'class' : ''},
                                      'submenu'      : None,
                                      })
-            # Make sure the title is unicode
-            title = context.Title()
-            if not isinstance(title, unicode):
-                title = unicode(title, 'utf-8', 'ignore')
-                # Display the selected item (i.e. the context)
-            results.append({ 'title'        : _(u'label_item_selected', default=u'Item: ${contentitem}', mapping={'contentitem' : title}),
+            # Display the selected item (i.e. the context)
+            results.append({ 'title'        : _(u'label_item_selected', default=u'Item: ${contentitem}', mapping={'contentitem' : _safe_unicode(context.Title())}),
                              'description'  : '',
                              'action'       : None,
                              'selected'     : True,
@@ -356,13 +359,8 @@ class DisplayMenu(BrowserMenu):
                                          'extra'        : {'id' : '_contextSetDefaultPage', 'separator' : 'actionSeparator', 'class' : ''},
                                          'submenu'      : None,
                                          })                
-            
                 else:
-                    # Make sure the title is unicode
-                    title = context.Title()
-                    if not isinstance(title, unicode):
-                        title = unicode(title, 'utf-8', 'ignore')
-                    results.append({ 'title'        : _(u'label_item_selected', default=u'Item: ${contentitem}', mapping={'title' : title}),
+                    results.append({ 'title'        : _(u'label_item_selected', default=u'Item: ${contentitem}', mapping={'title' : _safe_unicode(context.Title())}),
                                      'description'  : '',
                                      'action'       : None,
                                      'selected'     : True,
@@ -404,11 +402,8 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
         if showConstrainOptions or len(itemsToAdd) > 1:
             return _(u'label_add_new_item', default=u'Add new\u2026')
         elif len(itemsToAdd) == 1:
-            # Make sure the title is unicode
-            itemTitle = itemsToAdd[0].Title()
-            if not isinstance(itemTitle, unicode):
-                itemTitle = unicode(itemTitle, 'utf-8', 'ignore')
-            return _(u'label_add_type', default='Add ${type}', mapping={'type' : itemTitle})
+            return _(u'label_add_type', default='Add ${type}',
+                     mapping={'type' : _safe_unicode(itemsToAdd[0].Title())})
         else:
             return _(u'label_add_new_item', default=u'Add new\u2026')
     
