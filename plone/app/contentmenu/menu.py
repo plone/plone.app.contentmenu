@@ -358,7 +358,11 @@ class DisplayMenu(BrowserMenu):
                                          })                
             
                 else:
-                    results.append({ 'title'        : _(u'label_item_selected', default=u'Item: ${title}', mapping={'title' : context.Title()}),
+                    # Make sure the title is unicode
+                    title = context.Title()
+                    if not isinstance(title, unicode):
+                        title = unicode(title, 'utf-8', 'ignore')
+                    results.append({ 'title'        : _(u'label_item_selected', default=u'Item: ${contentitem}', mapping={'title' : title}),
                                      'description'  : '',
                                      'action'       : None,
                                      'selected'     : True,
@@ -400,7 +404,10 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
         if showConstrainOptions or len(itemsToAdd) > 1:
             return _(u'label_add_new_item', default=u'Add new\u2026')
         elif len(itemsToAdd) == 1:
+            # Make sure the title is unicode
             itemTitle = itemsToAdd[0].Title()
+            if not isinstance(itemTitle, unicode):
+                itemTitle = unicode(itemTitle, 'utf-8', 'ignore')
             return _(u'label_add_type', default='Add ${type}', mapping={'type' : itemTitle})
         else:
             return _(u'label_add_new_item', default=u'Add new\u2026')
