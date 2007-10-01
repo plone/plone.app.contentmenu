@@ -4,6 +4,10 @@ Changelog for plone.app.contentmenu
 
 plone.app.contentmenu - Unreleased
 
+    - Fixed another translation problem in the factory menu when only one type
+      was shown. This closes http://dev.plone.org/plone/ticket/7023.
+      [hannosch]
+
     - Fixed more translation problems with the display menu.
       This closes http://dev.plone.org/plone/ticket/6838 again and
       http://dev.plone.org/plone/ticket/7115 as well.

@@ -6,6 +6,7 @@ from zope.app.component.hooks import getSite
 
 from zope.component.interfaces import IFactory
 from zope.i18n import translate
+from zope.i18nmessageid.message import Message
 from zope.app.container.constraints import checkFactory
 from zope.app.publisher.interfaces.browser import AddMenu
 
@@ -402,8 +403,15 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
         if showConstrainOptions or len(itemsToAdd) > 1:
             return _(u'label_add_new_item', default=u'Add new\u2026')
         elif len(itemsToAdd) == 1:
+            title = itemsToAdd[0].Title()
+            if isinstance(itemsToAdd[0].Title(), Message):
+                title = translate(title, context=self.request)
+            else:
+                title = translate(_safe_unicode(title),
+                                  domain='plone',
+                                  context=self.request)
             return _(u'label_add_type', default='Add ${type}',
-                     mapping={'type' : _safe_unicode(itemsToAdd[0].Title())})
+                     mapping={'type' : title})
         else:
             return _(u'label_add_new_item', default=u'Add new\u2026')
     
@@ -465,7 +473,7 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
         else:
             locallyAllowed = constrain.getLocallyAllowedTypes()
             return [fti for fti in allowed_types if fti.getId() in locallyAllowed]
-                
+
     @memoize
     def _addingToParent(self):
         return (self._addContext().absolute_url() != self.context.absolute_url())
