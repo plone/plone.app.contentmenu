@@ -59,7 +59,7 @@
                              tal:attributes="src subMenuItem/icon;
                                              alt subMenuItem/description"
                              i18n:attributes="alt;"/>
-                        <span tal:content="subMenuItem/title"
+                        <span tal:content="structure subMenuItem/title"
                               i18n:translate=""
                               class="subMenuTitle">
                             Title
@@ -77,7 +77,7 @@
                              tal:attributes="src subMenuItem/icon;
                                              alt subMenuItem/description"
                              i18n:attributes="alt;"/>
-                        <span tal:content="subMenuItem/title"
+                        <span tal:content="structure subMenuItem/title"
                               i18n:translate=""
                               class="subMenuTitle">
                             Title
