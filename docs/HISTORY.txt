@@ -40,6 +40,9 @@ plone.app.contentmenu - Unreleased
       name. This closes http://dev.plone.org/plone/ticket/6259.
       [hannosch]
 
+    - Set kssIgnore class on workflow actions that define their own screens.
+      [ldr]
+
 plone.app.contentmenu - 1.0b1 Released March 5, 2007
 
     - Initial package structure.

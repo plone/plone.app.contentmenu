@@ -638,9 +638,11 @@ class WorkflowMenu(BrowserMenu):
             if action['category'] != 'workflow':
                 continue
             
+            cssClass = 'kssIgnore'
             actionUrl = action['url']
             if actionUrl == "":
                 actionUrl = '%s/content_status_modify?workflow_action=%s' % (context.absolute_url(), action['id'])
+                cssClass = ''
 
             description = ''
             
@@ -652,6 +654,7 @@ class WorkflowMenu(BrowserMenu):
                 if actionUrl.endswith(bogus):
                     if getattr(context, bogus, None) is None:
                         actionUrl = '%s/content_status_modify?workflow_action=%s' % (context.absolute_url(), action['id'],)
+                        cssClass =''
                     break
 
             if action['allowed']:
@@ -660,7 +663,7 @@ class WorkflowMenu(BrowserMenu):
                                  'action'       : actionUrl,
                                  'selected'     : False,
                                  'icon'         : None,
-                                 'extra'        : {'id' : 'workflow-transition-%s' % action['id'], 'separator' : None, 'class' : ''},
+                                 'extra'        : {'id' : 'workflow-transition-%s' % action['id'], 'separator' : None, 'class' : cssClass},
                                  'submenu'      : None,
                                  })
         
