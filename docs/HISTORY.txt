@@ -2,7 +2,7 @@ Changelog for plone.app.contentmenu
 
     (name of developer listed in brackets)
 
-plone.app.contentmenu - Unreleased
+plone.app.contentmenu - 1.0.5
 
     - Fixed display menu to show the default page title when not currently
       viewing it as well as the display of markup contained in translations.
@@ -12,6 +12,8 @@ plone.app.contentmenu - Unreleased
     - Removed loop that does nothing in plone.app.contentmenu.menu, in
       WorkflowMenu.getMenuItems().  
       [dreamcatcher]
+
+plone.app.contentmenu - 1.0.3
 
     - Fixed another translation problem in the factory menu when only one type
       was shown. This closes http://dev.plone.org/plone/ticket/7023.
