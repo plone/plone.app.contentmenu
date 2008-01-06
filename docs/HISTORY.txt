@@ -2,6 +2,13 @@ Changelog for plone.app.contentmenu
 
     (name of developer listed in brackets)
 
+plone.app.contentmenu - 1.0.6
+
+    - Fixed display menu to show the default page title correctly when the
+      default-page is not a contained content item with DC metadata fields.
+      Thanks to George Lee for finding this.
+      [optilude]
+
 plone.app.contentmenu - 1.0.5
 
     - Fixed display menu to show the default page title when not currently

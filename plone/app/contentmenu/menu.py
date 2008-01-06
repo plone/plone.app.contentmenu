@@ -17,7 +17,7 @@ from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize.instance import memoize
 from plone.memoize.request import memoize_diy_request
 
-from Acquisition import aq_inner
+from Acquisition import aq_inner, aq_base
 
 from Products.CMFCore.utils import getToolByName
 from Products.CMFDynamicViewFTI.interface import ISelectableBrowserDefault
@@ -361,7 +361,15 @@ class DisplayMenu(BrowserMenu):
                                          'submenu'      : None,
                                          })                
                 else:
-                    results.append({ 'title'        : _(u'label_item_selected', default=u'Item: ${contentitem}', mapping={'contentitem' : _safe_unicode(obj[defaultPage].Title())}),
+                    defaultPageObj = getattr(obj, defaultPage, None)
+                    defaultPageTitle = u""
+                    if defaultPageObj is not None:
+                        if hasattr(aq_base(defaultPageObj), 'Title'):
+                            defaultPageTitle = defaultPageObj.Title()
+                        else:
+                            defaultPageTitle = getattr(aq_base(defaultPageObj), 'title', u"")
+                            
+                    results.append({ 'title'        : _(u'label_item_selected', default=u'Item: ${contentitem}', mapping={'contentitem' : _safe_unicode(defaultPageTitle)}),
                                      'description'  : '',
                                      'action'       : None,
                                      'selected'     : True,

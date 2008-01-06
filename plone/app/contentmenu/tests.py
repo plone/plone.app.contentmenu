@@ -170,7 +170,15 @@ class TestDisplayMenu(ptc.PloneTestCase):
         ids = [a['extra']['id'] for a in actions]
         self.failIf('_folderHeader' in ids)
         self.failIf('_contextHeader' in ids)
-
+        
+    # Regressions
+    
+    def testDefaultPageTemplateTitle(self):
+        self.folder.setDefaultPage('sitemap') # Use a template in portal_skins
+        actions = self.menu.getMenuItems(self.folder, self.request)
+        changeAction = [x for x in actions if x['extra']['id'] == '_contextDefaultPageDisplay'][0]
+        changeAction['title'].default
+        self.assertEquals(u"Sitemap", changeAction['title'].mapping['contentitem'])
 
 class TestFactoriesMenu(ptc.PloneTestCase):
     
