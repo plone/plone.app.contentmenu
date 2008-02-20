@@ -1,21 +1,16 @@
 from urllib import quote_plus
 
 from zope.interface import implements
-from zope.component import getMultiAdapter, queryMultiAdapter, getAdapters, queryUtility
+from zope.component import getMultiAdapter, queryMultiAdapter
 from zope.app.component.hooks import getSite
 
-from zope.component.interfaces import IFactory
 from zope.i18n import translate
 from zope.i18nmessageid.message import Message
-from zope.app.container.constraints import checkFactory
-from zope.app.publisher.interfaces.browser import AddMenu
 
 from zope.app.publisher.browser.menu import BrowserMenu
 from zope.app.publisher.browser.menu import BrowserSubMenuItem
 
-from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize.instance import memoize
-from plone.memoize.request import memoize_diy_request
 
 from Acquisition import aq_inner, aq_base
 
