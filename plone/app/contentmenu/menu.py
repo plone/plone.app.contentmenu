@@ -406,8 +406,9 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
         if showConstrainOptions or len(itemsToAdd) > 1:
             return _(u'label_add_new_item', default=u'Add new\u2026')
         elif len(itemsToAdd) == 1:
-            title = itemsToAdd[0].Title()
-            if isinstance(itemsToAdd[0].Title(), Message):
+            fti=itemsToAdd[0][1]
+            title = fti.Title()
+            if isinstance(title, Message):
                 title = translate(title, context=self.request)
             else:
                 title = translate(_safe_unicode(title),
@@ -425,16 +426,16 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
         if showConstrainOptions or len(itemsToAdd) > 1:
             return _(u'title_add_new_items_inside_item', default=u'Add new items inside this item')
         elif len(itemsToAdd) == 1:
-            return itemsToAdd[0].Description()
+            return itemsToAdd[0][1].Description()
         else:
             return _(u'title_add_new_items_inside_item', default=u'Add new items inside this item')
     
     @property
     def action(self):
         addContext = self._addContext()
-        baseUrl = addContext.absolute_url()
         if self._hideChildren():
-            fti = self._itemsToAdd()[0]
+            (addContext, fti) = self._itemsToAdd()[0]
+            baseUrl = addContext.absolute_url()
             addingview = queryMultiAdapter((addContext, self.request), name='+')
             if addingview is not None:
                 addview = queryMultiAdapter((addingview, self.request), name=fti.factory)
@@ -442,12 +443,12 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
                     return '%s/+/%s' % (baseUrl, fti.factory,)
             return '%s/createObject?type_name=%s' % (baseUrl, quote_plus(fti.getId()),)
         else:
-            return '%s/folder_factories' % (baseUrl,)
+            return '%s/folder_factories' % self.context_state.folder().absolute_url()
     
     @property
     def icon(self):
         if self._hideChildren():
-            fti = self._itemsToAdd()[0]
+            fti = self._itemsToAdd()[0][1]
             return fti.getIcon()
         else:
             return None
@@ -468,7 +469,11 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
         
     @memoize
     def _itemsToAdd(self):
-        addContext = self._addContext()
+        context=self.context_state.folder()
+        return [(context, fti)
+                for fti in self._addableTypesInContext(self.context_state.folder())]
+
+    def _addableTypesInContext(self, addContext):
         allowed_types = _allowedTypes(self.request, addContext)
         constrain = IConstrainTypes(addContext, None)
         if constrain is None:
