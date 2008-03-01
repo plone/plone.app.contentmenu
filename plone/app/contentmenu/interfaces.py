@@ -7,23 +7,24 @@ from zope.app.publisher.interfaces.browser import IMenuItemType
 
 from zope.contentprovider.interfaces import IContentProvider
 
+
 class IContentMenuView(IContentProvider):
     """The view that powers the content menu (the green bar at the top of
     the editable border).
-    
+
     This will construct a menu by finding an adapter to IContentMenu.
     """
-    
+
     def available():
         """Determine whether the menu should be displayed at all.
         """
-    
+
     def menu():
         """Create a list of dicts that can be used to render a menu.
-        
-        The keys in this dict are: title, description, action (a URL), 
+
+        The keys in this dict are: title, description, action (a URL),
         selected (a boolean), icon (a URI), extra (a random payload), and
-        submenu 
+        submenu
         """
 
 # The content menu itself - menu items are registered as adapters to this
@@ -38,7 +39,7 @@ directlyProvides(IContentMenuItem, IMenuItemType)
 # The sub-menus - because they require additional logic, each of these will be
 # implemented with a separate class. We provide markers here to distinguish
 # them, although IBrowserMenu is the primary interface through which they are
-# looked up. We also provide markers for the special menu items - see 
+# looked up. We also provide markers for the special menu items - see
 # configure.zcml for more details.
 
 # We use the 'extra' field in the menu items for various bits of information
@@ -54,38 +55,37 @@ directlyProvides(IContentMenuItem, IMenuItemType)
 #   separator    :   True if the item should be preceded by a separator
 #   hideChildren :   True if the item's children should not be rendered
 
-
 class IActionsSubMenuItem(IBrowserSubMenuItem):
     """The menu item linking to the actions menu.
     """
 
 class IActionsMenu(IBrowserMenu):
     """The actions menu.
-    
+
     This gets its menu items from portal_actions.
     """
 
 class IDisplaySubMenuItem(IBrowserSubMenuItem):
     """The menu item linking to the display menu.
     """
-    
+
     def disabled(self):
         """Find out if the menu is visible but disabled."""
 
 class IDisplayMenu(IBrowserMenu):
     """The display menu.
-    
+
     This gets its menu items from an IBrowserDefault (see CMFDynamicViewFTI).
     """
-    
+
 class IFactoriesSubMenuItem(IBrowserSubMenuItem):
     """The menu item linking to the factories menu.
     """
-    
+
 class IFactoriesMenu(IBrowserMenu):
     """The factories menu.
-    
-    This gets its menu items from portal_types' list of addable types in 
+
+    This gets its menu items from portal_types' list of addable types in
     the context.
     """
 
@@ -95,18 +95,16 @@ class IWorkflowSubMenuItem(IBrowserSubMenuItem):
 
 class IWorkflowMenu(IBrowserMenu):
     """The workflow menu.
-    
-    This gets its menu items from the list of possible transitions in 
+
+    This gets its menu items from the list of possible transitions in
     portal_workflow.
     """
-    
+
 class IDisplayViewsMenu(IBrowserMenu):
     """A menu listing Zope3 views registered as content views
 
     Currently used only to register user-visible titles.
-    
     """
-    
-    def getMenuItemByAction(object, request, action):
-        """Return the first IBrowserMenuItem for the given action""" 
 
+    def getMenuItemByAction(object, request, action):
+        """Return the first IBrowserMenuItem for the given action"""

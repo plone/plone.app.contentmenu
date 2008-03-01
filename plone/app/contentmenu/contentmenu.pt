@@ -1,4 +1,4 @@
-<ul id="contentActionMenus" 
+<ul id="contentActionMenus"
     tal:define="menu view/menu"
     tal:condition="view/available"
     i18n:domain="plone">
@@ -34,7 +34,7 @@
                       i18n:translate="">
                     State title
                 </span>
-                <span class="arrowDownAlternative" 
+                <span class="arrowDownAlternative"
                       tal:condition="not:menuItem/extra/hideChildren | not:submenu | nothing">&#9660;</span>
             </a>
           </dt>

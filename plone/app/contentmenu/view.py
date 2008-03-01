@@ -12,10 +12,11 @@ from Acquisition import Explicit
 from Products.CMFPlone import utils
 from Products.Five.browser.pagetemplatefile import ZopeTwoPageTemplateFile
 
+
 class ContentMenuProvider(Explicit):
     """Content menu provider for the "view" tab: displays the menu
     """
-    
+
     implements(IContentMenuView)
 
     def __init__(self, context, request, view):
@@ -28,14 +29,14 @@ class ContentMenuProvider(Explicit):
 
     def update(self):
         pass
-        
+
     render = ZopeTwoPageTemplateFile('contentmenu.pt')
 
     # From IContentMenuView
 
     def available(self):
         return True
-        
+
     def menu(self):
         menu = getUtility(IBrowserMenu, name='plone_contentmenu')
         items = menu.getMenuItems(self.context, self.request)
