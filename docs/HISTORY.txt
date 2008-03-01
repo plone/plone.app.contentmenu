@@ -2,10 +2,10 @@ Changelog for plone.app.contentmenu
 
     (name of developer listed in brackets)
 
-plone.app.contentmenu - 1.0.7
+plone.app.contentmenu - 1.0.7 (unreleased)
 
     - Fixed an issue with non ISelectableBrowserDefault aware content.
-      This closes https://dev.plone.org/plone/ticket/7226.
+      This closes http://dev.plone.org/plone/ticket/7226.
       [deo]
 
 plone.app.contentmenu - 1.0.6
