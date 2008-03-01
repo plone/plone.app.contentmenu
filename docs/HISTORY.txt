@@ -2,6 +2,12 @@ Changelog for plone.app.contentmenu
 
     (name of developer listed in brackets)
 
+plone.app.contentmenu - 1.0.7
+
+    - Fixed an issue with non ISelectableBrowserDefault aware content.
+      This closes https://dev.plone.org/plone/ticket/7226.
+      [deo]
+
 plone.app.contentmenu - 1.0.6
 
     - Fixed display menu to show the default page title correctly when the
@@ -17,7 +23,7 @@ plone.app.contentmenu - 1.0.5
       [witsch]
 
     - Removed loop that does nothing in plone.app.contentmenu.menu, in
-      WorkflowMenu.getMenuItems().  
+      WorkflowMenu.getMenuItems().
       [dreamcatcher]
 
 plone.app.contentmenu - 1.0.3

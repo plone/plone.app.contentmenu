@@ -365,7 +365,17 @@ class TestContentMenu(ptc.PloneTestCase):
         _createObjectByType('ATListCriterion', self.folder, 'c1')
         items = self.menu.getMenuItems(self.folder.c1, self.request)
         self.assertEqual([i for i in items if i['extra']['id'] == 'plone-contentmenu-display'], [])
-    
+
+    def testDisplayMenuShowFolderDefaultPageWhenContextDoesNotSupportSelectableBrowserDefault(self):
+        # We need to create an object that is not ISelectableBrowserDefault aware
+        _createObjectByType('ATListCriterion', self.folder, 'c1')
+        self.folder.c1.setTitle('Foo')
+        self.folder.setDefaultPage('c1')
+        items = self.menu.getMenuItems(self.folder.c1, self.request)
+        displayMenuItem = [i for i in items if i['extra']['id'] == 'plone-contentmenu-display'][0]
+        selected =  [a for a in displayMenuItem['submenu'] if a['selected']][0]
+        self.assertEqual(u'Foo', selected['title'].mapping['contentitem'])
+
     def testDisplayMenuNotIncludedIfNoActionsAvailable(self):
         self.folder.invokeFactory('Document', 'doc1')
         items = self.menu.getMenuItems(self.folder.doc1, self.request)
