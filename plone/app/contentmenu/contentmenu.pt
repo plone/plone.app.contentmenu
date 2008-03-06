@@ -20,9 +20,10 @@
                i18n:attributes="title;">
                 <img width="16"
                      height="16"
+                     alt=""
                      tal:condition="menuItem/icon"
                      tal:attributes="src menuItem/icon;
-                                     alt menuItem/description"
+                                     title menuItem/description"
                      i18n:attributes="alt;"/>
                 <span tal:content="menuItem/title"
                       i18n:translate="">
@@ -55,9 +56,10 @@
                           >&bull;</span>
                         <img width="16"
                              height="16"
+                             alt=""
                              tal:condition="subMenuItem/icon"
                              tal:attributes="src subMenuItem/icon;
-                                             alt subMenuItem/description"
+                                             title subMenuItem/description"
                              i18n:attributes="alt;"/>
                         <span tal:content="structure subMenuItem/title"
                               i18n:translate=""
@@ -73,9 +75,10 @@
                           >&bull;</span>
                         <img width="16"
                              height="16"
+                             alt=""
                              tal:condition="subMenuItem/icon"
                              tal:attributes="src subMenuItem/icon;
-                                             alt subMenuItem/description"
+                                             title subMenuItem/description"
                              i18n:attributes="alt;"/>
                         <span tal:content="structure subMenuItem/title"
                               i18n:translate=""

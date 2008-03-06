@@ -4,6 +4,12 @@ Changelog for plone.app.contentmenu
 
 plone.app.contentmenu - 1.0.7 (unreleased)
 
+    - Correct the content menu html: the icons in menus should have an
+      empty alt-attribute since the alternative text if no image can
+      be seen is the label of the menu item itself. Move the description
+      to the title attribute so it still shows up as tooltip. 
+      [wichert]
+
     - Fixed an issue with non ISelectableBrowserDefault aware content.
       This closes http://dev.plone.org/plone/ticket/7226.
       [deo]
