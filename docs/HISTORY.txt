@@ -2,7 +2,7 @@ Changelog for plone.app.contentmenu
 
     (name of developer listed in brackets)
 
-plone.app.contentmenu - 1.0.7 (unreleased)
+plone.app.contentmenu - 1.0.7
 
     - Correct the content menu html: the icons in menus should have an
       empty alt-attribute since the alternative text if no image can
