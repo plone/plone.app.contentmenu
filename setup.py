@@ -20,6 +20,9 @@ setup(name='plone.app.contentmenu',
       zip_safe=False,
       install_requires=[
         'setuptools',
+        'plone.locking',
+        'plone.memoize',
+        'plone.app.content',
       ],
       entry_points="""
       # -*- Entry points: -*-
