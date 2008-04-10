@@ -2,6 +2,15 @@ Changelog for plone.app.contentmenu
 
     (name of developer listed in brackets)
 
+plone.app.contentmenu - UNRELEASED
+
+    - Add an actionMenuSelected class to selected menu items so they can be
+      styled (same class as used in Plone 2.5). Do not remove the <span>
+      tag around the &bull; for selected items so it can be removed when
+      proper CSS styling is used.
+      [wichert]
+
+
 plone.app.contentmenu - 1.0.7
 
     - Correct the content menu html: the icons in menus should have an

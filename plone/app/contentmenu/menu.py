@@ -293,7 +293,7 @@ class DisplayMenu(BrowserMenu):
                              'action'      : None,
                              'selected'    : True,
                              'icon'        : None,
-                             'extra'       : {'id': '_folderDefaultPageDisplay', 'separator': 'actionSeparator', 'class': ''},
+                             'extra'       : {'id': '_folderDefaultPageDisplay', 'separator': 'actionSeparator', 'class': 'actionMenuSelected'},
                              'submenu'     : None,
                              })
             # Let the user change the selection
