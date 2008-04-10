@@ -1,7 +1,6 @@
-plone.app.contentmenu Package Readme
-=========================
+Introduction
+============
 
-Overview
---------
+plone.app.contentmenu contains the logic that powers Plone's content menu
+(the green one with the drop-down menus).
 
-Plone's content menu implementation
