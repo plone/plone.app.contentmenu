@@ -473,8 +473,7 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
     @memoize
     def _itemsToAdd(self):
         context=self.context_state.folder()
-        return [(context, fti)
-                for fti in self._addableTypesInContext(self.context_state.folder())]
+        return [(context, fti) for fti in self._addableTypesInContext(context)]
 
     def _addableTypesInContext(self, addContext):
         allowed_types = _allowedTypes(self.request, addContext)
