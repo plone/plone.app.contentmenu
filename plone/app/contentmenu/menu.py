@@ -148,6 +148,9 @@ class DisplaySubMenuItem(BrowserSubMenuItem):
 
     @memoize
     def available(self):
+        if self.disabled():
+            return False
+
         isDefaultPage = self.context_state.is_default_page()
 
         folder = None

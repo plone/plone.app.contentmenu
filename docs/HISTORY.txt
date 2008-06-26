@@ -4,6 +4,13 @@ Changelog
 UNRELEASED
 ----------
 
+- Do not show the display menu if it is disabled (ie there is an index_html
+  item in the folder). The previous behaviour was confusing for users: the
+  description with the hint to remove the index_html object was never shown
+  and users only got a unusable menu item. The new behaviour makes the display
+  menu consistent with other parts of the Plone UI.
+  [wichert]
+
 - Add an actionMenuSelected class to selected menu items so they can be
   styled (same class as used in Plone 2.5). Do not remove the <span>
   tag around the &bull; for selected items so it can be removed when
