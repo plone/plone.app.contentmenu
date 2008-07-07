@@ -1,8 +1,8 @@
 Changelog
 =========
 
-UNRELEASED
-----------
+1.1.3
+-----
 
 - Do not show the display menu if it is disabled (ie there is an index_html
   item in the folder). The previous behaviour was confusing for users: the
