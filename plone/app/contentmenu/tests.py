@@ -386,14 +386,14 @@ class TestContentMenu(ptc.PloneTestCase):
     def testDisplayMenuDisabledIfIndexHtmlInFolder(self):
         self.folder.invokeFactory('Document', 'index_html')
         items = self.menu.getMenuItems(self.folder, self.request)
-        displayMenuItem = [i for i in items if i['extra']['id'] == 'plone-contentmenu-display'][0]
-        self.assertEqual(displayMenuItem['extra']['disabled'], True)
+        displayMenuItems = [i for i in items if i['extra']['id'] == 'plone-contentmenu-display']
+        self.assertEqual(len(displayMenuItems), 0)
 
     def testDisplayMenuDisabledIfIndexHtmlInFolderAndContextIsIndexHtml(self):
         self.folder.invokeFactory('Document', 'index_html')
         items = self.menu.getMenuItems(self.folder.index_html, self.request)
-        displayMenuItem = [i for i in items if i['extra']['id'] == 'plone-contentmenu-display'][0]
-        self.assertEqual(displayMenuItem['extra']['disabled'], True)
+        displayMenuItems = [i for i in items if i['extra']['id'] == 'plone-contentmenu-display']
+        self.assertEqual(len(displayMenuItems), 0)
 
     # Add sub-menu
 

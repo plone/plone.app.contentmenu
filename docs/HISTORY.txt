@@ -4,10 +4,13 @@ Changelog
 1.1.3
 -----
 
-- Do not show the display menu if it is disabled (ie there is an index_html
-  item in the folder). The previous behaviour was confusing for users: the
+- Adjusted tests to reflect new behavior introduced by the last change.
+  [hannosch]
+
+- Do not show the display menu if it is disabled (i.e. there is an index_html
+  item in the folder). The previous behavior was confusing for users: the
   description with the hint to remove the index_html object was never shown
-  and users only got a unusable menu item. The new behaviour makes the display
+  and users only got a unusable menu item. The new behavior makes the display
   menu consistent with other parts of the Plone UI.
   [wichert]
 
