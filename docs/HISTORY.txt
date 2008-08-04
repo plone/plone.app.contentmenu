@@ -1,6 +1,14 @@
 Changelog
 =========
 
+1.1.4 (unreleased)
+------------------
+
+- Add a span with a "noMenuAction" class around disable menus, allowing them
+  to be styled.
+  [wichert]
+
+
 1.1.3
 -----
 
