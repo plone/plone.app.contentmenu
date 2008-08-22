@@ -1,6 +1,14 @@
 Changelog
 =========
 
+1.1.6 (unreleased)
+------------------
+
+- Fix non XML syntax compliant ids in contentmenus. This closes
+  https://dev.plone.org/plone/ticket/8195
+  [garbas,calvinhp]
+
+
 1.1.5 (August 18th, 2008)
 ------------------
 

@@ -276,7 +276,7 @@ class DisplayMenu(BrowserMenu):
                                  'action'      : None,
                                  'selected'    : False,
                                  'icon'        : None,
-                                 'extra'       : {'id': '_folderHeader', 'separator': 'actionSeparator', 'class': ''},
+                                 'extra'       : {'id': 'folderHeader', 'separator': 'actionSeparator', 'class': ''},
                                  'submenu'     : None,
                                  })
 
@@ -296,7 +296,7 @@ class DisplayMenu(BrowserMenu):
                              'action'      : None,
                              'selected'    : True,
                              'icon'        : None,
-                             'extra'       : {'id': '_folderDefaultPageDisplay', 'separator': 'actionSeparator', 'class': 'actionMenuSelected'},
+                             'extra'       : {'id': 'folderDefaultPageDisplay', 'separator': 'actionSeparator', 'class': 'actionMenuSelected'},
                              'submenu'     : None,
                              })
             # Let the user change the selection
@@ -306,7 +306,7 @@ class DisplayMenu(BrowserMenu):
                                  'action'      : '%s/select_default_page' % (folderUrl,),
                                  'selected'    : False,
                                  'icon'        : None,
-                                 'extra'       : {'id': '_folderChangeDefaultPage', 'separator': 'actionSeparator', 'class': ''},
+                                 'extra'       : {'id': 'folderChangeDefaultPage', 'separator': 'actionSeparator', 'class': ''},
                                  'submenu'     : None,
                                  })
 
@@ -323,7 +323,7 @@ class DisplayMenu(BrowserMenu):
                                  'action'      : None,
                                  'selected'    : False,
                                  'icon'        : None,
-                                 'extra'       : {'id': '_contextHeader', 'separator': 'actionSeparator', 'class': ''},
+                                 'extra'       : {'id': 'contextHeader', 'separator': 'actionSeparator', 'class': ''},
                                  'submenu'     : None,
                                  })
 
@@ -357,7 +357,7 @@ class DisplayMenu(BrowserMenu):
                                          'action'      : '%s/select_default_page' % (contextUrl,),
                                          'selected'    : False,
                                          'icon'        : None,
-                                         'extra'       : {'id': '_contextSetDefaultPage', 'separator': 'actionSeparator', 'class': ''},
+                                         'extra'       : {'id': 'contextSetDefaultPage', 'separator': 'actionSeparator', 'class': ''},
                                          'submenu'     : None,
                                          })
                 else:
@@ -374,7 +374,7 @@ class DisplayMenu(BrowserMenu):
                                      'action'      : None,
                                      'selected'    : True,
                                      'icon'        : None,
-                                     'extra'       : {'id': '_contextDefaultPageDisplay', 'separator': 'actionSeparator', 'class': ''},
+                                     'extra'       : {'id': 'contextDefaultPageDisplay', 'separator': 'actionSeparator', 'class': ''},
                                      'submenu'     : None,
                                      })
                     if contextCanSetDefaultPage:
@@ -383,7 +383,7 @@ class DisplayMenu(BrowserMenu):
                                          'action'      : '%s/select_default_page' % (contextUrl,),
                                          'selected'    : False,
                                          'icon'        : None,
-                                         'extra'       : {'id': '_contextChangeDefaultPage', 'separator': 'actionSeparator', 'class': ''},
+                                         'extra'       : {'id': 'contextChangeDefaultPage', 'separator': 'actionSeparator', 'class': ''},
                                          'submenu'     : None,
                                          })
 
@@ -537,7 +537,7 @@ class FactoriesMenu(BrowserMenu):
                              'action'      : url,
                              'selected'    : False,
                              'icon'        : None,
-                             'extra'       : {'id': '_more', 'separator': None, 'class': ''},
+                             'extra'       : {'id': 'more', 'separator': None, 'class': ''},
                              'submenu'     : None,
                             })
 
@@ -550,7 +550,7 @@ class FactoriesMenu(BrowserMenu):
                                 'action'      : url,
                                 'selected'    : False,
                                 'icon'        : None,
-                                'extra'       : {'id': '_settings', 'separator': None, 'class': ''},
+                                'extra'       : {'id': 'settings', 'separator': None, 'class': ''},
                                 'submenu'     : None,
                                 })
 
@@ -691,7 +691,7 @@ class WorkflowMenu(BrowserMenu):
                              'action'       : url + '/content_status_history',
                              'selected'     : False,
                              'icon'         : None,
-                             'extra'        : {'id': '_advanced', 'separator': 'actionSeparator', 'class': 'kssIgnore'},
+                             'extra'        : {'id': 'advanced', 'separator': 'actionSeparator', 'class': 'kssIgnore'},
                              'submenu'      : None,
                             })
 
@@ -701,7 +701,7 @@ class WorkflowMenu(BrowserMenu):
                              'action'      : url + '/placeful_workflow_configuration',
                              'selected'    : False,
                              'icon'        : None,
-                             'extra'       : {'id': '_policy', 'separator': None, 'class': 'kssIgnore'},
+                             'extra'       : {'id': 'policy', 'separator': None, 'class': 'kssIgnore'},
                              'submenu'     : None,
                             })
 

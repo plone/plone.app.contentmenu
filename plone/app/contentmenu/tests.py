@@ -78,7 +78,7 @@ class TestDisplayMenu(ptc.PloneTestCase):
         self.folder.invokeFactory('Document', 'doc1')
         self.folder.setDefaultPage('doc1')
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
-        self.failUnless('_folderDefaultPageDisplay' in [a['extra']['id'] for a in actions])
+        self.failUnless('folderDefaultPageDisplay' in [a['extra']['id'] for a in actions])
         self.failIf('document_view' in [a['extra']['id'] for a in actions])
 
     def testDefaultPageIncludesParentAndItemViewsWhenItemHasMultipleViews(self):
@@ -88,7 +88,7 @@ class TestDisplayMenu(ptc.PloneTestCase):
         self.folder.invokeFactory('Document', 'doc1')
         self.folder.setDefaultPage('doc1')
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
-        self.failUnless('_folderDefaultPageDisplay' in [a['extra']['id'] for a in actions])
+        self.failUnless('folderDefaultPageDisplay' in [a['extra']['id'] for a in actions])
         self.failUnless('document_view' in [a['extra']['id'] for a in actions])
         self.failUnless('base_view' in [a['extra']['id'] for a in actions])
 
@@ -104,40 +104,40 @@ class TestDisplayMenu(ptc.PloneTestCase):
         self.folder.invokeFactory('Folder', 'f1')
         self.failUnless(self.folder.f1.canSetDefaultPage())
         actions = self.menu.getMenuItems(self.folder.f1, self.request)
-        self.failUnless('_contextSetDefaultPage' in [a['extra']['id'] for a in actions])
+        self.failUnless('contextSetDefaultPage' in [a['extra']['id'] for a in actions])
 
     def testWithCanSetDefaultPageFalse(self):
         self.folder.invokeFactory('Folder', 'f1')
         self.folder.f1.manage_permission('Modify view template', ('Manager',))
         self.failIf(self.folder.f1.canSetDefaultPage())
         actions = self.menu.getMenuItems(self.folder.f1, self.request)
-        self.failIf('_contextSetDefaultPage' in [a['extra']['id'] for a in actions])
+        self.failIf('contextSetDefaultPage' in [a['extra']['id'] for a in actions])
 
     def testSelectItemNotIncludedInNonStructuralFolder(self):
         self.folder.invokeFactory('Folder', 'f1')
         directlyProvides(self.folder.f1, INonStructuralFolder)
         actions = self.menu.getMenuItems(self.folder.f1, self.request)
-        self.failIf('_contextSetDefaultPage' in [a['extra']['id'] for a in actions])
+        self.failIf('contextSetDefaultPage' in [a['extra']['id'] for a in actions])
 
     def testDefaultPageSelectedAndOverridesLayout(self):
         self.folder.invokeFactory('Document', 'doc1')
         self.folder.setDefaultPage('doc1')
         actions = self.menu.getMenuItems(self.folder, self.request)
         selected = [a['extra']['id'] for a in actions if a['selected']]
-        self.assertEqual(selected, ['_contextDefaultPageDisplay'])
+        self.assertEqual(selected, ['contextDefaultPageDisplay'])
 
     def testDefaultPageCanBeChangedInContext(self):
         self.folder.invokeFactory('Document', 'doc1')
         self.folder.setDefaultPage('doc1')
         actions = self.menu.getMenuItems(self.folder, self.request)
-        self.failUnless('_contextChangeDefaultPage' in [a['extra']['id'] for a in actions])
+        self.failUnless('contextChangeDefaultPage' in [a['extra']['id'] for a in actions])
 
     def testDefaultPageCanBeChangedInFolder(self):
         self.folder.invokeFactory('Document', 'doc1')
         self.folder.setDefaultPage('doc1')
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
-        self.failUnless('_folderChangeDefaultPage' in [a['extra']['id'] for a in actions])
-        self.failIf('_contextChangeDefaultPage' in [a['extra']['id'] for a in actions])
+        self.failUnless('folderChangeDefaultPage' in [a['extra']['id'] for a in actions])
+        self.failIf('contextChangeDefaultPage' in [a['extra']['id'] for a in actions])
 
     # Headers/separators
 
@@ -149,8 +149,8 @@ class TestDisplayMenu(ptc.PloneTestCase):
         self.folder.setDefaultPage('doc1')
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
         ids = [a['extra']['id'] for a in actions]
-        self.failUnless('_folderHeader' in ids)
-        self.failUnless('_contextHeader' in ids)
+        self.failUnless('folderHeader' in ids)
+        self.failUnless('contextHeader' in ids)
 
     def testSeparatorsNotIncludedWhenViewingDefaultPageWithoutViews(self):
         self.folder.invokeFactory('Document', 'doc1')
@@ -158,8 +158,8 @@ class TestDisplayMenu(ptc.PloneTestCase):
         self.assertEqual(len(self.folder.doc1.getAvailableLayouts()), 1)
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
         ids = [a['extra']['id'] for a in actions]
-        self.failIf('_folderHeader' in ids)
-        self.failIf('_contextHeader' in ids)
+        self.failIf('folderHeader' in ids)
+        self.failIf('contextHeader' in ids)
 
     def testSeparatorsNotDisplayedWhenViewingFolder(self):
         fti = self.portal.portal_types['Document']
@@ -169,15 +169,15 @@ class TestDisplayMenu(ptc.PloneTestCase):
         self.folder.setDefaultPage('doc1')
         actions = self.menu.getMenuItems(self.folder, self.request)
         ids = [a['extra']['id'] for a in actions]
-        self.failIf('_folderHeader' in ids)
-        self.failIf('_contextHeader' in ids)
+        self.failIf('folderHeader' in ids)
+        self.failIf('contextHeader' in ids)
 
     # Regressions
 
     def testDefaultPageTemplateTitle(self):
         self.folder.setDefaultPage('sitemap') # Use a template in portal_skins
         actions = self.menu.getMenuItems(self.folder, self.request)
-        changeAction = [x for x in actions if x['extra']['id'] == '_contextDefaultPageDisplay'][0]
+        changeAction = [x for x in actions if x['extra']['id'] == 'contextDefaultPageDisplay'][0]
         changeAction['title'].default
         self.assertEquals(u"Sitemap", changeAction['title'].mapping['contentitem'])
 
