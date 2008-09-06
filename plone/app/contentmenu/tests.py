@@ -235,11 +235,11 @@ class TestFactoriesMenu(ptc.PloneTestCase):
         actions = self.menu.getMenuItems(self.folder, self.request)
         self.assertEqual(len(actions), 2)
         self.assertEqual(actions[0]['extra']['id'], 'document')
-        self.assertEqual(actions[1]['extra']['id'], '_settings')
+        self.assertEqual(actions[1]['extra']['id'], 'settings')
 
     def testSettingsIncluded(self):
         actions = self.menu.getMenuItems(self.folder, self.request)
-        self.assertEqual(actions[-1]['extra']['id'], '_settings')
+        self.assertEqual(actions[-1]['extra']['id'], 'settings')
 
     def testSettingsNotIncludedWhereNotSupported(self):
         self.folder.manage_permission('Modify constrain types', ('Manager',))
@@ -254,8 +254,8 @@ class TestFactoriesMenu(ptc.PloneTestCase):
         actions = self.menu.getMenuItems(self.folder, self.request)
         self.failIf('image' in [a['extra']['id'] for a in actions])
         self.failUnless('document' in [a['extra']['id'] for a in actions])
-        self.failUnless('_more' in [a['extra']['id'] for a in actions])
-        self.failUnless('_settings' in [a['extra']['id'] for a in actions])
+        self.failUnless('more' in [a['extra']['id'] for a in actions])
+        self.failUnless('settings' in [a['extra']['id'] for a in actions])
 
     def testMoreNotIncludedWhenNotNecessary(self):
         constraints = ISelectableConstrainTypes(self.folder)
@@ -265,7 +265,7 @@ class TestFactoriesMenu(ptc.PloneTestCase):
         actions = self.menu.getMenuItems(self.folder, self.request)
         self.assertEqual(len(actions), 2)
         self.assertEqual(actions[0]['extra']['id'], 'document')
-        self.assertEqual(actions[1]['extra']['id'], '_settings')
+        self.assertEqual(actions[1]['extra']['id'], 'settings')
 
     def testNonStructualFolderShowsParent(self):
         # Cope with an unfortunate side-effect of running all plone.* tests at
@@ -422,7 +422,7 @@ class TestContentMenu(ptc.PloneTestCase):
         items = self.menu.getMenuItems(self.folder, self.request)
         factoriesMenuItem = [i for i in items if i['extra']['id'] == 'plone-contentmenu-factories'][0]
         self.assertEqual(len(factoriesMenuItem['submenu']), 1)
-        self.assertEqual(factoriesMenuItem['submenu'][0]['extra']['id'], '_settings')
+        self.assertEqual(factoriesMenuItem['submenu'][0]['extra']['id'], 'settings')
 
     def testAddMenuWithNothingToAddButWithAvailableMorePage(self):
         self.folder.setConstrainTypesMode(1)
@@ -432,7 +432,7 @@ class TestContentMenu(ptc.PloneTestCase):
         items = self.menu.getMenuItems(self.folder, self.request)
         factoriesMenuItem = [i for i in items if i['extra']['id'] == 'plone-contentmenu-factories'][0]
         self.assertEqual(len(factoriesMenuItem['submenu']), 1)
-        self.assertEqual(factoriesMenuItem['submenu'][0]['extra']['id'], '_more')
+        self.assertEqual(factoriesMenuItem['submenu'][0]['extra']['id'], 'more')
 
     def testAddMenuRelativeToNonStructuralFolder(self):
         self.folder.invokeFactory('Folder', 'f1')
