@@ -497,7 +497,7 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
         constrain = ISelectableConstrainTypes(addContext, None)
         if constrain is None:
             return False
-        elif constrain.canSetConstrainTypes():
+        elif constrain.canSetConstrainTypes() and constrain.getDefaultAddableTypes():
             return True
         elif len(constrain.getLocallyAllowedTypes()) < len(constrain.getImmediatelyAddableTypes()):
             return True
@@ -543,7 +543,7 @@ class FactoriesMenu(BrowserMenu):
 
         constraints = ISelectableConstrainTypes(addContext, None)
         if constraints is not None:
-            if constraints.canSetConstrainTypes():
+            if constraints.canSetConstrainTypes() and constraints.getDefaultAddableTypes():
                 url = '%s/folder_constraintypes_form' % (addContext.absolute_url(),)
                 results.append({'title'       : _(u'folder_add_settings', default=u'Restrictions\u2026'),
                                 'description' : _(u'title_configure_addable_content_types', default=u'Configure which content types can be added here'),

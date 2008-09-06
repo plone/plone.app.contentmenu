@@ -4,6 +4,10 @@ Changelog
 1.1.6 (unreleased)
 ------------------
 
+- Fix on factories menu, showing constrain options only when there are 
+  types to constrain. This closes http://dev.plone.org/plone/ticket/8213.
+  [igbun]
+
 - Fix non XML syntax compliant ids in contentmenus. This closes
   http://dev.plone.org/plone/ticket/8195
   [garbas,calvinhp]

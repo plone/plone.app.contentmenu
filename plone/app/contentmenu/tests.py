@@ -220,6 +220,12 @@ class TestFactoriesMenu(ptc.PloneTestCase):
     def testNoAddableTypes(self):
         actions = self.menu.getMenuItems(self.portal, self.request)
         self.assertEqual(len(actions), 0)
+        
+        # set no types for folders and check the menu is not shown
+        folder_fti = self.portal.portal_types['Folder']
+        folder_fti.manage_changeProperties(filter_content_types=True, allowed_content_types=[])
+        actions = self.menu.getMenuItems(self.folder, self.request)
+        self.assertEqual(len(actions), 0)
 
     def testConstrainTypes(self):
         constraints = ISelectableConstrainTypes(self.folder)
