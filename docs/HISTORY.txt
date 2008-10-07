@@ -1,8 +1,8 @@
 Changelog
 =========
 
-1.1.6 (unreleased)
-------------------
+1.1.6 (October 7, 2008)
+-----------------------
 
 - Fix on factories menu, showing constrain options only when there are 
   types to constrain. This closes http://dev.plone.org/plone/ticket/8213.
