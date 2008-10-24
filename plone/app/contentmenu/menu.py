@@ -1,4 +1,5 @@
 from urllib import quote_plus
+from cgi import escape
 
 from zope.interface import implements
 from zope.component import getMultiAdapter, queryMultiAdapter
@@ -291,7 +292,7 @@ class DisplayMenu(BrowserMenu):
                                      'submenu'     : None,
                                      })
             # Display the selected item (i.e. the context)
-            results.append({ 'title'       : _(u'label_item_selected', default=u'Item: ${contentitem}', mapping={'contentitem' : _safe_unicode(obj.Title())}),
+            results.append({ 'title'       : _(u'label_item_selected', default=u'Item: ${contentitem}', mapping={'contentitem' : escape(_safe_unicode(obj.Title()))}),
                              'description' : '',
                              'action'      : None,
                              'selected'    : True,
@@ -369,7 +370,7 @@ class DisplayMenu(BrowserMenu):
                         else:
                             defaultPageTitle = getattr(aq_base(defaultPageObj), 'title', u'')
 
-                    results.append({ 'title'       : _(u'label_item_selected', default=u'Item: ${contentitem}', mapping={'contentitem' : _safe_unicode(defaultPageTitle)}),
+                    results.append({ 'title'       : _(u'label_item_selected', default=u'Item: ${contentitem}', mapping={'contentitem' : escape(_safe_unicode(defaultPageTitle))}),
                                      'description' : '',
                                      'action'      : None,
                                      'selected'    : True,

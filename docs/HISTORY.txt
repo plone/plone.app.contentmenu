@@ -4,6 +4,10 @@ Changelog
 1.1.7 (unreleased)
 ------------------
 
+- Escape the title of the defaultpage in the DisplayMenu.
+  This fixes a potential xss attack and https://dev.plone.org/plone/ticket/8377
+  [csenger]
+
 
 1.1.6 (October 7, 2008)
 -----------------------
