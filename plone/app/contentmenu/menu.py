@@ -288,7 +288,7 @@ class DisplayMenu(BrowserMenu):
                                      'action'      : '%s/selectViewTemplate?templateId=%s' % (folderUrl, id,),
                                      'selected'    : False,
                                      'icon'        : None,
-                                     'extra'       : {'id': id, 'separator': None, 'class': ''},
+                                     'extra'       : {'id': 'folder-' + id, 'separator': None, 'class': ''},
                                      'submenu'     : None,
                                      })
             # Display the selected item (i.e. the context)
