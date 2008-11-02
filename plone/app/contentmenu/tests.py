@@ -268,13 +268,6 @@ class TestFactoriesMenu(ptc.PloneTestCase):
         self.assertEqual(actions[1]['extra']['id'], 'settings')
 
     def testNonStructualFolderShowsParent(self):
-        # Cope with an unfortunate side-effect of running all plone.* tests at
-        # once. Some tests setup the Archetypes examples types and don't use
-        # their own layer for it :(
-        for t in ('ATBIFolder', 'ComplexType', 'DDocument'):
-            if t in self.portal.portal_types.keys():
-                self.portal.portal_types[t].global_allow = False
-
         self.folder.invokeFactory('Folder', 'folder1')
         directlyProvides(self.folder.folder1, INonStructuralFolder)
         constraints = ISelectableConstrainTypes(self.folder.folder1)
@@ -282,7 +275,8 @@ class TestFactoriesMenu(ptc.PloneTestCase):
         constraints.setLocallyAllowedTypes(('Document',))
         constraints.setImmediatelyAddableTypes(('Document',))
         actions = self.menu.getMenuItems(self.folder.folder1, self.request)
-        self.failUnless('event' in actions[0]['extra']['id'])
+        action_ids = [a['extra']['id'] for a in actions]
+        self.failUnless('event' in action_ids)
 
 
 class TestWorkflowMenu(ptc.PloneTestCase):

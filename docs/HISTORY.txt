@@ -4,6 +4,9 @@ Changelog
 1.1.7 (unreleased)
 ------------------
 
+- Made a test independent of an internal sort order.
+  [hannosch]
+
 - Escape the title of the defaultpage in the DisplayMenu.
   This fixes a potential xss attack and https://dev.plone.org/plone/ticket/8377
   [csenger]
