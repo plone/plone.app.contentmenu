@@ -11,6 +11,10 @@ Changelog
   This fixes a potential xss attack and https://dev.plone.org/plone/ticket/8377
   [csenger]
 
+- Added the prefix "folder-" to the CSS id of the folder part of the view contentmenu.
+  This closes https://dev.plone.org/plone/ticket/8375
+  [realefab]
+
 
 1.1.6 (October 7, 2008)
 -----------------------
