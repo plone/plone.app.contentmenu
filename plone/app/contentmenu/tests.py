@@ -395,6 +395,18 @@ class TestContentMenu(ptc.PloneTestCase):
         displayMenuItems = [i for i in items if i['extra']['id'] == 'plone-contentmenu-display']
         self.assertEqual(len(displayMenuItems), 0)
 
+    def testDisplayMenuAddPrefixFolderForContainerPart(self):
+        prefix = 'folder-'
+        self.folder.invokeFactory('Folder', 'subfolder1')
+        self.folder.setDefaultPage('subfolder1')
+        items = self.menu.getMenuItems(self.folder.subfolder1, self.request)
+        displayMenuItems = [i for i in items if i['extra']['id'] == 'plone-contentmenu-display'][0]
+        extras = [i['extra'] for i in displayMenuItems['submenu']]
+        for extra in extras[1:]:
+            if not extra['separator'] is None: break
+            else:
+                self.assertEqual(extra['id'][0:len(prefix)],prefix)
+
     # Add sub-menu
 
     def testAddMenuIncluded(self):
