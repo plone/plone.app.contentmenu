@@ -12,7 +12,7 @@ setup(name='plone.app.contentmenu',
       keywords='plone contentmenu menu',
       author='Martin Aspeli',
       author_email='optilude@gmx.net',
-      url='http://svn.plone.org/svn/plone/plone.app.contentmenu',
+      url='http://pypi.python.org/pypi/plone.app.contentmenu',
       license='GPL',
       packages=find_packages(exclude=['ez_setup']),
       namespace_packages = ['plone', 'plone.app'],
@@ -24,7 +24,4 @@ setup(name='plone.app.contentmenu',
         'plone.memoize',
         'plone.app.content',
       ],
-      entry_points="""
-      # -*- Entry points: -*-
-      """,
       )

@@ -1,23 +1,23 @@
 Changelog
 =========
 
-1.1.7 (unreleased)
+1.1.7 - 2009-03-07
 ------------------
 
 - Made a test independent of an internal sort order.
   [hannosch]
 
-- Escape the title of the defaultpage in the DisplayMenu.
-  This fixes a potential xss attack and https://dev.plone.org/plone/ticket/8377
+- Escape the title of the defaultpage in the DisplayMenu. This fixes a
+  potential xss attack and http://dev.plone.org/plone/ticket/8377.
   [csenger]
 
-- Added the prefix "folder-" to the CSS id of the folder part of the view contentmenu.
-  This closes https://dev.plone.org/plone/ticket/8375
+- Added the prefix "folder-" to the CSS id of the folder part of the view
+  contentmenu. This closes http://dev.plone.org/plone/ticket/8375.
   [realefab]
 
 
-1.1.6 (October 7, 2008)
------------------------
+1.1.6 2008-10-07
+----------------
 
 - Fix on factories menu, showing constrain options only when there are 
   types to constrain. This closes http://dev.plone.org/plone/ticket/8213.
@@ -28,8 +28,8 @@ Changelog
   [garbas,calvinhp]
 
 
-1.1.5 (August 18th, 2008)
-------------------
+1.1.5 2008-08-18
+----------------
 
 - Add a span with a "noMenuAction" class around disable menus, allowing them
   to be styled.
@@ -122,8 +122,8 @@ Changelog
 - Set kssIgnore class on workflow actions that define their own screens.
   [ldr]
 
-1.0b1 - March 5, 2007
----------------------
+1.0b1 - 2007-03-05
+------------------
 
 - Initial package structure.
   [zopeskel]
