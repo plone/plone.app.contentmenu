@@ -442,12 +442,19 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
         addContext = self._addContext()
         if self._hideChildren():
             (addContext, fti) = self._itemsToAdd()[0]
+            
+            # First, check the folder/add action category. This is set using
+            # add_view_expr on the FTI
+            ftiId = fti.getId()
+            for a in self.context_state.actions().get('folder/add', []):
+                if a['id'] == ftiId:
+                    actionUrl = a['url']
+                    if actionUrl:
+                        return actionUrl
+                    break
+            
+            # Otherwise, fall back on the createObject script
             baseUrl = addContext.absolute_url()
-            addingview = queryMultiAdapter((addContext, self.request), name='+')
-            if addingview is not None:
-                addview = queryMultiAdapter((addingview, self.request), name=fti.factory)
-                if addview is not None:
-                    return '%s/+/%s' % (baseUrl, fti.factory,)
             return '%s/createObject?type_name=%s' % (baseUrl, quote_plus(fti.getId()),)
         else:
             return '%s/folder_factories' % self.context_state.folder().absolute_url()

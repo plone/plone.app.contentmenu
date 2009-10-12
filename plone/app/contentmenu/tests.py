@@ -198,6 +198,13 @@ class TestFactoriesMenu(ptc.PloneTestCase):
     def testMenuIncludesFactories(self):
         actions = self.menu.getMenuItems(self.folder, self.request)
         self.failUnless('image' in [a['extra']['id'] for a in actions])
+    
+    def testAddViewExpressionUsedInMenu(self):
+        self.portal.portal_types['Image']._setPropValue('add_view_expr', 'string:custom_expr')
+        actions = self.menu.getMenuItems(self.folder, self.request)
+        self.failUnless('custom_expr' in [a['action'] for a in actions])
+        self.failUnless('%s/createObject?type_name=File' % self.folder.absolute_url()
+                         in [a['action'] for a in actions])
 
     def testTypeNameIsURLQuoted(self):
         actions = self.menu.getMenuItems(self.folder, self.request)
@@ -457,6 +464,19 @@ class TestContentMenu(ptc.PloneTestCase):
         items = self.menu.getMenuItems(self.folder, self.request)
         factoriesMenuItem = [i for i in items if i['extra']['id'] == 'plone-contentmenu-factories'][0]
         self.assertEqual(factoriesMenuItem['action'], self.folder.absolute_url() + '/createObject?type_name=Document')
+        self.assertEqual(factoriesMenuItem['extra']['hideChildren'], True)
+
+    def testAddMenuWithAddViewExpr(self):
+        # we need a dummy to test this - should test that if the item does not
+        # support constrain types and there is
+        self.folder.setConstrainTypesMode(1)
+        self.folder.setLocallyAllowedTypes(('Document',))
+        self.folder.setImmediatelyAddableTypes(('Document',))
+        self.folder.manage_permission('Modify constrain types', ('Manager',))
+        self.portal.portal_types['Document']._setPropValue('add_view_expr', 'string:custom_expr')
+        items = self.menu.getMenuItems(self.folder, self.request)
+        factoriesMenuItem = [i for i in items if i['extra']['id'] == 'plone-contentmenu-factories'][0]
+        self.assertEqual(factoriesMenuItem['action'], 'custom_expr')
         self.assertEqual(factoriesMenuItem['extra']['hideChildren'], True)
 
     # Workflow sub-menu

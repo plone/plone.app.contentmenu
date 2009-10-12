@@ -1,9 +1,12 @@
 Changelog
 =========
 
-1.1.8 - unreleased
-------------------
+1.2 - unreleased
+----------------
 
+- Added support for the new add_view_expr property available on FTIs. This
+  can be used to construct a URL for add views.
+  [optilude]
 
 1.1.7 - 2009-03-07
 ------------------
