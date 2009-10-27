@@ -4,6 +4,10 @@ Changelog
 1.2 - unreleased
 ----------------
 
+- Updated action and icon handling in the actions menu to take advantage of
+  the icon being stored on the action itself.
+  [hannosch]
+
 - Added support for the new add_view_expr property available on FTIs. This
   can be used to construct a URL for add views.
   [optilude]
