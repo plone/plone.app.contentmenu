@@ -84,20 +84,33 @@ class ActionsMenu(BrowserMenu):
         """Return menu item entries in a TAL-friendly form."""
         results = []
 
-        context_state = getMultiAdapter((context, request), name='plone_context_state')
+        context_state = getMultiAdapter((context, request),
+            name='plone_context_state')
         editActions = context_state.actions('object_buttons')
         if not editActions:
             return results
 
+        actionicons = getToolByName(context, 'portal_actionicons')
+        url_tool = getToolByName(context, 'portal_url')
+        portal_url = getToolByName(context, 'portal_url')()
+
         for action in editActions:
             if action['allowed']:
-                cssClass = 'actionicon-object_buttons-%s' % action['id']
+                aid = action['id']
+                cssClass = 'actionicon-object_buttons-%s' % aid
+                icon = action.get('icon', None)
+                if not icon:
+                    # allow fallback to action icons tool
+                    icon = actionicons.queryActionIcon('object_buttons', aid)
+                    if icon:
+                        icon = '%s/%s' % (portal_url, icon)
+
                 results.append({ 'title'       : action['title'],
                                  'description' : '',
                                  'action'      : action['url'],
                                  'selected'    : False,
-                                 'icon'        : action['icon'],
-                                 'extra'       : {'id': action['id'], 'separator': None, 'class': cssClass},
+                                 'icon'        : icon,
+                                 'extra'       : {'id': aid, 'separator': None, 'class': cssClass},
                                  'submenu'     : None,
                                  })
 
