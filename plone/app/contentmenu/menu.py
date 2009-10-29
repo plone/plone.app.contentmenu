@@ -654,12 +654,12 @@ class WorkflowMenu(BrowserMenu):
         results = []
         context = aq_inner(context)
 
-        wf_tool = getToolByName(context, 'portal_workflow')
-        workflowActions = wf_tool.listActionInfos(object=context)
-
         locking_info = queryMultiAdapter((context, request), name='plone_lock_info')
         if locking_info and locking_info.is_locked_for_current_user():
             return []
+
+        wf_tool = getToolByName(context, 'portal_workflow')
+        workflowActions = wf_tool.listActionInfos(object=context)
 
         for action in workflowActions:
             if action['category'] != 'workflow':
