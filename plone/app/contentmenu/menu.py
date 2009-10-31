@@ -445,17 +445,17 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
         addContext = self._addContext()
         if self._hideChildren():
             (addContext, fti) = self._itemsToAdd()[0]
-            
+
             # First, check the folder/add action category. This is set using
             # add_view_expr on the FTI
             ftiId = fti.getId()
-            for a in self.context_state.actions().get('folder/add', []):
+            for a in self.context_state.actions('folder/add'):
                 if a['id'] == ftiId:
                     actionUrl = a['url']
                     if actionUrl:
                         return actionUrl
                     break
-            
+
             # Otherwise, fall back on the createObject script
             baseUrl = addContext.absolute_url()
             return '%s/createObject?type_name=%s' % (baseUrl, quote_plus(fti.getId()),)
