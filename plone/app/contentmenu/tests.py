@@ -1,29 +1,25 @@
 import unittest
 
+from Testing.ZopeTestCase.placeless import PlacelessSetup
 from Products.PloneTestCase import PloneTestCase as ptc
-ptc.setupPloneSite(extension_profiles=['Products.CMFPlone:testfixture'])
+ptc.setupPloneSite()
 
-from zope.interface import directlyProvides
+from plone.locking.interfaces import ILockable
 from zope.component import getUtility
-
+from zope.interface import directlyProvides
 from zope.app.publisher.interfaces.browser import IBrowserMenu
-from zope.app.testing.placelesssetup import PlacelessSetup
 
 from Products.CMFCore.Expression import Expression
 from Products.CMFCore.utils import getToolByName
-
 from Products.CMFPlone.interfaces import ISelectableConstrainTypes
 from Products.CMFPlone.interfaces import INonStructuralFolder
+from Products.CMFPlone.tests import dummy
+from Products.CMFPlone.utils import _createObjectByType
 
 from plone.app.contentmenu.interfaces import IActionsMenu
 from plone.app.contentmenu.interfaces import IDisplayMenu
 from plone.app.contentmenu.interfaces import IFactoriesMenu
 from plone.app.contentmenu.interfaces import IWorkflowMenu
-
-from plone.locking.interfaces import ILockable
-
-from Products.CMFPlone.utils import _createObjectByType
-from Products.CMFPlone.tests import dummy
 
 
 class TestActionsMenu(ptc.PloneTestCase):

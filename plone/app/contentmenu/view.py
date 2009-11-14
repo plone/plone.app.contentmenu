@@ -1,36 +1,23 @@
-from zope.interface import Interface
-from zope.interface import implements
-
 from zope.component import getUtility
-from zope.component import adapts
-
+from zope.interface import implements
+from zope.contentprovider.provider import ContentProviderBase
 from zope.app.publisher.interfaces.browser import IBrowserMenu
 
-from interfaces import IContentMenuView
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 
-from Acquisition import Explicit
-from Products.CMFPlone import utils
-from Products.Five.browser.pagetemplatefile import ZopeTwoPageTemplateFile
+from plone.app.contentmenu.interfaces import IContentMenuView
 
 
-class ContentMenuProvider(Explicit):
+class ContentMenuProvider(ContentProviderBase):
     """Content menu provider for the "view" tab: displays the menu
     """
 
     implements(IContentMenuView)
 
-    def __init__(self, context, request, view):
-        self.__parent__ = view
-        self.view = view
-        self.context = context
-        self.request = request
+    index = ViewPageTemplateFile('contentmenu.pt')
 
-    # From IContentProvider
-
-    def update(self):
-        pass
-
-    render = ZopeTwoPageTemplateFile('contentmenu.pt')
+    def render(self):
+        return self.index()
 
     # From IContentMenuView
 

@@ -1,8 +1,11 @@
 Changelog
 =========
 
-1.2 - unreleased
-----------------
+2.0a1 - unreleased
+------------------
+
+- Specified package dependencies and assorted cleanups.
+  [hannosch]
 
 - Avoid a deprecation warning for calling the ``actions`` method from the
   context_state state view without passing in an action category.

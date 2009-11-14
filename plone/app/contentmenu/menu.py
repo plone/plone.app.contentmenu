@@ -1,41 +1,34 @@
-from urllib import quote_plus
 from cgi import escape
+from urllib import quote_plus
 
-from zope.interface import implements
-from zope.component import getMultiAdapter, queryMultiAdapter
-from zope.app.component.hooks import getSite
-
+from plone.memoize.instance import memoize
+from plone.app.content.browser.folderfactories import _allowedTypes
 from zope.i18n import translate
 from zope.i18nmessageid.message import Message
-
+from zope.interface import implements
+from zope.component import getMultiAdapter, queryMultiAdapter
+from zope.site.hooks import getSite
 from zope.app.publisher.browser.menu import BrowserMenu
 from zope.app.publisher.browser.menu import BrowserSubMenuItem
 
-from plone.memoize.instance import memoize
-
-from Acquisition import aq_inner, aq_base
-
+from Acquisition import aq_base
 from Products.CMFCore.utils import getToolByName
 from Products.CMFDynamicViewFTI.interface import ISelectableBrowserDefault
-
+from Products.CMFPlone import utils
 from Products.CMFPlone.interfaces.structure import INonStructuralFolder
 from Products.CMFPlone.interfaces.constrains import IConstrainTypes
 from Products.CMFPlone.interfaces.constrains import ISelectableConstrainTypes
 
-from interfaces import IActionsSubMenuItem
-from interfaces import IDisplaySubMenuItem
-from interfaces import IFactoriesSubMenuItem
-from interfaces import IWorkflowSubMenuItem
+from plone.app.contentmenu import PloneMessageFactory as _
+from plone.app.contentmenu.interfaces import IActionsMenu
+from plone.app.contentmenu.interfaces import IActionsSubMenuItem
+from plone.app.contentmenu.interfaces import IDisplayMenu
+from plone.app.contentmenu.interfaces import IDisplaySubMenuItem
+from plone.app.contentmenu.interfaces import IFactoriesMenu
+from plone.app.contentmenu.interfaces import IFactoriesSubMenuItem
+from plone.app.contentmenu.interfaces import IWorkflowMenu
+from plone.app.contentmenu.interfaces import IWorkflowSubMenuItem
 
-from interfaces import IActionsMenu
-from interfaces import IDisplayMenu
-from interfaces import IFactoriesMenu
-from interfaces import IWorkflowMenu
-
-from Products.CMFPlone import utils
-from Products.CMFPlone import PloneMessageFactory as _
-
-from plone.app.content.browser.folderfactories import _allowedTypes
 
 def _safe_unicode(text):
     if not isinstance(text, unicode):
@@ -70,7 +63,7 @@ class ActionsSubMenuItem(BrowserSubMenuItem):
     @memoize
     def available(self):
         actions_tool = self.getToolByName('portal_actions')
-        editActions = actions_tool.listActionInfos(object=aq_inner(self.context), categories=('object_buttons',), max=1)
+        editActions = actions_tool.listActionInfos(object=self.context, categories=('object_buttons',), max=1)
         return len(editActions) > 0
 
     def selected(self):
@@ -619,8 +612,8 @@ class WorkflowSubMenuItem(BrowserSubMenuItem):
 
     @memoize
     def _transitions(self):
-        wf_tool = getToolByName(aq_inner(self.context), 'portal_workflow')
-        return wf_tool.listActionInfos(object=aq_inner(self.context), max=1)
+        wf_tool = getToolByName(self.context, 'portal_workflow')
+        return wf_tool.listActionInfos(object=self.context, max=1)
 
     @memoize
     def _currentStateTitle(self):
@@ -652,7 +645,6 @@ class WorkflowMenu(BrowserMenu):
     def getMenuItems(self, context, request):
         """Return menu item entries in a TAL-friendly form."""
         results = []
-        context = aq_inner(context)
 
         locking_info = queryMultiAdapter((context, request), name='plone_lock_info')
         if locking_info and locking_info.is_locked_for_current_user():

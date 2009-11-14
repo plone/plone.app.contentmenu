@@ -2,7 +2,7 @@ from zope.component import getAdapters
 from zope.interface import implements
 from zope.app.publisher.browser.menu import BrowserMenu
 
-from interfaces import IDisplayViewsMenu
+from plone.app.contentmenu.interfaces import IDisplayViewsMenu
 
 
 class DisplayViewsMenu(BrowserMenu):
