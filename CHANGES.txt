@@ -4,6 +4,10 @@ Changelog
 2.0b1 - Unreleased
 ------------------
 
+- Mark selected display always with 'actionMenuSelected' class and
+  stop using bullet points. References
+  http://dev.plone.org/plone/ticket/9894
+  [dukebody]
 
 2.0a1 - 2009-11-14
 ------------------

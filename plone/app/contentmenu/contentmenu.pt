@@ -56,8 +56,6 @@
                                        id subMenuItem/extra/id | nothing;
                                        class subMenuItem/extra/class | nothing"
                        i18n:attributes="title">
-                        <span tal:condition="subMenuItem/selected"
-                          >&bull;</span>
                         <img width="16"
                              height="16"
                              alt=""
@@ -74,8 +72,6 @@
                     <div tal:condition="not:subMenuItem/action"
                          tal:attributes="id subMenuItem/extra/id | nothing;
                                          class subMenuItem/extra/class | nothing">
-                        <span tal:condition="subMenuItem/selected"
-                          >&bull;</span>
                         <img width="16"
                              height="16"
                              alt=""

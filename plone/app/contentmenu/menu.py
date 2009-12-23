@@ -335,12 +335,13 @@ class DisplayMenu(BrowserMenu):
 
             if showLayouts and contextCanSetLayout:
                 for id, title in contextLayouts:
+                    is_selected = (defaultPage is None and id == selected)
                     results.append({ 'title'       : title,
                                      'description' : '',
                                      'action'      : '%s/selectViewTemplate?templateId=%s' % (contextUrl, id,),
-                                     'selected'    : (defaultPage is None and id == selected),
+                                     'selected'    : is_selected,
                                      'icon'        : None,
-                                     'extra'       : {'id': id, 'separator': None, 'class': ''},
+                                     'extra'       : {'id': id, 'separator': None, 'class': is_selected and 'actionMenuSelected' or ''},
                                      'submenu'     : None,
                                      })
 
