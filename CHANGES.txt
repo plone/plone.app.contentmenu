@@ -4,6 +4,9 @@ Changelog
 2.0b1 - Unreleased
 ------------------
 
+- Noted missing zope.publisher dependency and prefer absolute imports.
+  [hannosch]
+
 - Mark selected display always with 'actionMenuSelected' class and
   stop using bullet points. References
   http://dev.plone.org/plone/ticket/9894

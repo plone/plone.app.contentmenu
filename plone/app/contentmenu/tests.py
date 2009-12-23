@@ -535,7 +535,7 @@ class TestDisplayViewsMenu(PlacelessSetup, unittest.TestCase):
 
     def testInterface(self):
         """A DisplayViewsMenu implements an extended interface"""
-        from interfaces import IDisplayViewsMenu
+        from plone.app.contentmenu.interfaces import IDisplayViewsMenu
         self.assertTrue(IDisplayViewsMenu.providedBy(self.menu))
 
     def testSimpleAction(self):
