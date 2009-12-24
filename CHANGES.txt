@@ -4,6 +4,9 @@ Changelog
 2.0b1 - Unreleased
 ------------------
 
+- Removed no longer required zope.site dependency.
+  [hannosch]
+
 - Hide the actions, display and workflow menus on the folder contents page.
   This closes http://dev.plone.org/plone/ticket/8908.
   [hannosch]
