@@ -3,6 +3,7 @@ from urllib import quote_plus
 
 from plone.memoize.instance import memoize
 from plone.app.content.browser.folderfactories import _allowedTypes
+from plone.app.content.browser.interfaces import IContentsPage
 from zope.i18n import translate
 from zope.i18nmessageid.message import Message
 from zope.interface import implements
@@ -58,6 +59,8 @@ class ActionsSubMenuItem(BrowserSubMenuItem):
 
     @memoize
     def available(self):
+        if IContentsPage.providedBy(self.request):
+            return False
         actions_tool = getToolByName(self.context, 'portal_actions')
         editActions = actions_tool.listActionInfos(object=self.context, categories=('object_buttons',), max=1)
         return len(editActions) > 0
@@ -191,6 +194,8 @@ class DisplaySubMenuItem(BrowserSubMenuItem):
 
     @memoize
     def disabled(self):
+        if IContentsPage.providedBy(self.request):
+            return True
         context = self.context
         if self.context_state.is_default_page():
             context = utils.parent(context)
@@ -598,6 +603,8 @@ class WorkflowSubMenuItem(BrowserSubMenuItem):
 
     @memoize
     def available(self):
+        if IContentsPage.providedBy(self.request):
+            return False
         return (self.context_state.workflow_state() is not None)
 
     def selected(self):

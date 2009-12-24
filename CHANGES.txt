@@ -4,6 +4,10 @@ Changelog
 2.0b1 - Unreleased
 ------------------
 
+- Hide the actions, display and workflow menus on the folder contents page.
+  This closes http://dev.plone.org/plone/ticket/8908.
+  [hannosch]
+
 - Avoid a bogus getToolByName indirection via getSite().
   [hannosch]
 
