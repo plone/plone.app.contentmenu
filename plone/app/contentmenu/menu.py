@@ -12,6 +12,8 @@ from zope.app.publisher.browser.menu import BrowserMenu
 from zope.app.publisher.browser.menu import BrowserSubMenuItem
 
 from Acquisition import aq_base
+from Acquisition import aq_parent
+from Products.CMFCore.Expression import createExprContext
 from Products.CMFCore.utils import getToolByName
 from Products.CMFDynamicViewFTI.interface import ISelectableBrowserDefault
 from Products.CMFPlone import utils
@@ -457,13 +459,17 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
         else:
             return '%s/folder_factories' % self.context_state.folder().absolute_url()
 
-    @property
     def icon(self):
         if self._hideChildren():
             fti = self._itemsToAdd()[0][1]
-            return fti.getIcon()
-        else:
-            return None
+            expr = fti.getIconExprObject()
+            if expr is not None:
+                context = self.context
+                url_tool = getToolByName(context, 'portal_url')
+                portal = url_tool.getPortalObject()
+                ec = createExprContext(aq_parent(context), portal, context)
+                return expr(ec)
+        return None
 
     def available(self):
         itemsToAdd = self._itemsToAdd()

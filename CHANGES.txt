@@ -4,6 +4,9 @@ Changelog
 2.0b1 - Unreleased
 ------------------
 
+- Adjust factory menu to use the new getIconExprObject method.
+  [hannosch]
+
 - Removed no longer required zope.site dependency.
   [hannosch]
 
