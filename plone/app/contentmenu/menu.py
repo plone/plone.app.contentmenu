@@ -7,7 +7,6 @@ from zope.i18n import translate
 from zope.i18nmessageid.message import Message
 from zope.interface import implements
 from zope.component import getMultiAdapter, queryMultiAdapter
-from zope.site.hooks import getSite
 from zope.app.publisher.browser.menu import BrowserMenu
 from zope.app.publisher.browser.menu import BrowserSubMenuItem
 
@@ -50,9 +49,6 @@ class ActionsSubMenuItem(BrowserSubMenuItem):
         BrowserSubMenuItem.__init__(self, context, request)
         self.context_state = getMultiAdapter((context, request), name='plone_context_state')
 
-    def getToolByName(self, tool):
-        return getToolByName(getSite(), tool)
-
     @property
     def action(self):
         folder = self.context
@@ -62,7 +58,7 @@ class ActionsSubMenuItem(BrowserSubMenuItem):
 
     @memoize
     def available(self):
-        actions_tool = self.getToolByName('portal_actions')
+        actions_tool = getToolByName(self.context, 'portal_actions')
         editActions = actions_tool.listActionInfos(object=self.context, categories=('object_buttons',), max=1)
         return len(editActions) > 0
 

@@ -4,6 +4,9 @@ Changelog
 2.0b1 - Unreleased
 ------------------
 
+- Avoid a bogus getToolByName indirection via getSite().
+  [hannosch]
+
 - Noted missing zope.publisher dependency and prefer absolute imports.
   [hannosch]
 
