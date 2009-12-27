@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0b1 - Unreleased
+2.0a2 - 2009-12-27
 ------------------
 
 - Adjust factory menu to use the new getIconExprObject method.
