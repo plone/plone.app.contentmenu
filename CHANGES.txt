@@ -4,6 +4,11 @@ Changelog
 2.0b1 - unreleased
 ------------------
 
+- Removed the checking for hideChildren when a single item is present, this
+  makes the styling consistent again. The menu is really a one-item menu, and we
+  put it in the header as a shortcut that you can click directly. This fixes
+  http://dev.plone.org/plone/ticket/9735
+  [limi]
 
 2.0a2 - 2009-12-27
 ------------------
