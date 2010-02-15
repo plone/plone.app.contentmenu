@@ -443,15 +443,11 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
         if self._hideChildren():
             (addContext, fti) = self._itemsToAdd()[0]
 
-            # First, check the folder/add action category. This is set using
-            # add_view_expr on the FTI
-            ftiId = fti.getId()
-            for a in self.context_state.actions('folder/add'):
-                if a['id'] == ftiId:
-                    actionUrl = a['url']
-                    if actionUrl:
-                        return actionUrl
-                    break
+            # Ask the types machinery for the add action.
+            factories_view = getMultiAdapter((addContext, self.request), name='folder_factories')
+            actions = factories_view.addable_types(include=[fti.getId()])
+            if actions:
+                return actions[0]["action"]
 
             # Otherwise, fall back on the createObject script
             baseUrl = addContext.absolute_url()
