@@ -396,76 +396,29 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
 
     submenuId = 'plone_contentmenu_factory'
     order = 30
-
+    title = _(u'label_add_new_item', default=u'Add new\u2026')
+    description = _(u'title_add_new_items_inside_item', default=u'Add new items inside this item')
+    
     def __init__(self, context, request):
         BrowserSubMenuItem.__init__(self, context, request)
         self.context_state = getMultiAdapter((context, request), name='plone_context_state')
 
     @property
     def extra(self):
-        return {'id': 'plone-contentmenu-factories',
-                'hideChildren': self._hideChildren()}
-
-    @property
-    def title(self):
-        itemsToAdd = self._itemsToAdd()
-        showConstrainOptions = self._showConstrainOptions()
-        if showConstrainOptions or len(itemsToAdd) > 1:
-            return _(u'label_add_new_item', default=u'Add new\u2026')
-        elif len(itemsToAdd) == 1:
-            fti=itemsToAdd[0][1]
-            title = fti.Title()
-            if isinstance(title, Message):
-                title = translate(title, context=self.request)
-            else:
-                title = translate(_safe_unicode(title),
-                                  domain='plone',
-                                  context=self.request)
-            return _(u'label_add_type', default='Add ${type}',
-                     mapping={'type' : title})
-        else:
-            return _(u'label_add_new_item', default=u'Add new\u2026')
-
-    @property
-    def description(self):
-        itemsToAdd = self._itemsToAdd()
-        showConstrainOptions = self._showConstrainOptions()
-        if showConstrainOptions or len(itemsToAdd) > 1:
-            return _(u'title_add_new_items_inside_item', default=u'Add new items inside this item')
-        elif len(itemsToAdd) == 1:
-            return itemsToAdd[0][1].Description()
-        else:
-            return _(u'title_add_new_items_inside_item', default=u'Add new items inside this item')
+        return {'id': 'plone-contentmenu-factories'}
 
     @property
     def action(self):
-        addContext = self._addContext()
-        if self._hideChildren():
+        if self._itemsToAdd():
             (addContext, fti) = self._itemsToAdd()[0]
-
             # Ask the types machinery for the add action.
             factories_view = getMultiAdapter((addContext, self.request), name='folder_factories')
             actions = factories_view.addable_types(include=[fti.getId()])
             if actions:
                 return actions[0]["action"]
-
             # Otherwise, fall back on the createObject script
             baseUrl = addContext.absolute_url()
             return '%s/createObject?type_name=%s' % (baseUrl, quote_plus(fti.getId()),)
-        else:
-            return '%s/folder_factories' % self.context_state.folder().absolute_url()
-
-    def icon(self):
-        if self._hideChildren():
-            fti = self._itemsToAdd()[0][1]
-            expr = fti.getIconExprObject()
-            if expr is not None:
-                context = self.context
-                url_tool = getToolByName(context, 'portal_url')
-                portal = url_tool.getPortalObject()
-                ec = createExprContext(aq_parent(context), portal, context)
-                return expr(ec)
-        return None
 
     def available(self):
         itemsToAdd = self._itemsToAdd()
@@ -509,13 +462,6 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
             return True
         elif len(constrain.getLocallyAllowedTypes()) < len(constrain.getImmediatelyAddableTypes()):
             return True
-
-    @memoize
-    def _hideChildren(self):
-        itemsToAdd = self._itemsToAdd()
-        showConstrainOptions = self._showConstrainOptions()
-        return (len(itemsToAdd) == 1 and not showConstrainOptions)
-
 
 class FactoriesMenu(BrowserMenu):
     implements(IFactoriesMenu)

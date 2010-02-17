@@ -20,13 +20,6 @@
                i18n:attributes="title;">
                <span tal:omit-tag="menuItem/action"
                      class="noMenuAction">
-                  <img width="16"
-                       height="16"
-                       alt=""
-                       tal:condition="menuItem/icon"
-                       tal:attributes="src menuItem/icon;
-                                       title menuItem/description"
-                       i18n:attributes="alt;"/>
                   <span tal:content="menuItem/title"
                         i18n:translate="">
                       Title

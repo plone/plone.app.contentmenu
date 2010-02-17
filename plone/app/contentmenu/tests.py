@@ -415,9 +415,8 @@ class TestContentMenu(ptc.PloneTestCase):
     def testAddMenuIncluded(self):
         items = self.menu.getMenuItems(self.folder, self.request)
         factoriesMenuItem = [i for i in items if i['extra']['id'] == 'plone-contentmenu-factories'][0]
-        self.assertEqual(factoriesMenuItem['action'], self.folder.absolute_url() + '/folder_factories')
+        self.assertEqual(factoriesMenuItem['action'], self.folder.absolute_url() + '/createObject?type_name=Document')
         self.failUnless(len(factoriesMenuItem['submenu']) > 0)
-        self.assertEqual(factoriesMenuItem['extra']['hideChildren'], False)
 
     def testAddMenuNotIncludedIfNothingToAdd(self):
         self.logout()
@@ -450,18 +449,6 @@ class TestContentMenu(ptc.PloneTestCase):
         factoriesMenuItem = [i for i in items if i['extra']['id'] == 'plone-contentmenu-factories']
         self.failIf(factoriesMenuItem)
 
-    def testAddMenuWithSingleItemCollapses(self):
-        # we need a dummy to test this - should test that if the item does not
-        # support constrain types and there is
-        self.folder.setConstrainTypesMode(1)
-        self.folder.setLocallyAllowedTypes(('Document',))
-        self.folder.setImmediatelyAddableTypes(('Document',))
-        self.folder.manage_permission('Modify constrain types', ('Manager',))
-        items = self.menu.getMenuItems(self.folder, self.request)
-        factoriesMenuItem = [i for i in items if i['extra']['id'] == 'plone-contentmenu-factories'][0]
-        self.assertEqual(factoriesMenuItem['action'], self.folder.absolute_url() + '/createObject?type_name=Document')
-        self.assertEqual(factoriesMenuItem['extra']['hideChildren'], True)
-
     def testAddMenuWithAddViewExpr(self):
         # we need a dummy to test this - should test that if the item does not
         # support constrain types and there is
@@ -473,7 +460,6 @@ class TestContentMenu(ptc.PloneTestCase):
         items = self.menu.getMenuItems(self.folder, self.request)
         factoriesMenuItem = [i for i in items if i['extra']['id'] == 'plone-contentmenu-factories'][0]
         self.assertEqual(factoriesMenuItem['action'], 'custom_expr')
-        self.assertEqual(factoriesMenuItem['extra']['hideChildren'], True)
 
     # Workflow sub-menu
 
