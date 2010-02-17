@@ -415,7 +415,7 @@ class TestContentMenu(ptc.PloneTestCase):
     def testAddMenuIncluded(self):
         items = self.menu.getMenuItems(self.folder, self.request)
         factoriesMenuItem = [i for i in items if i['extra']['id'] == 'plone-contentmenu-factories'][0]
-        self.assertEqual(factoriesMenuItem['action'], self.folder.absolute_url() + '/createObject?type_name=Document')
+        self.assertEqual(factoriesMenuItem['action'], self.folder.absolute_url() + '/folder_factories')
         self.failUnless(len(factoriesMenuItem['submenu']) > 0)
 
     def testAddMenuNotIncludedIfNothingToAdd(self):
@@ -459,7 +459,7 @@ class TestContentMenu(ptc.PloneTestCase):
         self.portal.portal_types['Document']._setPropValue('add_view_expr', 'string:custom_expr')
         items = self.menu.getMenuItems(self.folder, self.request)
         factoriesMenuItem = [i for i in items if i['extra']['id'] == 'plone-contentmenu-factories'][0]
-        self.assertEqual(factoriesMenuItem['action'], 'custom_expr')
+        self.assertEqual(factoriesMenuItem['submenu'][0]['action'], 'custom_expr')
 
     # Workflow sub-menu
 

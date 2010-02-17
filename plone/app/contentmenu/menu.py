@@ -1,19 +1,14 @@
 from cgi import escape
-from urllib import quote_plus
 
 from plone.memoize.instance import memoize
 from plone.app.content.browser.folderfactories import _allowedTypes
 from plone.app.content.browser.interfaces import IContentsPage
-from zope.i18n import translate
-from zope.i18nmessageid.message import Message
 from zope.interface import implements
 from zope.component import getMultiAdapter, queryMultiAdapter
 from zope.app.publisher.browser.menu import BrowserMenu
 from zope.app.publisher.browser.menu import BrowserSubMenuItem
 
 from Acquisition import aq_base
-from Acquisition import aq_parent
-from Products.CMFCore.Expression import createExprContext
 from Products.CMFCore.utils import getToolByName
 from Products.CMFDynamicViewFTI.interface import ISelectableBrowserDefault
 from Products.CMFPlone import utils
@@ -85,7 +80,6 @@ class ActionsMenu(BrowserMenu):
             return results
 
         actionicons = getToolByName(context, 'portal_actionicons')
-        url_tool = getToolByName(context, 'portal_url')
         portal_url = getToolByName(context, 'portal_url')()
 
         for action in editActions:
@@ -409,16 +403,7 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
 
     @property
     def action(self):
-        if self._itemsToAdd():
-            (addContext, fti) = self._itemsToAdd()[0]
-            # Ask the types machinery for the add action.
-            factories_view = getMultiAdapter((addContext, self.request), name='folder_factories')
-            actions = factories_view.addable_types(include=[fti.getId()])
-            if actions:
-                return actions[0]["action"]
-            # Otherwise, fall back on the createObject script
-            baseUrl = addContext.absolute_url()
-            return '%s/createObject?type_name=%s' % (baseUrl, quote_plus(fti.getId()),)
+        return '%s/folder_factories' % self.context_state.folder().absolute_url() 
 
     def available(self):
         itemsToAdd = self._itemsToAdd()
