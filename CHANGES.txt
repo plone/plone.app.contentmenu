@@ -1,18 +1,18 @@
 Changelog
 =========
 
-2.0b2 - unreleased
+2.0b2 - 2010-02-17
 ------------------
 
 - Show "add new" menu when there are one or more addable types. Showing a link
   when only one type was addable caused conflicts with the dropdown JavaScript.
-  Closes http://dev.plone.org/plone/ticket/10193
+  Closes http://dev.plone.org/plone/ticket/10193.
+  [esteele, davisagli]
 
 - Query the types tool instead of the action tools to find add actions
   in FactoriesSubMenuItem. This fixes a discrepancy in action URLs.
   http://dev.plone.org/plone/ticket/10207
   [wichert]
-
 
 2.0b1 - 2010-01-24
 ------------------
