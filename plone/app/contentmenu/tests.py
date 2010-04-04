@@ -303,6 +303,16 @@ class TestFactoriesMenu(ptc.PloneTestCase):
         action_ids = [a['extra']['id'] for a in actions]
         self.failUnless('event' in action_ids)
 
+    def testImgConditionalOnTypeIcon(self):
+        """The <img> element should not render if the content type has
+        no icon expression"""
+        folder_fti = self.portal.portal_types['Folder']
+        folder_fti.manage_changeProperties(icon_expr='')
+        for item in self.menu.getMenuItems(self.folder, self.request):
+            if item['id'] == folder_fti.getId():
+                break
+        self.failIf(item['icon'])
+
 
 class TestWorkflowMenu(ptc.PloneTestCase):
 
