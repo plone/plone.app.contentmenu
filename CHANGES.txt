@@ -4,6 +4,8 @@ Changelog
 2.0b3 - unreleased
 ------------------
 
+- Added optional compatibility with zope.browsermenu.
+  [hannosch]
 
 2.0b2 - 2010-02-17
 ------------------

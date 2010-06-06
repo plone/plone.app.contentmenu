@@ -5,8 +5,6 @@ from plone.app.content.browser.folderfactories import _allowedTypes
 from plone.app.content.browser.interfaces import IContentsPage
 from zope.interface import implements
 from zope.component import getMultiAdapter, queryMultiAdapter
-from zope.app.publisher.browser.menu import BrowserMenu
-from zope.app.publisher.browser.menu import BrowserSubMenuItem
 
 from Acquisition import aq_base
 from Products.CMFCore.utils import getToolByName
@@ -25,6 +23,14 @@ from plone.app.contentmenu.interfaces import IFactoriesMenu
 from plone.app.contentmenu.interfaces import IFactoriesSubMenuItem
 from plone.app.contentmenu.interfaces import IWorkflowMenu
 from plone.app.contentmenu.interfaces import IWorkflowSubMenuItem
+
+# BBB Zope 2.12
+try:
+    from zope.browsermenu.menu import BrowserMenu
+    from zope.browsermenu.menu import BrowserSubMenuItem
+except ImportError:
+    from zope.app.publisher.browser.menu import BrowserMenu
+    from zope.app.publisher.browser.menu import BrowserSubMenuItem
 
 
 def _safe_unicode(text):
