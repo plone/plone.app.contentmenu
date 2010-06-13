@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0b3 - unreleased
+2.0b3 - 2010-06-13
 ------------------
 
 - Added optional compatibility with zope.browsermenu.
