@@ -7,7 +7,7 @@
 
     <li tal:repeat="menuItem menu">
 
-        <dl class="actionMenu"
+        <dl class="actionMenu deactivated"
             tal:attributes="id menuItem/extra/id"
             tal:define="submenu menuItem/submenu">
           <dt tal:define="state_class menuItem/extra/class | nothing;
