@@ -1,8 +1,9 @@
 Changelog
 =========
 
-2.0b4 - unreleased
-------------------
+2.0 - 2010-07-01
+----------------
+
 - Adding "deactivated" class to menus by default, so they won't flicker on load.
   This fixes http://dev.plone.org/plone/ticket/10470.
   [limi]
