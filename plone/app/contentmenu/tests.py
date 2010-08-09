@@ -226,6 +226,21 @@ class TestFactoriesMenu(ptc.PloneTestCase):
             '%s/createObject?type_name=File' % self.folder.absolute_url()
             in [a['action'] for a in actions])
 
+    def testFrontPageExpressionContext(self):
+        # If the expression context uses the front-page instead of the
+        # folder using the front-page, then the expression values will
+        # be incorrect.
+        self.portal.portal_types['Event']._setPropValue(
+            'add_view_expr', 'string:${folder_url}/+/addATEvent')
+        self.loginAsPortalOwner()
+        actions = self.menu.getMenuItems(
+            self.portal.events.aggregator, self.request)
+        self.failUnless(
+            'http://nohost/plone/events/+/addATEvent' in [a['action'] for a in actions])
+        self.failIf(
+            'http://nohost/plone/events/aggregator/+/addATEvent' in
+            [a['action'] for a in actions])
+
     def testTypeNameIsURLQuoted(self):
         actions = self.menu.getMenuItems(self.folder, self.request)
         self.failUnless(

@@ -4,6 +4,9 @@ Changelog
 2.0.2 - unreleased
 ------------------
 
+- Add test coverage for factory expression context when a front-page
+  object is used for a folder.  Fix in plone.app.content.
+  [rossp]
 
 2.0.1 - 2010-07-18
 ------------------
