@@ -4,10 +4,6 @@ Changelog
 2.0.2 - unreleased
 ------------------
 
-- Optimized FactoriesSubMenuItem._addableTypesInContext by not
-  calling _allowedTypes if it's not needed.
-  [vincentfretin]
-
 - Add test coverage for factory expression context when a front-page
   object is used for a folder.  Fix in plone.app.content.
   [rossp]

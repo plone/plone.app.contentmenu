@@ -431,9 +431,9 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
         return [(context, fti) for fti in self._addableTypesInContext(context)]
 
     def _addableTypesInContext(self, addContext):
+        allowed_types = _allowedTypes(self.request, addContext)
         constrain = IConstrainTypes(addContext, None)
         if constrain is None:
-            allowed_types = _allowedTypes(self.request, addContext)
             return allowed_types
         else:
             locallyAllowed = constrain.getLocallyAllowedTypes()
