@@ -8,6 +8,12 @@ Changelog
   object is used for a folder.  Fix in plone.app.content.
   [rossp]
 
+- Fix the addContext in the FactoriesSubMenuItem to make it possible to add
+  content to a folderish object that set as the default view on its parent folder.
+  This closes http://dev.plone.org/plone/ticket/9057.
+  [WouterVH]
+
+
 2.0.1 - 2010-07-18
 ------------------
 

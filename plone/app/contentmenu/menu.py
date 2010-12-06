@@ -409,7 +409,7 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
 
     @property
     def action(self):
-        return '%s/folder_factories' % self.context_state.folder().absolute_url() 
+        return '%s/folder_factories' % self._addContext().absolute_url()
 
     def available(self):
         itemsToAdd = self._itemsToAdd()
@@ -423,7 +423,10 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
 
     @memoize
     def _addContext(self):
-        return self.context_state.folder()
+        if self.context_state.is_structural_folder():
+            return self.context
+        else:
+            return self.context_state.folder()
 
     @memoize
     def _itemsToAdd(self):
