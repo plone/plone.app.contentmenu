@@ -10,7 +10,7 @@ Changelog
 
 - Fix the addContext in the FactoriesSubMenuItem to make it possible to add
   content to a folderish object that set as the default view on its parent folder.
-  This closes http://dev.plone.org/plone/ticket/9057.
+  This closes http://dev.plone.org/plone/ticket/10953.
   [WouterVH]
 
 
