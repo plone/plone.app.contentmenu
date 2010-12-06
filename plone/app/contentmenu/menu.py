@@ -450,7 +450,7 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
                     return '%s/+/%s' % (baseUrl, fti.factory,)
             return '%s/createObject?type_name=%s' % (baseUrl, quote_plus(fti.getId()),)
         else:
-            return '%s/folder_factories' % self.context_state.folder().absolute_url()
+            return '%s/folder_factories' % addContext.absolute_url()
 
     @property
     def icon(self):
@@ -472,7 +472,10 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
 
     @memoize
     def _addContext(self):
-        return self.context_state.folder()
+        if self.context_state.is_structural_folder():
+            return self.context
+        else:
+            return self.context_state.folder()
 
     @memoize
     def _itemsToAdd(self):
