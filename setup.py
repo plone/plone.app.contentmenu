@@ -44,7 +44,7 @@ setup(name='plone.app.contentmenu',
         'Acquisition',
         'Products.CMFCore',
         'Products.CMFDynamicViewFTI',
-        'Plone',
+        'Products.CMFPlone',
         'Zope2',
       ],
       )

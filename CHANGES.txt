@@ -4,6 +4,9 @@ Changelog
 2.0.2 - unreleased
 ------------------
 
+- Depend on ``Products.CMFPlone`` instead of ``Plone``.
+  [elro]
+
 - Add test coverage for factory expression context when a front-page
   object is used for a folder.  Fix in plone.app.content.
   [rossp]
