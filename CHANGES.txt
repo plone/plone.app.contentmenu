@@ -5,6 +5,8 @@ Changelog
 2.0.3 - Unreleased
 ------------------
 
+- We need permission to see Placeful policy in workflow menu.
+  [thomasdesvenain]
 
 2.0.2 - 2011-01-03
 ------------------

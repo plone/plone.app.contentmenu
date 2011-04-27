@@ -7,7 +7,7 @@ from zope.interface import implements
 from zope.component import getMultiAdapter, queryMultiAdapter
 
 from Acquisition import aq_base
-from Products.CMFCore.utils import getToolByName
+from Products.CMFCore.utils import getToolByName, _checkPermission
 from Products.CMFDynamicViewFTI.interface import ISelectableBrowserDefault
 from Products.CMFPlone import utils
 from Products.CMFPlone.interfaces.structure import INonStructuralFolder
@@ -31,6 +31,11 @@ try:
 except ImportError:
     from zope.app.publisher.browser.menu import BrowserMenu
     from zope.app.publisher.browser.menu import BrowserSubMenuItem
+
+try:
+    from Products.CMFPlacefulWorkflow import ManageWorkflowPolicies
+except ImportError:
+    from Products.CMFCore.permissions import ManagePortal as ManageWorkflowPolicies
 
 
 def _safe_unicode(text):
@@ -398,7 +403,7 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
     order = 30
     title = _(u'label_add_new_item', default=u'Add new\u2026')
     description = _(u'title_add_new_items_inside_item', default=u'Add new items inside this item')
-    
+
     def __init__(self, context, request):
         BrowserSubMenuItem.__init__(self, context, request)
         self.context_state = getMultiAdapter((context, request), name='plone_context_state')
@@ -645,13 +650,16 @@ class WorkflowMenu(BrowserMenu):
                             })
 
         if getToolByName(context, 'portal_placeful_workflow', None) is not None:
-            results.append({ 'title'       : _(u'workflow_policy', default=u'Policy...'),
-                             'description' : '',
-                             'action'      : url + '/placeful_workflow_configuration',
-                             'selected'    : False,
-                             'icon'        : None,
-                             'extra'       : {'id': 'policy', 'separator': None, 'class': 'kssIgnore'},
-                             'submenu'     : None,
+            if _checkPermission(ManageWorkflowPolicies, context):
+                results.append({'title': _(u'workflow_policy',
+                                           default=u'Policy...'),
+                                'description': '',
+                                'action': url + '/placeful_workflow_configuration',
+                                'selected': False,
+                                'icon': None,
+                                'extra': {'id': 'policy', 'separator': None,
+                                          'class': 'kssIgnore'},
+                                'submenu': None,
                             })
 
         return results

@@ -396,6 +396,11 @@ class TestWorkflowMenu(ptc.PloneTestCase):
             ) + '/placeful_workflow_configuration'
         self.failIf(url in [a['action'] for a in actions])
         self.portal.portal_quickinstaller.installProduct('CMFPlacefulWorkflow')
+
+        # item needs permission
+        actions = self.menu.getMenuItems(self.folder.doc1, self.request)
+        self.failIf(url in [a['action'] for a in actions])
+        self.loginAsPortalOwner()
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
         self.failUnless(url in [a['action'] for a in actions])
 
