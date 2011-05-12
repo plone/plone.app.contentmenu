@@ -1,11 +1,10 @@
 Changelog
 =========
 
-
-2.0.3 - Unreleased
+2.0.3 - 2011-05-12
 ------------------
 
-- We need permission to see Placeful policy in workflow menu.
+- We need permission to see placeful policy in workflow menu.
   [thomasdesvenain]
 
 2.0.2 - 2011-01-03
