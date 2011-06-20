@@ -52,7 +52,9 @@
                              alt=""
                              tal:condition="subMenuItem/icon"
                              tal:attributes="src subMenuItem/icon;
-                                             title subMenuItem/description"
+                                             title subMenuItem/description;
+                                             width subMenuItem/width|string:16;
+                                             height subMenuItem/height|string:16;"
                              i18n:attributes="alt;"/>
                         <span tal:content="structure subMenuItem/title"
                               i18n:translate=""
