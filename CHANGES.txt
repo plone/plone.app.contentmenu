@@ -1,10 +1,10 @@
 Changelog
 =========
 
-2.0.4 - unreleased
+2.0.4 - 2011-07-04
 ------------------
 
-- We can set height/width of contentmenu icons through browser menu code.
+- Set height/width of contentmenu icons through browser menu code.
   [thomasdesvenain]
 
 2.0.3 - 2011-05-12
