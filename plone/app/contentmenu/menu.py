@@ -550,8 +550,6 @@ class WorkflowSubMenuItem(BrowserSubMenuItem):
 
     @memoize
     def available(self):
-        if IContentsPage.providedBy(self.request):
-            return False
         return (self.context_state.workflow_state() is not None)
 
     def selected(self):

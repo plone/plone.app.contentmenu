@@ -4,6 +4,10 @@ Changelog
 2.0.5 - unreleased
 ------------------
 
+- Restore the workflow menu on the folder contents page as it is the
+  only way to change the state of the folder when it has a default
+  page.  Improves the fix to http://dev.plone.org/plone/ticket/8908.
+  [rossp]
 
 2.0.4 - 2011-07-04
 ------------------
