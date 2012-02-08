@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0.5 - unreleased
+2.0.5 (2012-02-07)
 ------------------
 
 - Restore the workflow menu on the folder contents page as it is the
