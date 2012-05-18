@@ -1,15 +1,8 @@
+from zope.browsermenu.interfaces import IBrowserMenu
+from zope.browsermenu.interfaces import IBrowserSubMenuItem
+from zope.browsermenu.interfaces import IMenuItemType
 from zope.interface import Interface
 from zope.interface import directlyProvides
-
-# BBB Zope 2.12
-try:
-    from zope.browsermenu.interfaces import IBrowserMenu
-    from zope.browsermenu.interfaces import IBrowserSubMenuItem
-    from zope.browsermenu.interfaces import IMenuItemType
-except ImportError:
-    from zope.app.publisher.interfaces.browser import IBrowserMenu
-    from zope.app.publisher.interfaces.browser import IBrowserSubMenuItem
-    from zope.app.publisher.interfaces.browser import IMenuItemType
 
 from zope.contentprovider.interfaces import IContentProvider
 

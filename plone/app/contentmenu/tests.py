@@ -5,6 +5,7 @@ from Products.PloneTestCase import PloneTestCase as ptc
 ptc.setupPloneSite()
 
 from plone.locking.interfaces import ILockable
+from zope.browsermenu.interfaces import IBrowserMenu
 from zope.component import getUtility
 from zope.interface import directlyProvides
 
@@ -19,12 +20,6 @@ from plone.app.contentmenu.interfaces import IActionsMenu
 from plone.app.contentmenu.interfaces import IDisplayMenu
 from plone.app.contentmenu.interfaces import IFactoriesMenu
 from plone.app.contentmenu.interfaces import IWorkflowMenu
-
-# BBB Zope 2.12
-try:
-    from zope.browsermenu.interfaces import IBrowserMenu
-except ImportError:
-    from zope.app.publisher.interfaces.browser import IBrowserMenu
 
 
 class TestActionsMenu(ptc.PloneTestCase):

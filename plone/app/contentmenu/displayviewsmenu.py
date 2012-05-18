@@ -1,11 +1,6 @@
+from zope.browsermenu.menu import BrowserMenu
 from zope.component import getAdapters
 from zope.interface import implements
-
-# BBB Zope 2.12
-try:
-    from zope.browsermenu.menu import BrowserMenu
-except ImportError:
-    from zope.app.publisher.browser.menu import BrowserMenu
 
 from plone.app.contentmenu.interfaces import IDisplayViewsMenu
 
