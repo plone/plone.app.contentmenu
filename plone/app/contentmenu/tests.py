@@ -96,7 +96,7 @@ class TestDisplayMenu(ptc.PloneTestCase):
         self.failUnless('base_view' in [a['extra']['id'] for a in actions])
 
     def testCurrentTemplateSelected(self):
-        layout = self.folder.getLayout()
+        self.folder.getLayout()
         actions = self.menu.getMenuItems(self.folder, self.request)
         selected = [a['extra']['id'] for a in actions if a['selected']]
         self.assertEqual(selected, ['folder_listing'])
@@ -231,7 +231,8 @@ class TestFactoriesMenu(ptc.PloneTestCase):
         actions = self.menu.getMenuItems(
             self.portal.events.aggregator, self.request)
         self.failUnless(
-            'http://nohost/plone/events/+/addATEvent' in [a['action'] for a in actions])
+            'http://nohost/plone/events/+/addATEvent' in \
+                [a['action'] for a in actions])
         self.failIf(
             'http://nohost/plone/events/aggregator/+/addATEvent' in
             [a['action'] for a in actions])
@@ -479,7 +480,8 @@ class TestContentMenu(ptc.PloneTestCase):
                             i['extra']['id'] == 'plone-contentmenu-display'][0]
         extras = [i['extra'] for i in displayMenuItems['submenu']]
         for extra in extras[1:]:
-            if not extra['separator'] is None: break
+            if not extra['separator'] is None:
+                break
             else:
                 self.assertEqual(extra['id'][0:len(prefix)], prefix)
 

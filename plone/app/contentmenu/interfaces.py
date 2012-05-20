@@ -30,6 +30,7 @@ class IContentMenuView(IContentProvider):
 # interface (this is signalled by marking the interface itself with the
 # IInterface IMenuItemType)
 
+
 class IContentMenuItem(Interface):
     """Special menu item type for Plone's content menu."""
 
@@ -54,15 +55,18 @@ directlyProvides(IContentMenuItem, IMenuItemType)
 #   separator    :   True if the item should be preceded by a separator
 #   hideChildren :   True if the item's children should not be rendered
 
+
 class IActionsSubMenuItem(IBrowserSubMenuItem):
     """The menu item linking to the actions menu.
     """
+
 
 class IActionsMenu(IBrowserMenu):
     """The actions menu.
 
     This gets its menu items from portal_actions.
     """
+
 
 class IDisplaySubMenuItem(IBrowserSubMenuItem):
     """The menu item linking to the display menu.
@@ -71,15 +75,18 @@ class IDisplaySubMenuItem(IBrowserSubMenuItem):
     def disabled(self):
         """Find out if the menu is visible but disabled."""
 
+
 class IDisplayMenu(IBrowserMenu):
     """The display menu.
 
     This gets its menu items from an IBrowserDefault (see CMFDynamicViewFTI).
     """
 
+
 class IFactoriesSubMenuItem(IBrowserSubMenuItem):
     """The menu item linking to the factories menu.
     """
+
 
 class IFactoriesMenu(IBrowserMenu):
     """The factories menu.
@@ -88,9 +95,11 @@ class IFactoriesMenu(IBrowserMenu):
     the context.
     """
 
+
 class IWorkflowSubMenuItem(IBrowserSubMenuItem):
     """The menu item linking to the workflow menu.
     """
+
 
 class IWorkflowMenu(IBrowserMenu):
     """The workflow menu.
@@ -98,6 +107,7 @@ class IWorkflowMenu(IBrowserMenu):
     This gets its menu items from the list of possible transitions in
     portal_workflow.
     """
+
 
 class IDisplayViewsMenu(IBrowserMenu):
     """A menu listing Zope3 views registered as content views

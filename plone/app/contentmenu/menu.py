@@ -29,7 +29,8 @@ from plone.app.contentmenu.interfaces import IWorkflowSubMenuItem
 try:
     from Products.CMFPlacefulWorkflow import ManageWorkflowPolicies
 except ImportError:
-    from Products.CMFCore.permissions import ManagePortal as ManageWorkflowPolicies
+    from Products.CMFCore.permissions import \
+        ManagePortal as ManageWorkflowPolicies
 
 
 def _safe_unicode(text):
@@ -42,7 +43,8 @@ class ActionsSubMenuItem(BrowserSubMenuItem):
     implements(IActionsSubMenuItem)
 
     title = _(u'label_actions_menu', default=u'Actions')
-    description = _(u'title_actions_menu', default=u'Actions for the current content item')
+    description = _(u'title_actions_menu',
+        default=u'Actions for the current content item')
     submenuId = 'plone_contentmenu_actions'
 
     order = 10
@@ -50,7 +52,8 @@ class ActionsSubMenuItem(BrowserSubMenuItem):
 
     def __init__(self, context, request):
         BrowserSubMenuItem.__init__(self, context, request)
-        self.context_state = getMultiAdapter((context, request), name='plone_context_state')
+        self.context_state = getMultiAdapter((context, request),
+                                             name='plone_context_state')
 
     @property
     def action(self):
@@ -64,7 +67,8 @@ class ActionsSubMenuItem(BrowserSubMenuItem):
         if IContentsPage.providedBy(self.request):
             return False
         actions_tool = getToolByName(self.context, 'portal_actions')
-        editActions = actions_tool.listActionInfos(object=self.context, categories=('object_buttons',), max=1)
+        editActions = actions_tool.listActionInfos(object=self.context,
+            categories=('object_buttons',), max=1)
         return len(editActions) > 0
 
     def selected(self):
@@ -98,15 +102,17 @@ class ActionsMenu(BrowserMenu):
                     if icon:
                         icon = '%s/%s' % (portal_url, icon)
 
-                results.append({ 'title'       : action['title'],
-                                 'description' : '',
-                                 'action'      : action['url'],
-                                 'selected'    : False,
-                                 'icon'        : icon,
-                                 'extra'       : {'id': aid, 'separator': None, 'class': cssClass},
-                                 'submenu'     : None,
-                                 })
-
+                results.append({
+                    'title': action['title'],
+                    'description': '',
+                    'action': action['url'],
+                    'selected': False,
+                    'icon': icon,
+                    'extra': {'id': aid,
+                              'separator': None,
+                              'class': cssClass},
+                    'submenu': None,
+                })
         return results
 
 
@@ -120,7 +126,8 @@ class DisplaySubMenuItem(BrowserSubMenuItem):
 
     def __init__(self, context, request):
         BrowserSubMenuItem.__init__(self, context, request)
-        self.context_state = getMultiAdapter((context, request), name='plone_context_state')
+        self.context_state = getMultiAdapter((context, request),
+                                             name='plone_context_state')
 
     @property
     def extra(self):
@@ -129,9 +136,13 @@ class DisplaySubMenuItem(BrowserSubMenuItem):
     @property
     def description(self):
         if self.disabled():
-            return _(u'title_remove_index_html_for_display_control', default=u'Delete or rename the index_html item to gain full control over how this folder is displayed.')
+            return _(u'title_remove_index_html_for_display_control',
+                default=u'Delete or rename the index_html item to gain full '
+                        u'control over how this folder is displayed.')
         else:
-            return _(u'title_choose_default_view', default=u'Select the view mode for this folder, or set a content item as its default view.')
+            return _(u'title_choose_default_view',
+                default=u'Select the view mode for this folder, or set a '
+                        u'content item as its default view.')
 
     @property
     def action(self):
@@ -139,7 +150,8 @@ class DisplaySubMenuItem(BrowserSubMenuItem):
             return ''
         else:
             if self.context_state.is_default_page():
-                return self.context_state.parent().absolute_url() + '/select_default_view'
+                return self.context_state.parent().absolute_url() + \
+                    '/select_default_view'
             else:
                 return self.context.absolute_url() + '/select_default_view'
 
@@ -158,7 +170,8 @@ class DisplaySubMenuItem(BrowserSubMenuItem):
 
         # If this is a default page, also get menu items relative to the parent
         if isDefaultPage:
-            folder = ISelectableBrowserDefault(utils.parent(self.context), None)
+            folder = ISelectableBrowserDefault(utils.parent(self.context),
+                                               None)
 
         context = ISelectableBrowserDefault(self.context, None)
 
@@ -215,7 +228,8 @@ class DisplayMenu(BrowserMenu):
         """Return menu item entries in a TAL-friendly form."""
         results = []
 
-        context_state = getMultiAdapter((obj, request), name='plone_context_state')
+        context_state = getMultiAdapter((obj, request),
+                                        name='plone_context_state')
         isDefaultPage = context_state.is_default_page()
 
         parent = None
@@ -270,44 +284,67 @@ class DisplayMenu(BrowserMenu):
             folderUrl = parent.absolute_url()
 
             if useSeparators:
-                results.append({ 'title'       : _(u'label_current_folder_views', default=u'Folder display'),
-                                 'description' : '',
-                                 'action'      : None,
-                                 'selected'    : False,
-                                 'icon'        : None,
-                                 'extra'       : {'id': 'folderHeader', 'separator': 'actionSeparator', 'class': ''},
-                                 'submenu'     : None,
-                                 })
+                results.append({
+                    'title': _(u'label_current_folder_views',
+                                default=u'Folder display'),
+                    'description': '',
+                    'action': None,
+                    'selected': False,
+                    'icon': None,
+                    'extra': {'id': 'folderHeader',
+                              'separator': 'actionSeparator',
+                              'class': ''},
+                    'submenu': None,
+                })
 
             if folderCanSetLayout:
                 for id, title in folderLayouts:
-                    results.append({ 'title'       : title,
-                                     'description' : '',
-                                     'action'      : '%s/selectViewTemplate?templateId=%s' % (folderUrl, id,),
-                                     'selected'    : False,
-                                     'icon'        : None,
-                                     'extra'       : {'id': 'folder-' + id, 'separator': None, 'class': ''},
-                                     'submenu'     : None,
-                                     })
+                    results.append({
+                        'title': title,
+                        'description': '',
+                        'action': '%s/selectViewTemplate?templateId=%s' % (
+                            folderUrl, id,),
+                        'selected': False,
+                        'icon': None,
+                        'extra': {
+                            'id': 'folder-' + id,
+                            'separator': None,
+                            'class': ''},
+                        'submenu': None,
+                    })
             # Display the selected item (i.e. the context)
-            results.append({ 'title'       : _(u'label_item_selected', default=u'Item: ${contentitem}', mapping={'contentitem' : escape(_safe_unicode(obj.Title()))}),
-                             'description' : '',
-                             'action'      : None,
-                             'selected'    : True,
-                             'icon'        : None,
-                             'extra'       : {'id': 'folderDefaultPageDisplay', 'separator': 'actionSeparator', 'class': 'actionMenuSelected'},
-                             'submenu'     : None,
-                             })
+            results.append({
+                'title': _(u'label_item_selected',
+                    default=u'Item: ${contentitem}',
+                    mapping={'contentitem': escape(
+                                _safe_unicode(obj.Title()))}),
+                'description': '',
+                'action': None,
+                'selected': True,
+                'icon': None,
+                'extra': {
+                    'id': 'folderDefaultPageDisplay',
+                    'separator': 'actionSeparator',
+                    'class': 'actionMenuSelected'},
+                'submenu': None,
+                })
             # Let the user change the selection
             if folderCanSetDefaultPage:
-                results.append({ 'title'       : _(u'label_change_default_item', default=u'Change content item as default view...'),
-                                 'description' : _(u'title_change_default_view_item', default=u'Change the item used as default view in this folder'),
-                                 'action'      : '%s/select_default_page' % (folderUrl,),
-                                 'selected'    : False,
-                                 'icon'        : None,
-                                 'extra'       : {'id': 'folderChangeDefaultPage', 'separator': 'actionSeparator', 'class': ''},
-                                 'submenu'     : None,
-                                 })
+                results.append({
+                    'title': _(u'label_change_default_item',
+                        default=u'Change content item as default view...'),
+                    'description': _(u'title_change_default_view_item',
+                        default=u'Change the item used as default view in '
+                                u'this folder'),
+                    'action': '%s/select_default_page' % (folderUrl,),
+                    'selected': False,
+                    'icon': None,
+                    'extra': {
+                        'id': 'folderChangeDefaultPage',
+                        'separator': 'actionSeparator',
+                        'class': ''},
+                    'submenu': None,
+                })
 
         # 2. Render context options
         if context is not None:
@@ -317,17 +354,22 @@ class DisplayMenu(BrowserMenu):
             layouts = context.getAvailableLayouts()
 
             if useSeparators:
-                results.append({ 'title'       : _(u'label_current_item_views', default=u'Item display'),
-                                 'description' : '',
-                                 'action'      : None,
-                                 'selected'    : False,
-                                 'icon'        : None,
-                                 'extra'       : {'id': 'contextHeader', 'separator': 'actionSeparator', 'class': ''},
-                                 'submenu'     : None,
-                                 })
+                results.append({
+                    'title': _(u'label_current_item_views',
+                                default=u'Item display'),
+                    'description': '',
+                    'action': None,
+                    'selected': False,
+                    'icon': None,
+                    'extra': {
+                        'id': 'contextHeader',
+                        'separator': 'actionSeparator',
+                        'class': ''},
+                    'submenu': None,
+                })
 
-            # If context is a default-page in a folder, that folder's views will
-            # be shown. Only show context views if there are any to show.
+            # If context is a default-page in a folder, that folder's views
+            # will be shown. Only show context views if there are any to show.
 
             showLayouts = False
             if not isDefaultPage:
@@ -338,28 +380,43 @@ class DisplayMenu(BrowserMenu):
             if showLayouts and contextCanSetLayout:
                 for id, title in contextLayouts:
                     is_selected = (defaultPage is None and id == selected)
-                    results.append({ 'title'       : title,
-                                     'description' : '',
-                                     'action'      : '%s/selectViewTemplate?templateId=%s' % (contextUrl, id,),
-                                     'selected'    : is_selected,
-                                     'icon'        : None,
-                                     'extra'       : {'id': id, 'separator': None, 'class': is_selected and 'actionMenuSelected' or ''},
-                                     'submenu'     : None,
-                                     })
+                    results.append({
+                        'title': title,
+                        'description': '',
+                        'action': '%s/selectViewTemplate?templateId=%s' % (
+                            contextUrl, id,),
+                        'selected': is_selected,
+                        'icon': None,
+                        'extra': {
+                            'id': id,
+                            'separator': None,
+                            'class': is_selected and 'actionMenuSelected' or ''
+                            },
+                        'submenu': None,
+                    })
 
             # Allow setting / changing the default-page, unless this is a
             # default-page in a parent folder.
             if not INonStructuralFolder.providedBy(obj):
                 if defaultPage is None:
                     if contextCanSetDefaultPage:
-                        results.append({ 'title'       : _(u'label_choose_item', default=u'Select a content item\nas default view...'),
-                                         'description' : _(u'title_select_default_view_item', default=u'Select an item to be used as default view in this folder...'),
-                                         'action'      : '%s/select_default_page' % (contextUrl,),
-                                         'selected'    : False,
-                                         'icon'        : None,
-                                         'extra'       : {'id': 'contextSetDefaultPage', 'separator': 'actionSeparator', 'class': ''},
-                                         'submenu'     : None,
-                                         })
+                        results.append({
+                            'title': _(u'label_choose_item',
+                                default=u'Select a content item\n'
+                                        u'as default view...'),
+                            'description':
+                                _(u'title_select_default_view_item',
+                                    default=u'Select an item to be used as '
+                                            u'default view in this folder...'),
+                            'action': '%s/select_default_page' % (contextUrl,),
+                            'selected': False,
+                            'icon': None,
+                            'extra': {
+                                'id': 'contextSetDefaultPage',
+                                'separator': 'actionSeparator',
+                                'class': ''},
+                            'submenu': None,
+                            })
                 else:
                     defaultPageObj = getattr(obj, defaultPage, None)
                     defaultPageTitle = u""
@@ -367,25 +424,41 @@ class DisplayMenu(BrowserMenu):
                         if hasattr(aq_base(defaultPageObj), 'Title'):
                             defaultPageTitle = defaultPageObj.Title()
                         else:
-                            defaultPageTitle = getattr(aq_base(defaultPageObj), 'title', u'')
+                            defaultPageTitle = getattr(aq_base(defaultPageObj),
+                                                       'title', u'')
 
-                    results.append({ 'title'       : _(u'label_item_selected', default=u'Item: ${contentitem}', mapping={'contentitem' : escape(_safe_unicode(defaultPageTitle))}),
-                                     'description' : '',
-                                     'action'      : None,
-                                     'selected'    : True,
-                                     'icon'        : None,
-                                     'extra'       : {'id': 'contextDefaultPageDisplay', 'separator': 'actionSeparator', 'class': ''},
-                                     'submenu'     : None,
-                                     })
+                    results.append({
+                        'title': _(u'label_item_selected',
+                            default=u'Item: ${contentitem}',
+                            mapping={'contentitem': escape(_safe_unicode(
+                                defaultPageTitle))}),
+                        'description': '',
+                        'action': None,
+                        'selected': True,
+                        'icon': None,
+                        'extra': {
+                            'id': 'contextDefaultPageDisplay',
+                            'separator': 'actionSeparator',
+                            'class': ''},
+                        'submenu': None,
+                    })
                     if contextCanSetDefaultPage:
-                        results.append({ 'title'       : _(u'label_change_item', default=u'Change content item\nas default view...'),
-                                         'description' : _(u'title_change_default_view_item', default=u'Change the item used as default view in this folder'),
-                                         'action'      : '%s/select_default_page' % (contextUrl,),
-                                         'selected'    : False,
-                                         'icon'        : None,
-                                         'extra'       : {'id': 'contextChangeDefaultPage', 'separator': 'actionSeparator', 'class': ''},
-                                         'submenu'     : None,
-                                         })
+                        results.append({
+                            'title': _(u'label_change_item',
+                                default=u'Change content item\nas '
+                                        u'default view...'),
+                            'description': _(u'title_change_default_view_item',
+                                default=u'Change the item used as default '
+                                        u'view in this folder'),
+                            'action': '%s/select_default_page' % (contextUrl,),
+                            'selected': False,
+                            'icon': None,
+                            'extra': {
+                                'id': 'contextChangeDefaultPage',
+                                'separator': 'actionSeparator',
+                                'class': ''},
+                            'submenu': None,
+                            })
 
         return results
 
@@ -396,11 +469,13 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
     submenuId = 'plone_contentmenu_factory'
     order = 30
     title = _(u'label_add_new_item', default=u'Add new\u2026')
-    description = _(u'title_add_new_items_inside_item', default=u'Add new items inside this item')
+    description = _(u'title_add_new_items_inside_item',
+        default=u'Add new items inside this item')
 
     def __init__(self, context, request):
         BrowserSubMenuItem.__init__(self, context, request)
-        self.context_state = getMultiAdapter((context, request), name='plone_context_state')
+        self.context_state = getMultiAdapter((context, request),
+                                             name='plone_context_state')
 
     @property
     def extra(self):
@@ -429,7 +504,7 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
 
     @memoize
     def _itemsToAdd(self):
-        context=self.context_state.folder()
+        context = self.context_state.folder()
         return [(context, fti) for fti in self._addableTypesInContext(context)]
 
     def _addableTypesInContext(self, addContext):
@@ -439,11 +514,13 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
             return allowed_types
         else:
             locallyAllowed = constrain.getLocallyAllowedTypes()
-            return [fti for fti in allowed_types if fti.getId() in locallyAllowed]
+            return [fti for fti in allowed_types
+                        if fti.getId() in locallyAllowed]
 
     @memoize
     def _addingToParent(self):
-        return (self._addContext().absolute_url() != self.context.absolute_url())
+        add_context_url = self._addContext().absolute_url()
+        return (add_context_url != self.context.absolute_url())
 
     @memoize
     def _showConstrainOptions(self):
@@ -451,17 +528,21 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
         constrain = ISelectableConstrainTypes(addContext, None)
         if constrain is None:
             return False
-        elif constrain.canSetConstrainTypes() and constrain.getDefaultAddableTypes():
+        elif constrain.canSetConstrainTypes() and \
+                constrain.getDefaultAddableTypes():
             return True
-        elif len(constrain.getLocallyAllowedTypes()) < len(constrain.getImmediatelyAddableTypes()):
+        elif len(constrain.getLocallyAllowedTypes()) < \
+                len(constrain.getImmediatelyAddableTypes()):
             return True
+
 
 class FactoriesMenu(BrowserMenu):
     implements(IFactoriesMenu)
 
     def getMenuItems(self, context, request):
         """Return menu item entries in a TAL-friendly form."""
-        factories_view = getMultiAdapter((context, request), name='folder_factories')
+        factories_view = getMultiAdapter((context, request),
+                                         name='folder_factories')
 
         haveMore = False
         include = None
@@ -479,27 +560,41 @@ class FactoriesMenu(BrowserMenu):
 
         if haveMore:
             url = '%s/folder_factories' % (addContext.absolute_url(),)
-            results.append({ 'title'       : _(u'folder_add_more', default=u'More\u2026'),
-                             'description' : _(u'Show all available content types'),
-                             'action'      : url,
-                             'selected'    : False,
-                             'icon'        : None,
-                             'extra'       : {'id': 'more', 'separator': None, 'class': ''},
-                             'submenu'     : None,
-                            })
+            results.append({
+                'title': _(u'folder_add_more', default=u'More\u2026'),
+                'description': _(u'Show all available content types'),
+                'action': url,
+                'selected': False,
+                'icon': None,
+                'extra': {
+                    'id': 'more',
+                    'separator': None,
+                    'class': ''},
+                'submenu': None,
+            })
 
         constraints = ISelectableConstrainTypes(addContext, None)
         if constraints is not None:
-            if constraints.canSetConstrainTypes() and constraints.getDefaultAddableTypes():
-                url = '%s/folder_constraintypes_form' % (addContext.absolute_url(),)
-                results.append({'title'       : _(u'folder_add_settings', default=u'Restrictions\u2026'),
-                                'description' : _(u'title_configure_addable_content_types', default=u'Configure which content types can be added here'),
-                                'action'      : url,
-                                'selected'    : False,
-                                'icon'        : None,
-                                'extra'       : {'id': 'settings', 'separator': None, 'class': ''},
-                                'submenu'     : None,
-                                })
+            if constraints.canSetConstrainTypes() and \
+                    constraints.getDefaultAddableTypes():
+                url = '%s/folder_constraintypes_form' % (
+                    addContext.absolute_url(),)
+                results.append({
+                    'title': _(u'folder_add_settings',
+                        default=u'Restrictions\u2026'),
+                    'description':
+                        _(u'title_configure_addable_content_types',
+                            default=u'Configure which content types can be '
+                                    u'added here'),
+                    'action': url,
+                    'selected': False,
+                    'icon': None,
+                    'extra': {
+                        'id': 'settings',
+                        'separator': None,
+                        'class': ''},
+                    'submenu': None,
+                    })
 
         return results
 
@@ -517,21 +612,23 @@ class WorkflowSubMenuItem(BrowserSubMenuItem):
         BrowserSubMenuItem.__init__(self, context, request)
         self.tools = getMultiAdapter((context, request), name='plone_tools')
         self.context = context
-        self.context_state = getMultiAdapter((context, request), name='plone_context_state')
+        self.context_state = getMultiAdapter((context, request),
+                                             name='plone_context_state')
 
     @property
     def extra(self):
         state = self.context_state.workflow_state()
         stateTitle = self._currentStateTitle()
-        return {'id'         : 'plone-contentmenu-workflow',
-                'class'      : 'state-%s' % state,
-                'state'      : state,
-                'stateTitle' : stateTitle,}
+        return {'id': 'plone-contentmenu-workflow',
+                'class': 'state-%s' % state,
+                'state': state,
+                'stateTitle': stateTitle}
 
     @property
     def description(self):
         if self._manageSettings() or len(self._transitions()) > 0:
-            return _(u'title_change_state_of_item', default=u'Change the state of this item')
+            return _(u'title_change_state_of_item',
+                default=u'Change the state of this item')
         else:
             return u''
 
@@ -551,7 +648,8 @@ class WorkflowSubMenuItem(BrowserSubMenuItem):
 
     @memoize
     def _manageSettings(self):
-        return self.tools.membership().checkPermission(WorkflowSubMenuItem.MANAGE_SETTINGS_PERMISSION, self.context)
+        return self.tools.membership().checkPermission(
+            WorkflowSubMenuItem.MANAGE_SETTINGS_PERMISSION, self.context)
 
     @memoize
     def _transitions(self):
@@ -564,7 +662,7 @@ class WorkflowSubMenuItem(BrowserSubMenuItem):
         workflows = self.tools.workflow().getWorkflowsFor(self.context)
         if workflows:
             for w in workflows:
-                if w.states.has_key(state):
+                if state in w.states:
                     return w.states[state].title or state
 
 
@@ -589,7 +687,8 @@ class WorkflowMenu(BrowserMenu):
         """Return menu item entries in a TAL-friendly form."""
         results = []
 
-        locking_info = queryMultiAdapter((context, request), name='plone_lock_info')
+        locking_info = queryMultiAdapter((context, request),
+                                         name='plone_lock_info')
         if locking_info and locking_info.is_locked_for_current_user():
             return []
 
@@ -603,7 +702,8 @@ class WorkflowMenu(BrowserMenu):
             cssClass = 'kssIgnore'
             actionUrl = action['url']
             if actionUrl == "":
-                actionUrl = '%s/content_status_modify?workflow_action=%s' % (context.absolute_url(), action['id'])
+                actionUrl = '%s/content_status_modify?workflow_action=%s' % (
+                    context.absolute_url(), action['id'])
                 cssClass = ''
 
             description = ''
@@ -615,43 +715,55 @@ class WorkflowMenu(BrowserMenu):
             for bogus in self.BOGUS_WORKFLOW_ACTIONS:
                 if actionUrl.endswith(bogus):
                     if getattr(context, bogus, None) is None:
-                        actionUrl = '%s/content_status_modify?workflow_action=%s' % (context.absolute_url(), action['id'],)
-                        cssClass =''
+                        baseUrl = '%s/content_status_modify?workflow_action=%s'
+                        actionUrl = baseUrl % (context.absolute_url(),
+                                               action['id'])
+                        cssClass = ''
                     break
 
             if action['allowed']:
-                results.append({ 'title'       : action['title'],
-                                 'description' : description,
-                                 'action'      : actionUrl,
-                                 'selected'    : False,
-                                 'icon'        : None,
-                                 'extra'       : {'id': 'workflow-transition-%s' % action['id'], 'separator': None, 'class': cssClass},
-                                 'submenu'     : None,
-                                 })
+                results.append({
+                    'title': action['title'],
+                    'description': description,
+                    'action': actionUrl,
+                    'selected': False,
+                    'icon': None,
+                    'extra': {
+                        'id': 'workflow-transition-%s' % action['id'],
+                        'separator': None,
+                        'class': cssClass},
+                    'submenu': None,
+                })
 
         url = context.absolute_url()
 
         if len(results) > 0:
-            results.append({ 'title'        : _(u'label_advanced', default=u'Advanced...'),
-                             'description'  : '',
-                             'action'       : url + '/content_status_history',
-                             'selected'     : False,
-                             'icon'         : None,
-                             'extra'        : {'id': 'advanced', 'separator': 'actionSeparator', 'class': 'kssIgnore'},
-                             'submenu'      : None,
-                            })
+            results.append({
+                'title': _(u'label_advanced', default=u'Advanced...'),
+                'description': '',
+                'action': url + '/content_status_history',
+                'selected': False,
+                'icon': None,
+                'extra': {
+                    'id': 'advanced',
+                    'separator': 'actionSeparator',
+                    'class': 'kssIgnore'},
+                'submenu': None,
+            })
 
-        if getToolByName(context, 'portal_placeful_workflow', None) is not None:
+        pw = getToolByName(context, 'portal_placeful_workflow', None)
+        if pw is not None:
             if _checkPermission(ManageWorkflowPolicies, context):
-                results.append({'title': _(u'workflow_policy',
-                                           default=u'Policy...'),
-                                'description': '',
-                                'action': url + '/placeful_workflow_configuration',
-                                'selected': False,
-                                'icon': None,
-                                'extra': {'id': 'policy', 'separator': None,
-                                          'class': 'kssIgnore'},
-                                'submenu': None,
-                            })
+                results.append({
+                    'title': _(u'workflow_policy',
+                                default=u'Policy...'),
+                    'description': '',
+                    'action': url + '/placeful_workflow_configuration',
+                    'selected': False,
+                    'icon': None,
+                    'extra': {'id': 'policy', 'separator': None,
+                              'class': 'kssIgnore'},
+                    'submenu': None,
+                })
 
         return results
