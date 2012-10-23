@@ -388,7 +388,7 @@ class DisplayMenu(BrowserMenu):
                         'selected': is_selected,
                         'icon': None,
                         'extra': {
-                            'id': id,
+                            'id': 'plone-contentmenu-display-' + id,
                             'separator': None,
                             'class': is_selected and 'actionMenuSelected' or ''
                             },
