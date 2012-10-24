@@ -108,7 +108,7 @@ class ActionsMenu(BrowserMenu):
                     'action': action['url'],
                     'selected': False,
                     'icon': icon,
-                    'extra': {'id': aid,
+                    'extra': {'id': 'plone-contentmenu-actions-' + aid,
                               'separator': None,
                               'class': cssClass},
                     'submenu': None,
@@ -388,7 +388,7 @@ class DisplayMenu(BrowserMenu):
                         'selected': is_selected,
                         'icon': None,
                         'extra': {
-                            'id': id,
+                            'id': 'plone-contentmenu-display-' + id,
                             'separator': None,
                             'class': is_selected and 'actionMenuSelected' or ''
                             },
@@ -567,7 +567,7 @@ class FactoriesMenu(BrowserMenu):
                 'selected': False,
                 'icon': None,
                 'extra': {
-                    'id': 'more',
+                    'id': 'plone-contentmenu-more',
                     'separator': None,
                     'class': ''},
                 'submenu': None,
@@ -590,7 +590,7 @@ class FactoriesMenu(BrowserMenu):
                     'selected': False,
                     'icon': None,
                     'extra': {
-                        'id': 'settings',
+                        'id': 'plone-contentmenu-settings',
                         'separator': None,
                         'class': ''},
                     'submenu': None,
@@ -745,7 +745,7 @@ class WorkflowMenu(BrowserMenu):
                 'selected': False,
                 'icon': None,
                 'extra': {
-                    'id': 'advanced',
+                    'id': 'workflow-transition-advanced',
                     'separator': 'actionSeparator',
                     'class': 'kssIgnore'},
                 'submenu': None,
@@ -761,7 +761,8 @@ class WorkflowMenu(BrowserMenu):
                     'action': url + '/placeful_workflow_configuration',
                     'selected': False,
                     'icon': None,
-                    'extra': {'id': 'policy', 'separator': None,
+                    'extra': {'id': 'workflow-transition-policy',
+                              'separator': None,
                               'class': 'kssIgnore'},
                     'submenu': None,
                 })
