@@ -38,7 +38,7 @@ class TestActionsMenu(ptc.PloneTestCase):
 
     def testActionsMenuFindsActions(self):
         actions = self.menu.getMenuItems(self.folder, self.request)
-        self.failUnless('copy' in [a['extra']['id'] for a in actions])
+        self.failUnless('plone-contentmenu-actions-copy' in [a['extra']['id'] for a in actions])
 
 
 class TestDisplayMenu(ptc.PloneTestCase):
@@ -60,13 +60,13 @@ class TestDisplayMenu(ptc.PloneTestCase):
     def testTemplatesIncluded(self):
         actions = self.menu.getMenuItems(self.folder, self.request)
         templates = [a['extra']['id'] for a in actions]
-        self.failUnless('folder_listing' in templates)
+        self.failUnless('plone-contentmenu-display-folder_listing' in templates)
 
     def testSingleTemplateIncluded(self):
         self.folder.invokeFactory('Document', 'doc1')
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
         self.assertEqual(len(actions), 1)
-        self.assertEqual(actions[0]['extra']['id'], 'document_view')
+        self.assertEqual(actions[0]['extra']['id'], 'plone-contentmenu-display-document_view')
 
     def testNonBrowserDefaultReturnsNothing(self):
         f = dummy.Folder()
@@ -92,14 +92,14 @@ class TestDisplayMenu(ptc.PloneTestCase):
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
         self.failUnless('folderDefaultPageDisplay' in
                         [a['extra']['id'] for a in actions])
-        self.failUnless('document_view' in [a['extra']['id'] for a in actions])
-        self.failUnless('base_view' in [a['extra']['id'] for a in actions])
+        self.failUnless('plone-contentmenu-display-document_view' in [a['extra']['id'] for a in actions])
+        self.failUnless('plone-contentmenu-display-base_view' in [a['extra']['id'] for a in actions])
 
     def testCurrentTemplateSelected(self):
         self.folder.getLayout()
         actions = self.menu.getMenuItems(self.folder, self.request)
         selected = [a['extra']['id'] for a in actions if a['selected']]
-        self.assertEqual(selected, ['folder_listing'])
+        self.assertEqual(selected, ['plone-contentmenu-display-folder_listing'])
 
     # Default-page selection
 
@@ -276,11 +276,11 @@ class TestFactoriesMenu(ptc.PloneTestCase):
         actions = self.menu.getMenuItems(self.folder, self.request)
         self.assertEqual(len(actions), 2)
         self.assertEqual(actions[0]['extra']['id'], 'document')
-        self.assertEqual(actions[1]['extra']['id'], 'settings')
+        self.assertEqual(actions[1]['extra']['id'], 'plone-contentmenu-settings')
 
     def testSettingsIncluded(self):
         actions = self.menu.getMenuItems(self.folder, self.request)
-        self.assertEqual(actions[-1]['extra']['id'], 'settings')
+        self.assertEqual(actions[-1]['extra']['id'], 'plone-contentmenu-settings')
 
     def testSettingsNotIncludedWhereNotSupported(self):
         self.folder.manage_permission('Modify constrain types', ('Manager',))
@@ -295,8 +295,8 @@ class TestFactoriesMenu(ptc.PloneTestCase):
         actions = self.menu.getMenuItems(self.folder, self.request)
         self.failIf('image' in [a['extra']['id'] for a in actions])
         self.failUnless('document' in [a['extra']['id'] for a in actions])
-        self.failUnless('more' in [a['extra']['id'] for a in actions])
-        self.failUnless('settings' in [a['extra']['id'] for a in actions])
+        self.failUnless('plone-contentmenu-more' in [a['extra']['id'] for a in actions])
+        self.failUnless('plone-contentmenu-settings' in [a['extra']['id'] for a in actions])
 
     def testMoreNotIncludedWhenNotNecessary(self):
         constraints = ISelectableConstrainTypes(self.folder)
@@ -306,7 +306,7 @@ class TestFactoriesMenu(ptc.PloneTestCase):
         actions = self.menu.getMenuItems(self.folder, self.request)
         self.assertEqual(len(actions), 2)
         self.assertEqual(actions[0]['extra']['id'], 'document')
-        self.assertEqual(actions[1]['extra']['id'], 'settings')
+        self.assertEqual(actions[1]['extra']['id'], 'plone-contentmenu-settings')
 
     def testNonStructualFolderShowsParent(self):
         self.folder.invokeFactory('Folder', 'folder1')
@@ -513,7 +513,7 @@ class TestContentMenu(ptc.PloneTestCase):
             i['extra']['id'] == 'plone-contentmenu-factories'][0]
         self.assertEqual(len(factoriesMenuItem['submenu']), 1)
         self.assertEqual(factoriesMenuItem['submenu'][0]['extra']['id'],
-                         'settings')
+                         'plone-contentmenu-settings')
 
     def testAddMenuWithNothingToAddButWithAvailableMorePage(self):
         self.folder.setConstrainTypesMode(1)
@@ -526,7 +526,7 @@ class TestContentMenu(ptc.PloneTestCase):
             i['extra']['id'] == 'plone-contentmenu-factories'][0]
         self.assertEqual(len(factoriesMenuItem['submenu']), 1)
         self.assertEqual(factoriesMenuItem['submenu'][0]['extra']['id'],
-                         'more')
+                         'plone-contentmenu-more')
 
     def testAddMenuRelativeToNonStructuralFolder(self):
         self.folder.invokeFactory('Folder', 'f1')
