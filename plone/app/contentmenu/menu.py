@@ -65,6 +65,8 @@ class ActionsSubMenuItem(BrowserSubMenuItem):
     @memoize
     def available(self):
         if IContentsPage.providedBy(self.request):
+            # Don't display action menu on folder_contents page.
+            # The cut/copy/paste submenu items are too confusing in this view.
             return False
         actions_tool = getToolByName(self.context, 'portal_actions')
         editActions = actions_tool.listActionInfos(object=self.context,
