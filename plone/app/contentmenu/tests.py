@@ -184,12 +184,14 @@ class TestDisplayMenu(ptc.PloneTestCase):
     # Regressions
 
     def testDefaultPageTemplateTitle(self):
-        self.folder.setDefaultPage('sitemap')  # Use a template in portal_skins
+        self.folder.invokeFactory('Document', 'doc1')
+        self.folder.doc1.setTitle("New Document")
+        self.folder.setDefaultPage('doc1')
         actions = self.menu.getMenuItems(self.folder, self.request)
         changeAction = [x for x in actions if
                         x['extra']['id'] == 'contextDefaultPageDisplay'][0]
         changeAction['title'].default
-        self.assertEquals(u"Sitemap",
+        self.assertEquals(u"New Document",
                           changeAction['title'].mapping['contentitem'])
 
 
