@@ -598,6 +598,27 @@ class FactoriesMenu(BrowserMenu):
                     'submenu': None,
                     })
 
+        # Also add a menu item to add items to the default page
+        context_state = getMultiAdapter((context, request),
+                                        name='plone_context_state')
+        if context_state.is_structural_folder() and context_state.is_default_page():
+            results.append({
+                'title': _(u'default_page_folder',
+                    default=u'Add item to default page'),
+                'description':
+                    _(u'desc_default_page_folder',
+                        default=u'If the default page is also a folder, '
+                                u'add items to it from here.'),
+                'action': context.absolute_url() + '/@@folder_factories',
+                'selected': False,
+                'icon': None,
+                'extra': {
+                    'id': 'plone-contentmenu-add-to-default-page',
+                    'separator': None,
+                    'class': ''},
+                'submenu': None,
+                })
+
         return results
 
 
