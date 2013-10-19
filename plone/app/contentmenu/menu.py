@@ -90,7 +90,6 @@ class ActionsMenu(BrowserMenu):
         if not editActions:
             return results
 
-        actionicons = getToolByName(context, 'portal_actionicons')
         portal_url = getToolByName(context, 'portal_url')()
 
         for action in editActions:
@@ -100,6 +99,7 @@ class ActionsMenu(BrowserMenu):
                 icon = action.get('icon', None)
                 if not icon:
                     # allow fallback to action icons tool
+                    actionicons = getToolByName(context, 'portal_actionicons', None)
                     icon = actionicons.queryActionIcon('object_buttons', aid)
                     if icon:
                         icon = '%s/%s' % (portal_url, icon)

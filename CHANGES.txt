@@ -4,7 +4,8 @@ Changelog
 2.0.9 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Don't break if there's no portal_actionicons tool.
+  [davisagli]
 
 
 2.0.8 (2013-03-05)
