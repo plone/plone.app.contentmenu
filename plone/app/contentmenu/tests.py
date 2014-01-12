@@ -1,8 +1,6 @@
 import unittest
 
-from Testing.ZopeTestCase.placeless import PlacelessSetup
-from Products.PloneTestCase import PloneTestCase as ptc
-ptc.setupPloneSite()
+from plone.app.testing.bbb import PloneTestCase
 
 from plone.locking.interfaces import ILockable
 from zope.browsermenu.interfaces import IBrowserMenu
@@ -22,7 +20,7 @@ from plone.app.contentmenu.interfaces import IFactoriesMenu
 from plone.app.contentmenu.interfaces import IWorkflowMenu
 
 
-class TestActionsMenu(ptc.PloneTestCase):
+class TestActionsMenu(PloneTestCase):
 
     def afterSetUp(self):
         self.menu = getUtility(
@@ -41,7 +39,7 @@ class TestActionsMenu(ptc.PloneTestCase):
         self.failUnless('plone-contentmenu-actions-copy' in [a['extra']['id'] for a in actions])
 
 
-class TestDisplayMenu(ptc.PloneTestCase):
+class TestDisplayMenu(PloneTestCase):
 
     def afterSetUp(self):
         self.menu = getUtility(
@@ -195,7 +193,7 @@ class TestDisplayMenu(ptc.PloneTestCase):
                           changeAction['title'].mapping['contentitem'])
 
 
-class TestFactoriesMenu(ptc.PloneTestCase):
+class TestFactoriesMenu(PloneTestCase):
 
     def afterSetUp(self):
         self.folder.invokeFactory('Document', 'doc1')
@@ -332,7 +330,7 @@ class TestFactoriesMenu(ptc.PloneTestCase):
         self.failIf(item['icon'])
 
 
-class TestWorkflowMenu(ptc.PloneTestCase):
+class TestWorkflowMenu(PloneTestCase):
 
     def afterSetUp(self):
         self.folder.invokeFactory('Document', 'doc1')
@@ -403,7 +401,7 @@ class TestWorkflowMenu(ptc.PloneTestCase):
         self.failUnless(url in [a['action'] for a in actions])
 
 
-class TestContentMenu(ptc.PloneTestCase):
+class TestContentMenu(PloneTestCase):
 
     def afterSetUp(self):
         self.menu = getUtility(
@@ -604,7 +602,7 @@ class TestContentMenu(ptc.PloneTestCase):
                     [a['extra']['id'] for a in actions])
 
 
-class TestDisplayViewsMenu(PlacelessSetup, unittest.TestCase):
+class TestDisplayViewsMenu(unittest.TestCase):
 
     def setUp(self):
         # BBB for Zope 2.12
