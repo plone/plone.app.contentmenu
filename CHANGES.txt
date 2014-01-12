@@ -7,6 +7,9 @@ Changelog
 - Don't break if there's no portal_actionicons tool.
   [davisagli]
 
+- Ported tests to plone.app.testing
+  [tomgross]
+
 
 2.0.8 (2013-03-05)
 ------------------
