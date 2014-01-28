@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0.9 (unreleased)
+2.0.9 (2014-01-27)
 ------------------
 
 - Don't break if there's no portal_actionicons tool.
