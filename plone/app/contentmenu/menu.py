@@ -97,13 +97,6 @@ class ActionsMenu(BrowserMenu):
                 aid = action['id']
                 cssClass = 'actionicon-object_buttons-%s' % aid
                 icon = action.get('icon', None)
-                if not icon:
-                    # allow fallback to action icons tool
-                    actionicons = getToolByName(context, 'portal_actionicons', None)
-                    if actionicons is not None:
-                        icon = actionicons.queryActionIcon('object_buttons', aid)
-                        if icon:
-                            icon = '%s/%s' % (portal_url, icon)
 
                 results.append({
                     'title': action['title'],
