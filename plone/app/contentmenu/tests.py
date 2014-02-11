@@ -18,6 +18,7 @@ from plone.app.contentmenu.interfaces import IActionsMenu
 from plone.app.contentmenu.interfaces import IDisplayMenu
 from plone.app.contentmenu.interfaces import IFactoriesMenu
 from plone.app.contentmenu.interfaces import IWorkflowMenu
+from plone.app.contentmenu.interfaces import IPortletManagerMenu
 
 
 class TestActionsMenu(PloneTestCase):
@@ -398,6 +399,40 @@ class TestWorkflowMenu(PloneTestCase):
         self.failIf(url in [a['action'] for a in actions])
         self.loginAsPortalOwner()
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
+        self.failUnless(url in [a['action'] for a in actions])
+
+
+class TestManagePortletsMenu(PloneTestCase):
+
+    def afterSetUp(self):
+        self.folder.invokeFactory('Document', 'doc1')
+        self.menu = getUtility(
+            IBrowserMenu, name='plone_contentmenu_portletmanager',
+            context=self.folder)
+        self.request = self.app.REQUEST
+
+    def testMenuImplementsIBrowserMenu(self):
+        self.failUnless(IBrowserMenu.providedBy(self.menu))
+
+    def testMenuImplementsIActionsMenu(self):
+        self.failUnless(IPortletManagerMenu.providedBy(self.menu))
+
+    def testMenuIncludesActions(self):
+        actions = self.menu.getMenuItems(self.folder.doc1, self.request)
+        self.failUnless('portlet-manager-plone.leftcolumn' in
+                        [a['extra']['id'] for a in actions])
+        self.failUnless(('http://nohost/plone/Members/test_user_1_/doc1/'
+                         '/@@topbar-manage-portlets/plone.leftcolumn?ajax_load=1')
+                        in [a['action'] for a in actions])
+
+    def testNoTransitions(self):
+        self.logout()
+        actions = self.menu.getMenuItems(self.folder.doc1, self.request)
+        self.assertEqual(len(actions), 0)
+
+    def testAdvancedIncluded(self):
+        actions = self.menu.getMenuItems(self.folder.doc1, self.request)
+        url = self.folder.doc1.absolute_url() + '/manage-portlets'
         self.failUnless(url in [a['action'] for a in actions])
 
 

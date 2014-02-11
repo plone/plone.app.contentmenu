@@ -36,6 +36,12 @@
     class=".menu.WorkflowMenu"
     />
 
+  <browser:menu
+    id="plone_contentmenu_portletmanager"
+    title="The 'workflow' menu - allows the user to execute workflow transitions"
+    class=".menu.PortletManagerMenu"
+    />
+
   <!--
     The menu items in the contentMenu are all sub-menu items. Unfortunately,
     Five (with Zope 2.9 at least) does not seem to support the subMenuItem
@@ -79,6 +85,11 @@
   <adapter for="* *"
            name="plone.contentmenu.workflow"
            factory=".menu.WorkflowSubMenuItem"
+           provides=".interfaces.IContentMenuItem" />
+
+  <adapter for="* *"
+           name="plone.contentmenu.portletmanager"
+           factory=".menu.PortletManagerSubMenuItem"
            provides=".interfaces.IContentMenuItem" />
 
   <!-- A content provider showing the menu -->

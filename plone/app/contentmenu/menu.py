@@ -7,6 +7,9 @@ from zope.browsermenu.menu import BrowserMenu
 from zope.browsermenu.menu import BrowserSubMenuItem
 from zope.interface import implements
 from zope.component import getMultiAdapter, queryMultiAdapter
+from zope.component import getUtilitiesFor
+from zope.component import getUtility
+from AccessControl import getSecurityManager
 
 from Acquisition import aq_base
 from Products.CMFCore.utils import getToolByName, _checkPermission
@@ -15,6 +18,9 @@ from Products.CMFPlone import utils
 from Products.CMFPlone.interfaces.structure import INonStructuralFolder
 from Products.CMFPlone.interfaces.constrains import IConstrainTypes
 from Products.CMFPlone.interfaces.constrains import ISelectableConstrainTypes
+from plone.portlets.interfaces import IPortletManager
+from plone.portlets.interfaces import ILocalPortletAssignable
+from plone.registry.interfaces import IRegistry
 
 from plone.app.contentmenu import PloneMessageFactory as _
 from plone.app.contentmenu.interfaces import IActionsMenu
@@ -25,6 +31,8 @@ from plone.app.contentmenu.interfaces import IFactoriesMenu
 from plone.app.contentmenu.interfaces import IFactoriesSubMenuItem
 from plone.app.contentmenu.interfaces import IWorkflowMenu
 from plone.app.contentmenu.interfaces import IWorkflowSubMenuItem
+from plone.app.contentmenu.interfaces import IPortletManagerMenu
+from plone.app.contentmenu.interfaces import IPortletManagerSubMenuItem
 
 try:
     from Products.CMFPlacefulWorkflow import ManageWorkflowPolicies
@@ -792,3 +800,102 @@ class WorkflowMenu(BrowserMenu):
                 })
 
         return results
+
+
+class PortletManagerSubMenuItem(BrowserSubMenuItem):
+    implements(IPortletManagerSubMenuItem)
+
+    MANAGE_SETTINGS_PERMISSION = 'Manage portal'
+
+    title = _(u'manage_portlets_link', default=u'Manage Portlets')
+    submenuId = 'plone_contentmenu_portletmanager'
+    order = 50
+
+    def __init__(self, context, request):
+        BrowserSubMenuItem.__init__(self, context, request)
+        self.context = context
+
+    @property
+    def extra(self):
+        return {'id': 'plone-contentmenu-portetmanager',
+                'class': 'pat-modal'}
+
+    @property
+    def description(self):
+        if self._manageSettings():
+            return _(
+                u'title_change_portlets',
+                default=u'Change the portlets of this item'
+            )
+        else:
+            return u''
+
+    @property
+    def action(self):
+        return self.context.absolute_url() + '/manage-portlets'
+
+    @memoize
+    def available(self):
+        secman = getSecurityManager()
+        has_manage_portlets_permission = secman.checkPermission(
+            'Portlets: Manage portlets',
+            self.context
+        )
+        if not has_manage_portlets_permission:
+            return False
+        else:
+            return ILocalPortletAssignable.providedBy(self.context)
+
+    def selected(self):
+        return False
+
+    @memoize
+    def _manageSettings(self):
+        secman = getSecurityManager()
+        has_manage_portlets_permission = secman.checkPermission(
+            'Portlets: Manage portlets',
+            self.context
+        )
+        return has_manage_portlets_permission
+
+
+class PortletManagerMenu(BrowserMenu):
+    implements(IPortletManagerMenu)
+
+    def getMenuItems(self, context, request):
+        """Return menu item entries in a TAL-friendly form."""
+        items = []
+        sm = getSecurityManager()
+        perm = 'plone.app.portlets.ManagePortlets'
+        # Bail out if the user can't manage portlets
+        if not sm.checkPermission(perm, context):
+            return items
+        blacklist = getUtility(IRegistry).get(
+            'plone.app.portlets.PortletManagerBlacklist', [])
+        managers = getUtilitiesFor(IPortletManager)
+        current_url = context.absolute_url()
+        for manager in managers:
+            manager_name = manager[0]
+            # Don't show items like 'plone.dashboard1' by default
+            if manager_name in blacklist:
+                continue
+            item = {
+                'title': ' '.join(manager_name.split('.')).title(),
+                'description': ' '.join(manager_name.split('.')).title(),
+                'action': utils.ajax_load_url(
+                    '%s/@@topbar-manage-portlets/%s' % (
+                        current_url,
+                        manager_name)
+                ),
+                'selected': False,
+                'icon': None,
+                'extra': {
+                    'id': 'portlet-manager-%s' % manager_name,
+                    'separator': None,
+                    'class': 'pat-modal'},
+                'submenu': None,
+            }
+
+            items.append(item)
+        items.sort()
+        return items
