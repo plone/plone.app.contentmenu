@@ -3,7 +3,9 @@
     xmlns:tal="http://xml.zope.org/namespaces/tal"
     tal:define="menu view/menu"
     tal:condition="view/available"
-    i18n:domain="plone">
+    i18n:domain="plone"
+    data-pat-modal="{&quot;actionOptions&quot;: {&quot;displayInModal&quot;: false}}"
+>
     <tal:elements repeat="menuItem menu">
         <li class="actionMenu deactivated dropdown"
             tal:attributes="id menuItem/extra/id"
@@ -69,7 +71,9 @@
                        tal:attributes="href subMenuItem/action;
                                        title subMenuItem/description;
                                        id subMenuItem/extra/id | nothing;
-                                       class subMenuItem/extra/class | nothing"
+                                       class subMenuItem/extra/class | nothing;
+                                       data-pat-modal subMenuItem/extra/modal | nothing;
+                                       "
                        i18n:attributes="title">
                         <img width="16"
                              height="16"

@@ -98,20 +98,14 @@ class ActionsMenu(BrowserMenu):
         if not editActions:
             return results
 
-        portal_url = getToolByName(context, 'portal_url')()
-
         for action in editActions:
             if action['allowed']:
                 aid = action['id']
                 cssClass = 'actionicon-object_buttons-%s' % aid
                 icon = action.get('icon', None)
-                if not icon:
-                    # allow fallback to action icons tool
-                    actionicons = getToolByName(context, 'portal_actionicons', None)
-                    if actionicons is not None:
-                        icon = actionicons.queryActionIcon('object_buttons', aid)
-                        if icon:
-                            icon = '%s/%s' % (portal_url, icon)
+                modal = action.get('modal', None)
+                if modal:
+                    cssClass += ' pat-modal'
 
                 results.append({
                     'title': action['title'],
@@ -121,7 +115,8 @@ class ActionsMenu(BrowserMenu):
                     'icon': icon,
                     'extra': {'id': 'plone-contentmenu-actions-' + aid,
                               'separator': None,
-                              'class': cssClass},
+                              'class': cssClass,
+                              'modal': modal},
                     'submenu': None,
                 })
         return results
@@ -353,7 +348,7 @@ class DisplayMenu(BrowserMenu):
                     'extra': {
                         'id': 'folderChangeDefaultPage',
                         'separator': 'actionSeparator',
-                        'class': ''},
+                        'class': 'pat-modal'},
                     'submenu': None,
                 })
 
@@ -624,7 +619,7 @@ class FactoriesMenu(BrowserMenu):
                 'extra': {
                     'id': 'plone-contentmenu-add-to-default-page',
                     'separator': None,
-                    'class': ''},
+                    'class': 'pat-modal',},
                 'submenu': None,
                 })
 
@@ -779,7 +774,7 @@ class WorkflowMenu(BrowserMenu):
                 'extra': {
                     'id': 'workflow-transition-advanced',
                     'separator': 'actionSeparator',
-                    'class': 'kssIgnore'},
+                    'class': 'kssIgnore pat-modal'},
                 'submenu': None,
             })
 
