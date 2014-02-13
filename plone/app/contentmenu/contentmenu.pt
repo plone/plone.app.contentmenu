@@ -22,6 +22,7 @@
                    class="noMenuAction">
                 <span tal:condition="menuItem/extra/stateTitle | nothing"
                       class="" aria-hidden="true"
+                      
                       tal:attributes="class string:icon-${identifier} ${menuItem/extra/class}">
                 </span>
 
@@ -48,6 +49,19 @@
           </a>
           <ul class="actionMenuContent dropdown-menu"
               tal:condition="not:menuItem/extra/hideChildren | not:submenu | nothing">
+                <li class="dropdown-header">
+                  <span  tal:content="menuItem/title"
+                      i18n:translate="">
+                    Title
+                </span>
+
+                <span tal:condition="menuItem/extra/stateTitle | nothing"
+                      tal:attributes="class string:${menuItem/extra/class}"
+                      tal:content="menuItem/extra/stateTitle"
+                      i18n:translate="">
+                    State title
+                </span>
+                </li>
                 <tal:block repeat="subMenuItem submenu">
                   <li tal:attributes="class subMenuItem/extra/separator">
                     <a href="#"
