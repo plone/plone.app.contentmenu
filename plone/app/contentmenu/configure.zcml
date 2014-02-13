@@ -65,6 +65,7 @@
       display menu   - order=20
       factories menu - order=30
       workflows menu - order=40
+      manage portlets menu - order=50
   -->
 
   <adapter for="* *"

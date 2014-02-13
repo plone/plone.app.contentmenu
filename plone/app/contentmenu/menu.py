@@ -56,7 +56,10 @@ class ActionsSubMenuItem(BrowserSubMenuItem):
     submenuId = 'plone_contentmenu_actions'
 
     order = 10
-    extra = {'id': 'plone-contentmenu-actions'}
+    extra = {
+        'id': 'plone-contentmenu-actions',
+        'level': 1
+    }
 
     def __init__(self, context, request):
         BrowserSubMenuItem.__init__(self, context, request)
@@ -137,7 +140,11 @@ class DisplaySubMenuItem(BrowserSubMenuItem):
 
     @property
     def extra(self):
-        return {'id': 'plone-contentmenu-display', 'disabled': self.disabled()}
+        return {
+            'id': 'plone-contentmenu-display',
+            'disabled': self.disabled(),
+            'level': 1
+        }
 
     @property
     def description(self):
@@ -485,7 +492,7 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
 
     @property
     def extra(self):
-        return {'id': 'plone-contentmenu-factories'}
+        return {'id': 'plone-contentmenu-factories', 'level': 0}
 
     @property
     def action(self):
@@ -649,7 +656,8 @@ class WorkflowSubMenuItem(BrowserSubMenuItem):
         return {'id': 'plone-contentmenu-workflow',
                 'class': 'state-%s' % state,
                 'state': state,
-                'stateTitle': stateTitle}
+                'stateTitle': stateTitle,
+                'level': 0}
 
     @property
     def description(self):
@@ -813,7 +821,8 @@ class PortletManagerSubMenuItem(BrowserSubMenuItem):
     @property
     def extra(self):
         return {'id': 'plone-contentmenu-portetmanager',
-                'class': 'pat-modal'}
+                'class': 'pat-modal',
+                'level': 1}
 
     @property
     def description(self):

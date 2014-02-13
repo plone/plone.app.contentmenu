@@ -27,5 +27,13 @@ class ContentMenuProvider(ContentProviderBase):
     def menu(self):
         menu = getUtility(IBrowserMenu, name='plone_contentmenu')
         items = menu.getMenuItems(self.context, self.request)
-        items.reverse()
-        return items
+        level1_items = []
+        level0_items = []
+        for item in items:
+            if 'extra' in item and 'level' in item['extra'] and item['extra']['level']:
+                level1_items.append(item)
+            else:
+                level0_items.append(item)
+        level0_items.reverse()
+        level1_items.reverse()
+        return {'level0': level0_items, 'level1': level1_items}
