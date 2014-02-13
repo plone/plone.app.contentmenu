@@ -427,7 +427,7 @@ class DisplayMenu(BrowserMenu):
                             'extra': {
                                 'id': 'contextSetDefaultPage',
                                 'separator': 'actionSeparator',
-                                'class': ''},
+                                'class': 'pat-modal'},
                             'submenu': None,
                             })
                 else:
@@ -469,7 +469,7 @@ class DisplayMenu(BrowserMenu):
                             'extra': {
                                 'id': 'contextChangeDefaultPage',
                                 'separator': 'actionSeparator',
-                                'class': ''},
+                                'class': 'pat-modal'},
                             'submenu': None,
                             })
 

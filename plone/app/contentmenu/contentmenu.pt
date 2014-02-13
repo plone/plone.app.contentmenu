@@ -5,7 +5,6 @@
                 level0 python:menu_dict['level0'];
                 level1 python:menu_dict['level1']"
     tal:condition="view/available"
-    data-pat-modal="{&quot;actionOptions&quot;: {&quot;displayInModal&quot;: false}}"
     i18n:domain="plone">
     <tal:elements repeat="menuItem level0">
         <li class="actionMenu deactivated dropdown"
