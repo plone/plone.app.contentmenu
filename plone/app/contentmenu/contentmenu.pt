@@ -155,13 +155,8 @@
                           tal:attributes="class string:icon-${identifier} ${menuItem/extra/class}">
                     </span>
 
-                    <span tal:condition="not: menuItem/extra/stateTitle | nothing"
-                          class="" aria-hidden="true"
-                          tal:attributes="class string:icon-${identifier}">
-                    </span>
 
-
-                    <span class="text-toolbar" tal:content="menuItem/title"
+                    <span tal:content="menuItem/title"
                           i18n:translate="">
                         Title
                     </span>
@@ -172,9 +167,7 @@
                           i18n:translate="">
                         State title
                     </span>
-                    <span class="caret"
-                        tal:condition="not:menuItem/extra/hideChildren | not:submenu | nothing"></span>
-                 </span>
+
               </a>
                     </li>
                     <tal:block repeat="subMenuItem submenu">
