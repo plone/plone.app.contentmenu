@@ -109,6 +109,18 @@ class IWorkflowMenu(IBrowserMenu):
     """
 
 
+class IPortletManagerSubMenuItem(IBrowserSubMenuItem):
+    """The menu item linking to the portlet manager menu.
+    """
+
+
+class IPortletManagerMenu(IBrowserMenu):
+    """The portlet manager menu.
+
+    This gets its menu items from the list of possible portlet managers.
+    """
+
+
 class IDisplayViewsMenu(IBrowserMenu):
     """A menu listing Zope3 views registered as content views
 

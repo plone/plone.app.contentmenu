@@ -7,6 +7,9 @@ from zope.browsermenu.menu import BrowserMenu
 from zope.browsermenu.menu import BrowserSubMenuItem
 from zope.interface import implements
 from zope.component import getMultiAdapter, queryMultiAdapter
+from zope.component import getUtilitiesFor
+from zope.component import getUtility
+from AccessControl import getSecurityManager
 
 from Acquisition import aq_base
 from Products.CMFCore.utils import getToolByName, _checkPermission
@@ -15,6 +18,9 @@ from Products.CMFPlone import utils
 from Products.CMFPlone.interfaces.structure import INonStructuralFolder
 from Products.CMFPlone.interfaces.constrains import IConstrainTypes
 from Products.CMFPlone.interfaces.constrains import ISelectableConstrainTypes
+from plone.portlets.interfaces import IPortletManager
+from plone.portlets.interfaces import ILocalPortletAssignable
+from plone.registry.interfaces import IRegistry
 
 from plone.app.contentmenu import PloneMessageFactory as _
 from plone.app.contentmenu.interfaces import IActionsMenu
@@ -25,6 +31,8 @@ from plone.app.contentmenu.interfaces import IFactoriesMenu
 from plone.app.contentmenu.interfaces import IFactoriesSubMenuItem
 from plone.app.contentmenu.interfaces import IWorkflowMenu
 from plone.app.contentmenu.interfaces import IWorkflowSubMenuItem
+from plone.app.contentmenu.interfaces import IPortletManagerMenu
+from plone.app.contentmenu.interfaces import IPortletManagerSubMenuItem
 
 try:
     from Products.CMFPlacefulWorkflow import ManageWorkflowPolicies
@@ -48,7 +56,10 @@ class ActionsSubMenuItem(BrowserSubMenuItem):
     submenuId = 'plone_contentmenu_actions'
 
     order = 10
-    extra = {'id': 'plone-contentmenu-actions'}
+    extra = {
+        'id': 'plone-contentmenu-actions',
+        'level': 1
+    }
 
     def __init__(self, context, request):
         BrowserSubMenuItem.__init__(self, context, request)
@@ -64,6 +75,8 @@ class ActionsSubMenuItem(BrowserSubMenuItem):
 
     @memoize
     def available(self):
+        if 'folder_contents' in self.request.getURL().split('/'):
+            return False
         if IContentsPage.providedBy(self.request):
             # Don't display action menu on folder_contents page.
             # The cut/copy/paste submenu items are too confusing in this view.
@@ -90,13 +103,14 @@ class ActionsMenu(BrowserMenu):
         if not editActions:
             return results
 
-        portal_url = getToolByName(context, 'portal_url')()
-
         for action in editActions:
             if action['allowed']:
                 aid = action['id']
                 cssClass = 'actionicon-object_buttons-%s' % aid
                 icon = action.get('icon', None)
+                modal = action.get('modal', None)
+                if modal:
+                    cssClass += ' pat-modal'
 
                 results.append({
                     'title': action['title'],
@@ -106,7 +120,8 @@ class ActionsMenu(BrowserMenu):
                     'icon': icon,
                     'extra': {'id': 'plone-contentmenu-actions-' + aid,
                               'separator': None,
-                              'class': cssClass},
+                              'class': cssClass,
+                              'modal': modal},
                     'submenu': None,
                 })
         return results
@@ -127,7 +142,11 @@ class DisplaySubMenuItem(BrowserSubMenuItem):
 
     @property
     def extra(self):
-        return {'id': 'plone-contentmenu-display', 'disabled': self.disabled()}
+        return {
+            'id': 'plone-contentmenu-display',
+            'disabled': self.disabled(),
+            'level': 1
+        }
 
     @property
     def description(self):
@@ -204,6 +223,10 @@ class DisplaySubMenuItem(BrowserSubMenuItem):
 
     @memoize
     def disabled(self):
+        # As we don't have the view we need to parse the url to see
+        # if its folder_contents
+        if 'folder_contents' in self.request.getURL().split('/'):
+            return True
         if IContentsPage.providedBy(self.request):
             return True
         context = self.context
@@ -338,7 +361,7 @@ class DisplayMenu(BrowserMenu):
                     'extra': {
                         'id': 'folderChangeDefaultPage',
                         'separator': 'actionSeparator',
-                        'class': ''},
+                        'class': 'pat-modal'},
                     'submenu': None,
                 })
 
@@ -410,7 +433,7 @@ class DisplayMenu(BrowserMenu):
                             'extra': {
                                 'id': 'contextSetDefaultPage',
                                 'separator': 'actionSeparator',
-                                'class': ''},
+                                'class': 'pat-modal'},
                             'submenu': None,
                             })
                 else:
@@ -452,7 +475,7 @@ class DisplayMenu(BrowserMenu):
                             'extra': {
                                 'id': 'contextChangeDefaultPage',
                                 'separator': 'actionSeparator',
-                                'class': ''},
+                                'class': 'pat-modal'},
                             'submenu': None,
                             })
 
@@ -475,7 +498,7 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
 
     @property
     def extra(self):
-        return {'id': 'plone-contentmenu-factories'}
+        return {'id': 'plone-contentmenu-factories', 'level': 0}
 
     @property
     def action(self):
@@ -484,6 +507,8 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
     def available(self):
         itemsToAdd = self._itemsToAdd()
         showConstrainOptions = self._showConstrainOptions()
+        if 'folder_contents' in self.request.getURL().split('/'):
+            return False
         if self._addingToParent() and not self.context_state.is_default_page():
             return False
         return (len(itemsToAdd) > 0 or showConstrainOptions)
@@ -609,7 +634,7 @@ class FactoriesMenu(BrowserMenu):
                 'extra': {
                     'id': 'plone-contentmenu-add-to-default-page',
                     'separator': None,
-                    'class': ''},
+                    'class': 'pat-modal',},
                 'submenu': None,
                 })
 
@@ -639,7 +664,8 @@ class WorkflowSubMenuItem(BrowserSubMenuItem):
         return {'id': 'plone-contentmenu-workflow',
                 'class': 'state-%s' % state,
                 'state': state,
-                'stateTitle': stateTitle}
+                'stateTitle': stateTitle,
+                'level': 0}
 
     @property
     def description(self):
@@ -658,6 +684,8 @@ class WorkflowSubMenuItem(BrowserSubMenuItem):
 
     @memoize
     def available(self):
+        if 'folder_contents' in self.request.getURL().split('/'):
+            return False
         return (self.context_state.workflow_state() is not None)
 
     def selected(self):
@@ -764,7 +792,7 @@ class WorkflowMenu(BrowserMenu):
                 'extra': {
                     'id': 'workflow-transition-advanced',
                     'separator': 'actionSeparator',
-                    'class': 'kssIgnore'},
+                    'class': 'kssIgnore pat-modal'},
                 'submenu': None,
             })
 
@@ -785,3 +813,109 @@ class WorkflowMenu(BrowserMenu):
                 })
 
         return results
+
+
+class PortletManagerSubMenuItem(BrowserSubMenuItem):
+    implements(IPortletManagerSubMenuItem)
+
+    MANAGE_SETTINGS_PERMISSION = 'Manage portal'
+
+    title = _(u'manage_portlets_link', default=u'Manage Portlets')
+    submenuId = 'plone_contentmenu_portletmanager'
+    order = 50
+
+    def __init__(self, context, request):
+        BrowserSubMenuItem.__init__(self, context, request)
+        self.context = context
+        self.context_state = getMultiAdapter((context, request),
+                                             name='plone_context_state')
+
+    @property
+    def extra(self):
+        return {'id': 'plone-contentmenu-portetmanager',
+                'class': 'pat-modal',
+                'level': 1}
+
+    @property
+    def description(self):
+        if self._manageSettings():
+            return _(
+                u'title_change_portlets',
+                default=u'Change the portlets of this item'
+            )
+        else:
+            return u''
+
+    @property
+    def action(self):
+        return self.context.absolute_url() + '/manage-portlets'
+
+    @memoize
+    def available(self):
+        # As we don't have the view we need to parse the url to see
+        # if its folder_contents
+        if 'folder_contents' in self.request.getURL().split('/'):
+            return False
+        secman = getSecurityManager()
+        has_manage_portlets_permission = secman.checkPermission(
+            'Portlets: Manage portlets',
+            self.context
+        )
+        if not has_manage_portlets_permission:
+            return False
+        else:
+            return ILocalPortletAssignable.providedBy(self.context)
+
+    def selected(self):
+        return False
+
+    @memoize
+    def _manageSettings(self):
+        secman = getSecurityManager()
+        has_manage_portlets_permission = secman.checkPermission(
+            'Portlets: Manage portlets',
+            self.context
+        )
+        return has_manage_portlets_permission
+
+
+class PortletManagerMenu(BrowserMenu):
+    implements(IPortletManagerMenu)
+
+    def getMenuItems(self, context, request):
+        """Return menu item entries in a TAL-friendly form."""
+        items = []
+        sm = getSecurityManager()
+        perm = 'plone.app.portlets.ManagePortlets'
+        # Bail out if the user can't manage portlets
+        if not sm.checkPermission(perm, context):
+            return items
+        blacklist = getUtility(IRegistry).get(
+            'plone.app.portlets.PortletManagerBlacklist', [])
+        managers = getUtilitiesFor(IPortletManager)
+        current_url = context.absolute_url()
+        for manager in managers:
+            manager_name = manager[0]
+            # Don't show items like 'plone.dashboard1' by default
+            if manager_name in blacklist:
+                continue
+            item = {
+                'title': ' '.join(manager_name.split('.')).title(),
+                'description': ' '.join(manager_name.split('.')).title(),
+                'action': utils.ajax_load_url(
+                    '%s/@@topbar-manage-portlets/%s' % (
+                        current_url,
+                        manager_name)
+                ),
+                'selected': False,
+                'icon': None,
+                'extra': {
+                    'id': 'portlet-manager-%s' % manager_name,
+                    'separator': None,
+                    'class': 'pat-modal'},
+                'submenu': None,
+            }
+
+            items.append(item)
+        items.sort()
+        return items
