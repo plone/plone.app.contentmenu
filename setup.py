@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-version = '2.1.0.dev0'
+version = '2.1.0'
 
 setup(name='plone.app.contentmenu',
       version=version,
