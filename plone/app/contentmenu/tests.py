@@ -274,17 +274,20 @@ class TestFactoriesMenu(PloneTestCase):
         constraints.setConstrainTypesMode(1)
         constraints.setLocallyAllowedTypes(('Document',))
         constraints.setImmediatelyAddableTypes(('Document',))
+        self.loginAsPortalOwner()
         actions = self.menu.getMenuItems(self.folder, self.request)
         self.assertEqual(len(actions), 2)
         self.assertEqual(actions[0]['extra']['id'], 'document')
         self.assertEqual(actions[1]['extra']['id'], 'plone-contentmenu-settings')
 
     def testSettingsIncluded(self):
+        self.loginAsPortalOwner()
         actions = self.menu.getMenuItems(self.folder, self.request)
         self.assertEqual(actions[-1]['extra']['id'], 'plone-contentmenu-settings')
 
     def testSettingsNotIncludedWhereNotSupported(self):
         self.folder.manage_permission('Modify constrain types', ('Manager',))
+        self.loginAsPortalOwner()
         actions = self.menu.getMenuItems(self.folder, self.request)
         self.failIf('_settings' in [a['extra']['id'] for a in actions])
 
@@ -293,6 +296,7 @@ class TestFactoriesMenu(PloneTestCase):
         constraints.setConstrainTypesMode(1)
         constraints.setLocallyAllowedTypes(('Document', 'Image',))
         constraints.setImmediatelyAddableTypes(('Document',))
+        self.loginAsPortalOwner()
         actions = self.menu.getMenuItems(self.folder, self.request)
         self.failIf('image' in [a['extra']['id'] for a in actions])
         self.failUnless('document' in [a['extra']['id'] for a in actions])
@@ -304,6 +308,7 @@ class TestFactoriesMenu(PloneTestCase):
         constraints.setConstrainTypesMode(1)
         constraints.setLocallyAllowedTypes(('Document',))
         constraints.setImmediatelyAddableTypes(('Document',))
+        self.loginAsPortalOwner()
         actions = self.menu.getMenuItems(self.folder, self.request)
         self.assertEqual(len(actions), 2)
         self.assertEqual(actions[0]['extra']['id'], 'document')
@@ -347,12 +352,18 @@ class TestWorkflowMenu(PloneTestCase):
         self.failUnless(IWorkflowMenu.providedBy(self.menu))
 
     def testMenuIncludesActions(self):
+        self.loginAsPortalOwner()
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
         self.failUnless('workflow-transition-submit' in
                         [a['extra']['id'] for a in actions])
-        self.failUnless(('http://nohost/plone/Members/test_user_1_/doc1/'
-                         'content_status_modify?workflow_action=submit')
-                        in [a['action'] for a in actions])
+        found = False
+        for item in actions:
+            if ('http://nohost/plone/Members/test_user_1_/doc1/'
+                    'content_status_modify?'
+                    'workflow_action=submit') in item['action']:
+                found = True
+                break
+        self.assertTrue(found)
 
         # Let us try that again but with an empty url action, like is
         # usual in older workflows, and which is nice to keep
@@ -364,9 +375,14 @@ class TestWorkflowMenu(PloneTestCase):
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
         self.failUnless('workflow-transition-submit' in
                         [a['extra']['id'] for a in actions])
-        self.failUnless(('http://nohost/plone/Members/test_user_1_/doc1/'
-                         'content_status_modify?workflow_action=submit') in
-                        [a['action'] for a in actions])
+        found = False
+        for item in actions:
+            if ('http://nohost/plone/Members/test_user_1_/doc1/'
+                    'content_status_modify?'
+                    'workflow_action=submit') in item['action']:
+                found = True
+                break
+        self.assertTrue(found)
 
     def testNoTransitions(self):
         self.logout()
@@ -510,6 +526,7 @@ class TestContentMenu(PloneTestCase):
         prefix = 'folder-'
         self.folder.invokeFactory('Folder', 'subfolder1')
         self.folder.setDefaultPage('subfolder1')
+        self.loginAsPortalOwner()
         items = self.menu.getMenuItems(self.folder.subfolder1, self.request)
         displayMenuItems = [i for i in items if
                             i['extra']['id'] == 'plone-contentmenu-display'][0]
@@ -527,8 +544,8 @@ class TestContentMenu(PloneTestCase):
         factoriesMenuItem = [
             i for i in items if
             i['extra']['id'] == 'plone-contentmenu-factories'][0]
-        self.assertEqual(factoriesMenuItem['action'],
-                         self.folder.absolute_url() + '/folder_factories')
+        self.assertIn(self.folder.absolute_url() + '/folder_factories',
+                      factoriesMenuItem['action'])
         self.failUnless(len(factoriesMenuItem['submenu']) > 0)
 
     def testAddMenuNotIncludedIfNothingToAdd(self):
@@ -542,6 +559,7 @@ class TestContentMenu(PloneTestCase):
         self.folder.setConstrainTypesMode(1)
         self.folder.setLocallyAllowedTypes(())
         self.folder.setImmediatelyAddableTypes(())
+        self.loginAsPortalOwner()
         items = self.menu.getMenuItems(self.folder, self.request)
         factoriesMenuItem = [
             i for i in items if

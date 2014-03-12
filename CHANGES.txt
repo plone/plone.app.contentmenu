@@ -4,7 +4,7 @@ Changelog
 2.1.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add csrf tokens to menu urls that need it.
 
 
 2.1.0 (2014-02-26)

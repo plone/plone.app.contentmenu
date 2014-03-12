@@ -39,6 +39,7 @@ try:
 except ImportError:
     from Products.CMFCore.permissions import \
         ManagePortal as ManageWorkflowPolicies
+from plone.protect.utils import addTokenToUrl
 
 
 def _safe_unicode(text):
@@ -52,7 +53,7 @@ class ActionsSubMenuItem(BrowserSubMenuItem):
 
     title = _(u'label_actions_menu', default=u'Actions')
     description = _(u'title_actions_menu',
-        default=u'Actions for the current content item')
+                    default=u'Actions for the current content item')
     submenuId = 'plone_contentmenu_actions'
 
     order = 10
@@ -82,8 +83,8 @@ class ActionsSubMenuItem(BrowserSubMenuItem):
             # The cut/copy/paste submenu items are too confusing in this view.
             return False
         actions_tool = getToolByName(self.context, 'portal_actions')
-        editActions = actions_tool.listActionInfos(object=self.context,
-            categories=('object_buttons',), max=1)
+        editActions = actions_tool.listActionInfos(
+            object=self.context, categories=('object_buttons',), max=1)
         return len(editActions) > 0
 
     def selected(self):
@@ -98,7 +99,7 @@ class ActionsMenu(BrowserMenu):
         results = []
 
         context_state = getMultiAdapter((context, request),
-            name='plone_context_state')
+                                        name='plone_context_state')
         editActions = context_state.actions('object_buttons')
         if not editActions:
             return results
@@ -115,7 +116,7 @@ class ActionsMenu(BrowserMenu):
                 results.append({
                     'title': action['title'],
                     'description': '',
-                    'action': action['url'],
+                    'action': addTokenToUrl(action['url'], request),
                     'selected': False,
                     'icon': icon,
                     'extra': {'id': 'plone-contentmenu-actions-' + aid,
@@ -152,12 +153,13 @@ class DisplaySubMenuItem(BrowserSubMenuItem):
     def description(self):
         if self.disabled():
             return _(u'title_remove_index_html_for_display_control',
-                default=u'Delete or rename the index_html item to gain full '
-                        u'control over how this folder is displayed.')
+                     default=u'Delete or rename the index_html item to gain '
+                             u'full control over how this folder is '
+                             u'displayed.')
         else:
             return _(u'title_choose_default_view',
-                default=u'Select the view mode for this folder, or set a '
-                        u'content item as its default view.')
+                     default=u'Select the view mode for this folder, or set a '
+                             u'content item as its default view.')
 
     @property
     def action(self):
@@ -286,7 +288,7 @@ class DisplayMenu(BrowserMenu):
 
         # Short circuit if neither folder nor object will provide us with
         # items
-        if not (folderCanSetLayout or folderCanSetDefaultPage or \
+        if not (folderCanSetLayout or folderCanSetDefaultPage or
                 contextCanSetLayout or contextCanSetDefaultPage):
             return []
 
@@ -295,7 +297,7 @@ class DisplayMenu(BrowserMenu):
         useSeparators = False
         if folderCanSetLayout or folderCanSetDefaultPage:
             if (contextCanSetLayout and len(contextLayouts) > 1) or \
-                contextCanSetDefaultPage:
+                    contextCanSetDefaultPage:
                 useSeparators = True
 
         # 1. If this is a default-page, first render folder options
@@ -305,7 +307,7 @@ class DisplayMenu(BrowserMenu):
             if useSeparators:
                 results.append({
                     'title': _(u'label_current_folder_views',
-                                default=u'Folder display'),
+                               default=u'Folder display'),
                     'description': '',
                     'action': None,
                     'selected': False,
@@ -321,8 +323,9 @@ class DisplayMenu(BrowserMenu):
                     results.append({
                         'title': title,
                         'description': '',
-                        'action': '%s/selectViewTemplate?templateId=%s' % (
-                            folderUrl, id,),
+                        'action': addTokenToUrl(
+                            '%s/selectViewTemplate?templateId=%s' % (
+                                folderUrl, id,), request),
                         'selected': False,
                         'icon': None,
                         'extra': {
@@ -334,9 +337,9 @@ class DisplayMenu(BrowserMenu):
             # Display the selected item (i.e. the context)
             results.append({
                 'title': _(u'label_item_selected',
-                    default=u'Item: ${contentitem}',
-                    mapping={'contentitem': escape(
-                                _safe_unicode(obj.Title()))}),
+                           default=u'Item: ${contentitem}',
+                           mapping={'contentitem': escape(
+                               _safe_unicode(obj.Title()))}),
                 'description': '',
                 'action': None,
                 'selected': True,
@@ -351,10 +354,11 @@ class DisplayMenu(BrowserMenu):
             if folderCanSetDefaultPage:
                 results.append({
                     'title': _(u'label_change_default_item',
-                        default=u'Change content item as default view...'),
+                               default=u'Change content item as default '
+                                       u'view...'),
                     'description': _(u'title_change_default_view_item',
-                        default=u'Change the item used as default view in '
-                                u'this folder'),
+                                     default=u'Change the item used as default'
+                                             u' view in this folder'),
                     'action': '%s/select_default_page' % (folderUrl,),
                     'selected': False,
                     'icon': None,
@@ -375,7 +379,7 @@ class DisplayMenu(BrowserMenu):
             if useSeparators:
                 results.append({
                     'title': _(u'label_current_item_views',
-                                default=u'Item display'),
+                               default=u'Item display'),
                     'description': '',
                     'action': None,
                     'selected': False,
@@ -402,8 +406,9 @@ class DisplayMenu(BrowserMenu):
                     results.append({
                         'title': title,
                         'description': '',
-                        'action': '%s/selectViewTemplate?templateId=%s' % (
-                            contextUrl, id,),
+                        'action': addTokenToUrl(
+                            '%s/selectViewTemplate?templateId=%s' % (
+                                contextUrl, id,), request),
                         'selected': is_selected,
                         'icon': None,
                         'extra': {
@@ -421,13 +426,15 @@ class DisplayMenu(BrowserMenu):
                     if contextCanSetDefaultPage:
                         results.append({
                             'title': _(u'label_choose_item',
-                                default=u'Select a content item\n'
-                                        u'as default view...'),
-                            'description':
-                                _(u'title_select_default_view_item',
-                                    default=u'Select an item to be used as '
-                                            u'default view in this folder...'),
-                            'action': '%s/select_default_page' % (contextUrl,),
+                                       default=u'Select a content item\n'
+                                               u'as default view...'),
+                            'description': _(
+                                u'title_select_default_view_item',
+                                default=u'Select an item to be used as '
+                                        u'default view in this folder...'),
+                            'action': addTokenToUrl(
+                                '%s/select_default_page' % (contextUrl,),
+                                request),
                             'selected': False,
                             'icon': None,
                             'extra': {
@@ -448,9 +455,9 @@ class DisplayMenu(BrowserMenu):
 
                     results.append({
                         'title': _(u'label_item_selected',
-                            default=u'Item: ${contentitem}',
-                            mapping={'contentitem': escape(_safe_unicode(
-                                defaultPageTitle))}),
+                                   default=u'Item: ${contentitem}',
+                                   mapping={'contentitem': escape(
+                                       _safe_unicode(defaultPageTitle))}),
                         'description': '',
                         'action': None,
                         'selected': True,
@@ -464,9 +471,10 @@ class DisplayMenu(BrowserMenu):
                     if contextCanSetDefaultPage:
                         results.append({
                             'title': _(u'label_change_item',
-                                default=u'Change content item\nas '
-                                        u'default view...'),
-                            'description': _(u'title_change_default_view_item',
+                                       default=u'Change content item\nas '
+                                               u'default view...'),
+                            'description': _(
+                                u'title_change_default_view_item',
                                 default=u'Change the item used as default '
                                         u'view in this folder'),
                             'action': '%s/select_default_page' % (contextUrl,),
@@ -489,7 +497,7 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
     order = 30
     title = _(u'label_add_new_item', default=u'Add new\u2026')
     description = _(u'title_add_new_items_inside_item',
-        default=u'Add new items inside this item')
+                    default=u'Add new items inside this item')
 
     def __init__(self, context, request):
         BrowserSubMenuItem.__init__(self, context, request)
@@ -502,7 +510,9 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
 
     @property
     def action(self):
-        return '%s/folder_factories' % self._addContext().absolute_url()
+        return addTokenToUrl(
+            '%s/folder_factories' % self._addContext().absolute_url(),
+            self.request)
 
     def available(self):
         itemsToAdd = self._itemsToAdd()
@@ -536,7 +546,7 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
         else:
             locallyAllowed = constrain.getLocallyAllowedTypes()
             return [fti for fti in allowed_types
-                        if fti.getId() in locallyAllowed]
+                    if fti.getId() in locallyAllowed]
 
     @memoize
     def _addingToParent(self):
@@ -602,11 +612,11 @@ class FactoriesMenu(BrowserMenu):
                     addContext.absolute_url(),)
                 results.append({
                     'title': _(u'folder_add_settings',
-                        default=u'Restrictions\u2026'),
-                    'description':
-                        _(u'title_configure_addable_content_types',
-                            default=u'Configure which content types can be '
-                                    u'added here'),
+                               default=u'Restrictions\u2026'),
+                    'description': _(
+                        u'title_configure_addable_content_types',
+                        default=u'Configure which content types can be '
+                                u'added here'),
                     'action': url,
                     'selected': False,
                     'icon': None,
@@ -620,14 +630,15 @@ class FactoriesMenu(BrowserMenu):
         # Also add a menu item to add items to the default page
         context_state = getMultiAdapter((context, request),
                                         name='plone_context_state')
-        if context_state.is_structural_folder() and context_state.is_default_page():
+        if context_state.is_structural_folder() and \
+                context_state.is_default_page():
             results.append({
                 'title': _(u'default_page_folder',
-                    default=u'Add item to default page'),
-                'description':
-                    _(u'desc_default_page_folder',
-                        default=u'If the default page is also a folder, '
-                                u'add items to it from here.'),
+                           default=u'Add item to default page'),
+                'description': _(
+                    u'desc_default_page_folder',
+                    default=u'If the default page is also a folder, '
+                            u'add items to it from here.'),
                 'action': context.absolute_url() + '/@@folder_factories',
                 'selected': False,
                 'icon': None,
@@ -671,7 +682,7 @@ class WorkflowSubMenuItem(BrowserSubMenuItem):
     def description(self):
         if self._manageSettings() or len(self._transitions()) > 0:
             return _(u'title_change_state_of_item',
-                default=u'Change the state of this item')
+                     default=u'Change the state of this item')
         else:
             return u''
 
@@ -770,7 +781,7 @@ class WorkflowMenu(BrowserMenu):
                 results.append({
                     'title': action['title'],
                     'description': description,
-                    'action': actionUrl,
+                    'action': addTokenToUrl(actionUrl, request),
                     'selected': False,
                     'icon': None,
                     'extra': {
@@ -801,7 +812,7 @@ class WorkflowMenu(BrowserMenu):
             if _checkPermission(ManageWorkflowPolicies, context):
                 results.append({
                     'title': _(u'workflow_policy',
-                                default=u'Policy...'),
+                               default=u'Policy...'),
                     'description': '',
                     'action': url + '/placeful_workflow_configuration',
                     'selected': False,
@@ -902,11 +913,12 @@ class PortletManagerMenu(BrowserMenu):
             item = {
                 'title': ' '.join(manager_name.split('.')).title(),
                 'description': ' '.join(manager_name.split('.')).title(),
-                'action': utils.ajax_load_url(
+                'action': addTokenToUrl(utils.ajax_load_url(
                     '%s/@@topbar-manage-portlets/%s' % (
                         current_url,
                         manager_name)
-                ),
+                    ),
+                    request),
                 'selected': False,
                 'icon': None,
                 'extra': {

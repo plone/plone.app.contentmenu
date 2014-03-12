@@ -45,6 +45,7 @@ setup(name='plone.app.contentmenu',
         'Products.CMFCore',
         'Products.CMFDynamicViewFTI',
         'Products.CMFPlone',
+        'plone.protect >= 3.0.0a1',
         'Zope2',
       ],
       )
