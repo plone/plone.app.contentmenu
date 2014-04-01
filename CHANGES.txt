@@ -5,6 +5,8 @@ Changelog
 ------------------
 
 - Add csrf tokens to menu urls that need it.
+- Allow custom modal attributes for more links
+  [do3cc]
 
 
 2.1.0 (2014-02-26)
