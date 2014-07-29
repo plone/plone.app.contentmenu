@@ -5,8 +5,8 @@ version = '2.1.2.dev0'
 setup(name='plone.app.contentmenu',
       version=version,
       description="Plone's content menu implementation",
-      long_description=open("README.txt").read() + "\n" +
-                       open("CHANGES.txt").read(),
+      long_description=open("README.rst").read() + "\n" +
+                       open("CHANGES.rst").read(),
       classifiers=[
           "Environment :: Web Environment",
           "Framework :: Plone",
