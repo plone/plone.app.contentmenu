@@ -24,7 +24,7 @@
                    class="noMenuAction">
                 <span tal:condition="menuItem/extra/stateTitle | nothing"
                       class="" aria-hidden="true"
-                      
+
                       tal:attributes="class string:icon-${identifier} ${menuItem/extra/class}">
                 </span>
 
@@ -151,7 +151,7 @@
                        class="noMenuAction">
                     <span tal:condition="menuItem/extra/stateTitle | nothing"
                           class="" aria-hidden="true"
-                          
+
                           tal:attributes="class string:icon-${identifier} ${menuItem/extra/class}">
                     </span>
 
