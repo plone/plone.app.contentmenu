@@ -829,7 +829,7 @@ class WorkflowMenu(BrowserMenu):
 class PortletManagerSubMenuItem(BrowserSubMenuItem):
     implements(IPortletManagerSubMenuItem)
 
-    MANAGE_SETTINGS_PERMISSION = 'Manage portal'
+    MANAGE_SETTINGS_PERMISSION = 'Portlets: Manage portlets'
 
     title = _(u'manage_portlets_link', default=u'Manage Portlets')
     submenuId = 'plone_contentmenu_portletmanager'
@@ -884,7 +884,7 @@ class PortletManagerSubMenuItem(BrowserSubMenuItem):
     def _manageSettings(self):
         secman = getSecurityManager()
         has_manage_portlets_permission = secman.checkPermission(
-            'Portlets: Manage portlets',
+            self.MANAGE_SETTINGS_PERMISSION,
             self.context
         )
         return has_manage_portlets_permission
@@ -897,9 +897,9 @@ class PortletManagerMenu(BrowserMenu):
         """Return menu item entries in a TAL-friendly form."""
         items = []
         sm = getSecurityManager()
-        perm = 'plone.app.portlets.ManagePortlets'
         # Bail out if the user can't manage portlets
-        if not sm.checkPermission(perm, context):
+        if not sm.checkPermission(
+                PortletManagerSubMenuItem.MANAGE_SETTINGS_PERMISSION, context):
             return items
         blacklist = getUtility(IRegistry).get(
             'plone.app.portlets.PortletManagerBlacklist', [])
