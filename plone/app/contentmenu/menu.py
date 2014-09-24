@@ -59,7 +59,8 @@ class ActionsSubMenuItem(BrowserSubMenuItem):
     order = 10
     extra = {
         'id': 'plone-contentmenu-actions',
-        'level': 1
+        'level': 1,
+        'class': 'content-action'
     }
 
     def __init__(self, context, request):
@@ -755,7 +756,7 @@ class WorkflowMenu(BrowserMenu):
             if action['category'] != 'workflow':
                 continue
 
-            cssClass = 'kssIgnore'
+            cssClass = 'workfow-transition'
             actionUrl = action['url']
             if actionUrl == "":
                 actionUrl = '%s/content_status_modify?workflow_action=%s' % (
@@ -803,7 +804,7 @@ class WorkflowMenu(BrowserMenu):
                 'extra': {
                     'id': 'workflow-transition-advanced',
                     'separator': 'actionSeparator',
-                    'class': 'kssIgnore pat-modal'},
+                    'class': 'pat-modal'},
                 'submenu': None,
             })
 
@@ -819,7 +820,7 @@ class WorkflowMenu(BrowserMenu):
                     'icon': None,
                     'extra': {'id': 'workflow-transition-policy',
                               'separator': None,
-                              'class': 'kssIgnore'},
+                              'class': ''},
                     'submenu': None,
                 })
 
@@ -844,7 +845,7 @@ class PortletManagerSubMenuItem(BrowserSubMenuItem):
     @property
     def extra(self):
         return {'id': 'plone-contentmenu-portetmanager',
-                'class': 'pat-modal',
+                'class': 'portlet-manager',
                 'level': 1}
 
     @property
