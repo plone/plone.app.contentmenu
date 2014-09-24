@@ -60,7 +60,7 @@ class ActionsSubMenuItem(BrowserSubMenuItem):
     extra = {
         'id': 'plone-contentmenu-actions',
         'level': 1,
-        'class': 'content-action'
+        'li_class': 'plonetoolbar-content-action'
     }
 
     def __init__(self, context, request):
@@ -147,7 +147,8 @@ class DisplaySubMenuItem(BrowserSubMenuItem):
         return {
             'id': 'plone-contentmenu-display',
             'disabled': self.disabled(),
-            'level': 1
+            'level': 1,
+            'li_class': 'plonetoolbar-display-view'
         }
 
     @property
@@ -507,7 +508,9 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
 
     @property
     def extra(self):
-        return {'id': 'plone-contentmenu-factories', 'level': 0}
+        return {'id': 'plone-contentmenu-factories',
+                'level': 0,
+                'li_class': 'plonetoolbar-contenttype'}
 
     @property
     def action(self):
@@ -677,7 +680,8 @@ class WorkflowSubMenuItem(BrowserSubMenuItem):
                 'class': 'state-%s' % state,
                 'state': state,
                 'stateTitle': stateTitle,
-                'level': 0}
+                'level': 0,
+                'li_class': 'plonetoolbar-workfow-transition'}
 
     @property
     def description(self):
@@ -756,7 +760,7 @@ class WorkflowMenu(BrowserMenu):
             if action['category'] != 'workflow':
                 continue
 
-            cssClass = 'workfow-transition'
+            cssClass = ''
             actionUrl = action['url']
             if actionUrl == "":
                 actionUrl = '%s/content_status_modify?workflow_action=%s' % (
@@ -845,7 +849,7 @@ class PortletManagerSubMenuItem(BrowserSubMenuItem):
     @property
     def extra(self):
         return {'id': 'plone-contentmenu-portetmanager',
-                'class': 'portlet-manager',
+                'li_class': 'plonetoolbar-portlet-manager',
                 'level': 1}
 
     @property
