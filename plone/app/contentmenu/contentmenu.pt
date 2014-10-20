@@ -15,7 +15,7 @@
                      state_class python:state_class and state_class or ''"
          tal:attributes="href menuItem/action;
                          title menuItem/description;
-                         class string:${state_class}"
+                         class string:label-${state_class}"
          i18n:attributes="title;">
 
           <span tal:condition="menuItem/extra/stateTitle | nothing"
@@ -36,7 +36,6 @@
             </span>
 
             <span tal:condition="menuItem/extra/stateTitle | nothing"
-                  tal:attributes="class string:${menuItem/extra/class | nothing}"
                   tal:content="menuItem/extra/stateTitle"
                   i18n:translate="">
                 State title
@@ -75,7 +74,7 @@
                   Title
               </tal:title>
           </a>
-          <div tal:condition="not:subMenuItem/action"
+          <span tal:condition="not:subMenuItem/action"
                tal:attributes="id subMenuItem/extra/id | nothing;
                                class subMenuItem/extra/class | nothing">
 
@@ -83,7 +82,7 @@
                     i18n:translate="">
                   Title
               </span>
-          </div>
+          </span>
         </li>
       </ul>
     </li>
@@ -128,7 +127,7 @@
                         Title
                     </tal:title>
                 </a>
-                <div tal:condition="not:subMenuItem/action"
+                <span tal:condition="not:subMenuItem/action"
                      tal:attributes="id subMenuItem/extra/id | nothing;
                                      class subMenuItem/extra/class | nothing">
 
@@ -136,7 +135,7 @@
                           i18n:translate="">
                         Title
                     </tal:title>
-                </div>
+                </span>
               </li>
             </tal:block>
           </tal:menulevel1>

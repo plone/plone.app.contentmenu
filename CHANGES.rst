@@ -7,6 +7,13 @@ Changelog
 - Fix "Manage Portlets" menus not appearing for "Site Administrators".
   [@rpatterson]
 
+- Integration of the new markup update and CSS for both Plone and Barceloneta
+  theme. This is the work done in the GSOC Barceloneta theme project.
+  [albertcasado, sneridagh]
+
+- New toolbar markup based in ul li tags for the contentActions menus.
+  [albertcasado, sneridagh]
+
 
 2.1.1 (2014-04-13)
 ------------------
