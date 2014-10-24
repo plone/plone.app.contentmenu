@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.1.2 (unreleased)
+2.1.2 (2014-10-23)
 ------------------
 
 - Fix "Manage Portlets" menus not appearing for "Site Administrators".
