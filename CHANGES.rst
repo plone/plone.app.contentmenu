@@ -4,7 +4,9 @@ Changelog
 2.1.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Don't show the menu-item to add content to a folderish default_page if no
+  content can be added to it.
+  [pbauer]
 
 
 2.1.2 (2014-10-23)
