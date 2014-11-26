@@ -269,7 +269,7 @@ class TestFactoriesMenu(PloneTestCase):
         actions = self.menu.getMenuItems(self.folder, self.request)
         self.assertEqual(len(actions), 0)
 
-    def testNoAddableTypesForFolderishDefaultPage(self):
+    def testMenuForFolderishDefaultPages(self):
         self.loginAsPortalOwner()
         self.portal.invokeFactory('Folder', 'folder1')
         self.portal.invokeFactory('Folder', 'folder2')
