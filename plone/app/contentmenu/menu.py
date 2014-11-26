@@ -657,12 +657,13 @@ class FactoriesMenu(BrowserMenu):
         return results
 
     def _contentCanBeAdded(self, addContext, request):
-        allowed_types = _allowedTypes(request, addContext)
+        """Find out if content can be added either by local constraints on the
+        context or by allowed_content_types on the FTI.
+        """
         constrain = IConstrainTypes(addContext, None)
         if constrain is None:
-            return allowed_types
-        else:
-            return constrain.getLocallyAllowedTypes()
+            return _allowedTypes(request, addContext)
+        return constrain.getLocallyAllowedTypes()
 
 class WorkflowSubMenuItem(BrowserSubMenuItem):
     implements(IWorkflowSubMenuItem)

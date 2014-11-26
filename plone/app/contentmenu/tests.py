@@ -269,6 +269,54 @@ class TestFactoriesMenu(PloneTestCase):
         actions = self.menu.getMenuItems(self.folder, self.request)
         self.assertEqual(len(actions), 0)
 
+    def testNoAddableTypesForFolderishDefaultPage(self):
+        self.loginAsPortalOwner()
+        self.portal.invokeFactory('Folder', 'folder1')
+        self.portal.invokeFactory('Folder', 'folder2')
+        self.portal.invokeFactory('Folder', 'folder3')
+        self.portal.invokeFactory('Document', 'doc1')
+        folder1 = self.portal['folder1']
+        folder2 = self.portal['folder2']
+        folder3 = self.portal['folder3']
+        doc1 = self.portal['doc1']
+
+        # test normal folder
+        actions = self.menu.getMenuItems(folder1, self.request)
+        self.assertEqual(len(actions), 10)
+        self.assertEqual(
+            'http://nohost/plone/folder1/folder_constraintypes_form',
+            actions[-1]['action'])
+
+        # test non-folderish default_page
+        self.portal.setDefaultPage('doc1')
+        actions = self.menu.getMenuItems(doc1, self.request)
+        self.assertEqual(len(actions), 9)
+        self.assertEqual(
+            'http://nohost/plone/createObject?type_name=Document',
+            actions[-1]['action'])
+
+        # test folderish default_page
+        # We need to test a different folder than folder1 to beat memoize.
+        self.portal.setDefaultPage('folder2')
+        actions = self.menu.getMenuItems(folder2, self.request)
+        self.assertEqual(len(actions), 10)
+        self.assertEqual(
+            'http://nohost/plone/folder2/@@folder_factories',
+            actions[-1]['action'])
+
+        # test folderish default_page to which no content can be added
+        # set no types for folders and check the link to factories menu-item is not shown
+        folder_fti = self.portal.portal_types['Folder']
+        folder_fti.manage_changeProperties(
+            filter_content_types=True, allowed_content_types=[])
+        self.portal.setDefaultPage('folder3')
+        actions = self.menu.getMenuItems(folder3, self.request)
+        self.assertEqual(len(actions), 9)
+        self.assertEqual(
+            'http://nohost/plone/createObject?type_name=Document',
+            actions[-1]['action'])
+
+
     def testConstrainTypes(self):
         constraints = ISelectableConstrainTypes(self.folder)
         constraints.setConstrainTypesMode(1)
