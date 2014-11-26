@@ -635,7 +635,8 @@ class FactoriesMenu(BrowserMenu):
         context_state = getMultiAdapter((context, request),
                                         name='plone_context_state')
         if context_state.is_structural_folder() and \
-                context_state.is_default_page():
+                context_state.is_default_page() and \
+                self._contentCanBeAdded(context, request):
             results.append({
                 'title': _(u'default_page_folder',
                            default=u'Add item to default page'),
@@ -655,6 +656,14 @@ class FactoriesMenu(BrowserMenu):
 
         return results
 
+    def _contentCanBeAdded(self, addContext, request):
+        """Find out if content can be added either by local constraints on the
+        context or by allowed_content_types on the FTI.
+        """
+        constrain = IConstrainTypes(addContext, None)
+        if constrain is None:
+            return _allowedTypes(request, addContext)
+        return constrain.getLocallyAllowedTypes()
 
 class WorkflowSubMenuItem(BrowserSubMenuItem):
     implements(IWorkflowSubMenuItem)
