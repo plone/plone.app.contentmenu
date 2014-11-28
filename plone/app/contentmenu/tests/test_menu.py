@@ -626,205 +626,213 @@ class TestContentMenuDX(unittest.TestCase):
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
         self.portal.invokeFactory('Folder', 'folder')
         self.folder = self.portal['folder']
-        self.folder.invokeFactory('Document', 'doc1')
+        # self.folder.invokeFactory('Document', 'doc1')
         self.menu = getUtility(
             IBrowserMenu, name='plone_contentmenu', context=self.folder)
         self.request = self.layer['request']
         self.is_dx = self.folder.meta_type == 'Dexterity Container'
 
-#     # Actions sub-menu
+    # Actions sub-menu
 
-#     def testActionsSubMenuIncluded(self):
-#         items = self.menu.getMenuItems(self.folder, self.request)
-#         actionsMenuItem = [i for i in items if
-#                            i['extra']['id'] == 'plone-contentmenu-actions'][0]
-#         self.assertEqual(actionsMenuItem['action'],
-#                          self.folder.absolute_url() + '/folder_contents')
-#         self.failUnless(len(actionsMenuItem['submenu']) > 0)
+    def testActionsSubMenuIncluded(self):
+        items = self.menu.getMenuItems(self.folder, self.request)
+        actionsMenuItem = [i for i in items if
+                           i['extra']['id'] == 'plone-contentmenu-actions'][0]
+        self.assertEqual(actionsMenuItem['action'],
+                         self.folder.absolute_url() + '/folder_contents')
+        self.failUnless(len(actionsMenuItem['submenu']) > 0)
 
-#     # Display sub-menu
+    # Display sub-menu
 
-#     def testDisplayMenuIncluded(self):
-#         items = self.menu.getMenuItems(self.folder, self.request)
-#         displayMenuItem = [i for i in items if
-#                            i['extra']['id'] == 'plone-contentmenu-display'][0]
-#         self.assertEqual(displayMenuItem['action'],
-#                          self.folder.absolute_url() + '/select_default_view')
-#         self.failUnless(len(displayMenuItem['submenu']) > 0)
+    def testDisplayMenuIncluded(self):
+        items = self.menu.getMenuItems(self.folder, self.request)
+        displayMenuItem = [i for i in items if
+                           i['extra']['id'] == 'plone-contentmenu-display'][0]
+        self.assertEqual(displayMenuItem['action'],
+                         self.folder.absolute_url() + '/select_default_view')
+        self.failUnless(len(displayMenuItem['submenu']) > 0)
 
-#     def testDisplayMenuNotIncludedIfContextDoesNotSupportBrowserDefault(self):
-#         # We need to create an object that does not have
-#         # IBrowserDefault enabled
-#         _createObjectByType('ATListCriterion', self.folder, 'c1')
-#         items = self.menu.getMenuItems(self.folder.c1, self.request)
-#         self.assertEqual([i for i in items if
-#                           i['extra']['id'] == 'plone-contentmenu-display'], [])
+    def testDisplayMenuNotIncludedIfContextDoesNotSupportBrowserDefault(self):
+        if self.is_dx:
+            # DX has no ATListCriterion
+            return
+        # We need to create an object that does not have
+        # IBrowserDefault enabled
+        _createObjectByType('ATListCriterion', self.folder, 'c1')
+        items = self.menu.getMenuItems(self.folder.c1, self.request)
+        self.assertEqual([i for i in items if
+                          i['extra']['id'] == 'plone-contentmenu-display'], [])
 
-#     def testWhenContextDoesNotSupportSelectableBrowserDefault(self):
-#         """Display Menu Show Folder Default Page When Context Does Not
-#         Support Selectable Browser Default"""
-#         # We need to create an object that is not
-#         # ISelectableBrowserDefault aware
-#         _createObjectByType('ATListCriterion', self.folder, 'c1')
-#         self.folder.c1.setTitle('Foo')
-#         self.folder.setDefaultPage('c1')
-#         items = self.menu.getMenuItems(self.folder.c1, self.request)
-#         displayMenuItem = [i for i in items if
-#                            i['extra']['id'] == 'plone-contentmenu-display'][0]
-#         selected = [a for a in displayMenuItem['submenu']
-#                     if a['selected']][0]
-#         self.assertEqual(u'Foo', selected['title'].mapping['contentitem'])
+    def testWhenContextDoesNotSupportSelectableBrowserDefault(self):
+        """Display Menu Show Folder Default Page When Context Does Not
+        Support Selectable Browser Default"""
+        if self.is_dx:
+            # DX has no ATListCriterion
+            return
+        # We need to create an object that is not
+        # ISelectableBrowserDefault aware
+        _createObjectByType('ATListCriterion', self.folder, 'c1')
+        self.folder.c1.setTitle('Foo')
+        self.folder.setDefaultPage('c1')
+        items = self.menu.getMenuItems(self.folder.c1, self.request)
+        displayMenuItem = [i for i in items if
+                           i['extra']['id'] == 'plone-contentmenu-display'][0]
+        selected = [a for a in displayMenuItem['submenu']
+                    if a['selected']][0]
+        self.assertEqual(u'Foo', selected['title'].mapping['contentitem'])
 
-#     def testDisplayMenuNotIncludedIfNoActionsAvailable(self):
-#         import pdb; pdb.set_trace()
-#         self.folder.invokeFactory('Document', 'doc1')
-#         items = self.menu.getMenuItems(self.folder.doc1, self.request)
-#         self.assertEqual([i for i in items if
-#                           i['extra']['id'] == 'plone-contentmenu-display'], [])
+    def testDisplayMenuNotIncludedIfNoActionsAvailable(self):
+        self.folder.invokeFactory('Document', 'doc1')
+        items = self.menu.getMenuItems(self.folder.doc1, self.request)
+        self.assertEqual([i for i in items if
+                          i['extra']['id'] == 'plone-contentmenu-display'], [])
 
-#     def testDisplayMenuDisabledIfIndexHtmlInFolder(self):
-#         self.folder.invokeFactory('Document', 'index_html')
-#         items = self.menu.getMenuItems(self.folder, self.request)
-#         displayMenuItems = [i for i in items if
-#                             i['extra']['id'] == 'plone-contentmenu-display']
-#         self.assertEqual(len(displayMenuItems), 0)
+    def testDisplayMenuDisabledIfIndexHtmlInFolder(self):
+        self.folder.invokeFactory('Document', 'index_html')
+        items = self.menu.getMenuItems(self.folder, self.request)
+        displayMenuItems = [i for i in items if
+                            i['extra']['id'] == 'plone-contentmenu-display']
+        self.assertEqual(len(displayMenuItems), 0)
 
-#     def testDisplayMenuDisabledIfIndexHtmlInFolderAndContextIsIndexHtml(self):
-#         self.folder.invokeFactory('Document', 'index_html')
-#         items = self.menu.getMenuItems(self.folder.index_html, self.request)
-#         displayMenuItems = [i for i in items if
-#                             i['extra']['id'] == 'plone-contentmenu-display']
-#         self.assertEqual(len(displayMenuItems), 0)
+    def testDisplayMenuDisabledIfIndexHtmlInFolderAndContextIsIndexHtml(self):
+        self.folder.invokeFactory('Document', 'index_html')
+        items = self.menu.getMenuItems(self.folder.index_html, self.request)
+        displayMenuItems = [i for i in items if
+                            i['extra']['id'] == 'plone-contentmenu-display']
+        self.assertEqual(len(displayMenuItems), 0)
 
-#     def testDisplayMenuAddPrefixFolderForContainerPart(self):
-#         prefix = 'folder-'
-#         self.folder.invokeFactory('Folder', 'subfolder1')
-#         self.folder.setDefaultPage('subfolder1')
-#         items = self.menu.getMenuItems(self.folder.subfolder1, self.request)
-#         displayMenuItems = [i for i in items if
-#                             i['extra']['id'] == 'plone-contentmenu-display'][0]
-#         extras = [i['extra'] for i in displayMenuItems['submenu']]
-#         for extra in extras[1:]:
-#             if not extra['separator'] is None:
-#                 break
-#             else:
-#                 self.assertEqual(extra['id'][0:len(prefix)], prefix)
+    def testDisplayMenuAddPrefixFolderForContainerPart(self):
+        prefix = 'folder-'
+        self.folder.invokeFactory('Folder', 'subfolder1')
+        self.folder.setDefaultPage('subfolder1')
+        items = self.menu.getMenuItems(self.folder.subfolder1, self.request)
+        displayMenuItems = [i for i in items if
+                            i['extra']['id'] == 'plone-contentmenu-display'][0]
+        extras = [i['extra'] for i in displayMenuItems['submenu']]
+        for extra in extras[1:]:
+            if not extra['separator'] is None:
+                break
+            else:
+                self.assertEqual(extra['id'][0:len(prefix)], prefix)
 
-#     # Add sub-menu
+    # Add sub-menu
 
-#     def testAddMenuIncluded(self):
-#         items = self.menu.getMenuItems(self.folder, self.request)
-#         factoriesMenuItem = [
-#             i for i in items if
-#             i['extra']['id'] == 'plone-contentmenu-factories'][0]
-#         self.assertIn(self.folder.absolute_url() + '/folder_factories',
-#                       factoriesMenuItem['action'])
-#         self.failUnless(len(factoriesMenuItem['submenu']) > 0)
+    def testAddMenuIncluded(self):
+        items = self.menu.getMenuItems(self.folder, self.request)
+        factoriesMenuItem = [
+            i for i in items if
+            i['extra']['id'] == 'plone-contentmenu-factories'][0]
+        self.assertIn(self.folder.absolute_url() + '/folder_factories',
+                      factoriesMenuItem['action'])
+        self.failUnless(len(factoriesMenuItem['submenu']) > 0)
 
-#     def testAddMenuNotIncludedIfNothingToAdd(self):
-#         logout()
-#         items = self.menu.getMenuItems(self.folder, self.request)
-#         self.assertEqual(
-#             [i for i in items if
-#              i['extra']['id'] == 'plone-contentmenu-factories'], [])
+    def testAddMenuNotIncludedIfNothingToAdd(self):
+        logout()
+        items = self.menu.getMenuItems(self.folder, self.request)
+        self.assertEqual(
+            [i for i in items if
+             i['extra']['id'] == 'plone-contentmenu-factories'], [])
 
-#     def testAddMenuWithNothingToAddButWithAvailableConstrainSettings(self):
-#         self.folder.setConstrainTypesMode(1)
-#         self.folder.setLocallyAllowedTypes(())
-#         self.folder.setImmediatelyAddableTypes(())
-#         items = self.menu.getMenuItems(self.folder, self.request)
-#         factoriesMenuItem = [
-#             i for i in items if
-#             i['extra']['id'] == 'plone-contentmenu-factories'][0]
-#         self.assertEqual(len(factoriesMenuItem['submenu']), 1)
-#         self.assertEqual(factoriesMenuItem['submenu'][0]['extra']['id'],
-#                          'plone-contentmenu-settings')
+    def testAddMenuWithNothingToAddButWithAvailableConstrainSettings(self):
+        constraints = ISelectableConstrainTypes(self.folder)
+        constraints.setConstrainTypesMode(1)
+        constraints.setLocallyAllowedTypes(())
+        constraints.setImmediatelyAddableTypes(())
+        items = self.menu.getMenuItems(self.folder, self.request)
+        factoriesMenuItem = [
+            i for i in items if
+            i['extra']['id'] == 'plone-contentmenu-factories'][0]
+        self.assertEqual(len(factoriesMenuItem['submenu']), 1)
+        self.assertEqual(factoriesMenuItem['submenu'][0]['extra']['id'],
+                         'plone-contentmenu-settings')
 
-#     def testAddMenuWithNothingToAddButWithAvailableMorePage(self):
-#         self.folder.setConstrainTypesMode(1)
-#         self.folder.setLocallyAllowedTypes(('Document',))
-#         self.folder.setImmediatelyAddableTypes(())
-#         self.folder.manage_permission('Modify constrain types', ('Manager',))
-#         items = self.menu.getMenuItems(self.folder, self.request)
-#         factoriesMenuItem = [
-#             i for i in items if
-#             i['extra']['id'] == 'plone-contentmenu-factories'][0]
-#         self.assertEqual(len(factoriesMenuItem['submenu']), 1)
-#         self.assertEqual(factoriesMenuItem['submenu'][0]['extra']['id'],
-#                          'plone-contentmenu-more')
+    def testAddMenuWithNothingToAddButWithAvailableMorePage(self):
+        constraints = ISelectableConstrainTypes(self.folder)
+        constraints.setConstrainTypesMode(1)
+        constraints.setLocallyAllowedTypes(('Document',))
+        constraints.setImmediatelyAddableTypes(())
+        self.folder.manage_permission('Modify constrain types', ('Manager',))
+        setRoles(self.portal, TEST_USER_ID, ['Contributor'])
+        items = self.menu.getMenuItems(self.folder, self.request)
+        factoriesMenuItem = [i for i in items if
+            i['extra']['id'] == 'plone-contentmenu-factories'][0]
+        self.assertEqual(len(factoriesMenuItem['submenu']), 1)
+        self.assertEqual(factoriesMenuItem['submenu'][0]['extra']['id'],
+                         'plone-contentmenu-more')
 
-#     def testAddMenuRelativeToNonStructuralFolder(self):
-#         self.folder.invokeFactory('Folder', 'f1')
-#         directlyProvides(self.folder.f1, INonStructuralFolder)
-#         items = self.menu.getMenuItems(self.folder.f1, self.request)
-#         factoriesMenuItem = [i for i in items if
-#                              i['extra']['id'] == 'plone-contentmenu-factories']
-#         self.failIf(factoriesMenuItem)
+    def testAddMenuRelativeToNonStructuralFolder(self):
+        self.folder.invokeFactory('Folder', 'f1')
+        directlyProvides(self.folder.f1, INonStructuralFolder)
+        items = self.menu.getMenuItems(self.folder.f1, self.request)
+        factoriesMenuItem = [i for i in items if
+                             i['extra']['id'] == 'plone-contentmenu-factories']
+        self.failIf(factoriesMenuItem)
 
-#     def testAddMenuWithAddViewExpr(self):
-#         # we need a dummy to test this - should test that if the item does not
-#         # support constrain types and there is
-#         self.folder.setConstrainTypesMode(1)
-#         self.folder.setLocallyAllowedTypes(('Document',))
-#         self.folder.setImmediatelyAddableTypes(('Document',))
-#         self.folder.manage_permission('Modify constrain types', ('Manager',))
-#         self.portal.portal_types['Document']._setPropValue(
-#             'add_view_expr', 'string:custom_expr')
-#         items = self.menu.getMenuItems(self.folder, self.request)
-#         factoriesMenuItem = [
-#             i for i in items if
-#             i['extra']['id'] == 'plone-contentmenu-factories'][0]
-#         self.assertEqual(factoriesMenuItem['submenu'][0]['action'],
-#                          'custom_expr')
+    def testAddMenuWithAddViewExpr(self):
+        # we need a dummy to test this - should test that if the item does not
+        # support constrain types and there is
+        constraints = ISelectableConstrainTypes(self.folder)
+        constraints.setConstrainTypesMode(1)
+        constraints.setLocallyAllowedTypes(('Document',))
+        constraints.setImmediatelyAddableTypes(('Document',))
+        self.folder.manage_permission('Modify constrain types', ('Manager',))
+        self.portal.portal_types['Document']._setPropValue(
+            'add_view_expr', 'string:custom_expr')
+        items = self.menu.getMenuItems(self.folder, self.request)
+        factoriesMenuItem = [
+            i for i in items if
+            i['extra']['id'] == 'plone-contentmenu-factories'][0]
+        self.assertEqual(factoriesMenuItem['submenu'][0]['action'],
+                         'custom_expr')
 
-#     # Workflow sub-menu
+    # Workflow sub-menu
 
-#     def testWorkflowMenuIncluded(self):
-#         items = self.menu.getMenuItems(self.folder, self.request)
-#         workflowMenuItem = [
-#             i for i in items if
-#             i['extra']['id'] == 'plone-contentmenu-workflow'][0]
-#         self.assertEqual(
-#             workflowMenuItem['action'],
-#             self.folder.absolute_url() + '/content_status_history')
-#         self.failUnless(len(workflowMenuItem['submenu']) > 0)
+    def testWorkflowMenuIncluded(self):
+        items = self.menu.getMenuItems(self.folder, self.request)
+        workflowMenuItem = [
+            i for i in items if
+            i['extra']['id'] == 'plone-contentmenu-workflow'][0]
+        self.assertEqual(
+            workflowMenuItem['action'],
+            self.folder.absolute_url() + '/content_status_history')
+        self.failUnless(len(workflowMenuItem['submenu']) > 0)
 
-#     def testWorkflowMenuWithNoTransitionsDisabled(self):
-#         logout()
-#         items = self.menu.getMenuItems(self.folder, self.request)
-#         workflowMenuItem = [
-#             i for i in items if
-#             i['extra']['id'] == 'plone-contentmenu-workflow'][0]
-#         self.assertEqual(workflowMenuItem['action'], '')
+    def testWorkflowMenuWithNoTransitionsDisabled(self):
+        logout()
+        items = self.menu.getMenuItems(self.folder, self.request)
+        workflowMenuItem = [
+            i for i in items if
+            i['extra']['id'] == 'plone-contentmenu-workflow'][0]
+        self.assertEqual(workflowMenuItem['action'], '')
 
-#     # XXX: Unable to write a proper test so far
-#     def DISABLED_testWorkflowMenuWithNoTransitionsEnabledAsManager(self):
-#         # set workflow guard condition that fails, so there are no transitions.
-#         # then show that manager will get a drop-down with settings whilst
-#         # regular users won't
+    @unittest.skip("Unable to write a proper test so far")
+    def testWorkflowMenuWithNoTransitionsEnabledAsManager(self):
+        # set workflow guard condition that fails, so there are no transitions.
+        # then show that manager will get a drop-down with settings whilst
+        # regular users won't
 
-#         self.portal.portal_workflow.doActionFor(self.folder, 'hide')
-#         wf = self.portal.portal_workflow['folder_workflow']
-#         wf.transitions['show'].guard.expr = Expression('python: False')
-#         wf.transitions['publish'].guard.expr = Expression('python: False')
+        self.portal.portal_workflow.doActionFor(self.folder, 'hide')
+        wf = self.portal.portal_workflow['folder_workflow']
+        wf.transitions['show'].guard.expr = Expression('python: False')
+        wf.transitions['publish'].guard.expr = Expression('python: False')
 
-#         items = self.menu.getMenuItems(self.folder, self.request)
-#         workflowMenuItem = [
-#             i for i in items if
-#             i['extra']['id'] == 'plone-contentmenu-workflow'][0]
+        items = self.menu.getMenuItems(self.folder, self.request)
+        workflowMenuItem = [
+            i for i in items if
+            i['extra']['id'] == 'plone-contentmenu-workflow'][0]
 
-#         # A regular user doesn't see any actions
-#         self.failUnless(workflowMenuItem['action'] == '')
-#         self.failUnless(workflowMenuItem['submenu'] is None)
+        # A regular user doesn't see any actions
+        self.failUnless(workflowMenuItem['action'] == '')
+        self.failUnless(workflowMenuItem['submenu'] is None)
 
-#         self.fail('Unable to write a proper test so far')
+        self.fail('Unable to write a proper test so far')
 
-#     def testWorkflowMenuWithNoWorkflowNotIncluded(self):
-#         self.portal.portal_workflow.setChainForPortalTypes(('Document',), ())
-#         self.folder.invokeFactory('Document', 'doc1')
-#         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
-#         self.failIf('plone_contentmenu_workflow' in
-#                     [a['extra']['id'] for a in actions])
+    def testWorkflowMenuWithNoWorkflowNotIncluded(self):
+        self.portal.portal_workflow.setChainForPortalTypes(('Document',), ())
+        self.folder.invokeFactory('Document', 'doc1')
+        actions = self.menu.getMenuItems(self.folder.doc1, self.request)
+        self.failIf('plone_contentmenu_workflow' in
+                    [a['extra']['id'] for a in actions])
 
 
 class TestContentMenuAT(TestContentMenuDX):
