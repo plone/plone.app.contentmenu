@@ -617,12 +617,20 @@ class TestManagePortletsMenuAT(TestManagePortletsMenuDX):
     layer = PLONE_APP_CONTENTMENU_DX_INTEGRATION_TESTING
 
 
-# class TestContentMenu(PloneTestCase):
+class TestContentMenuDX(unittest.TestCase):
 
-#     def afterSetUp(self):
-#         self.menu = getUtility(
-#             IBrowserMenu, name='plone_contentmenu', context=self.folder)
-#         self.request = self.app.REQUEST
+    layer = PLONE_APP_CONTENTMENU_DX_INTEGRATION_TESTING
+
+    def setUp(self):
+        self.portal = self.layer['portal']
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+        self.portal.invokeFactory('Folder', 'folder')
+        self.folder = self.portal['folder']
+        self.folder.invokeFactory('Document', 'doc1')
+        self.menu = getUtility(
+            IBrowserMenu, name='plone_contentmenu', context=self.folder)
+        self.request = self.layer['request']
+        self.is_dx = self.folder.meta_type == 'Dexterity Container'
 
 #     # Actions sub-menu
 
@@ -668,6 +676,7 @@ class TestManagePortletsMenuAT(TestManagePortletsMenuDX):
 #         self.assertEqual(u'Foo', selected['title'].mapping['contentitem'])
 
 #     def testDisplayMenuNotIncludedIfNoActionsAvailable(self):
+#         import pdb; pdb.set_trace()
 #         self.folder.invokeFactory('Document', 'doc1')
 #         items = self.menu.getMenuItems(self.folder.doc1, self.request)
 #         self.assertEqual([i for i in items if
@@ -691,7 +700,6 @@ class TestManagePortletsMenuAT(TestManagePortletsMenuDX):
 #         prefix = 'folder-'
 #         self.folder.invokeFactory('Folder', 'subfolder1')
 #         self.folder.setDefaultPage('subfolder1')
-#         self.loginAsPortalOwner()
 #         items = self.menu.getMenuItems(self.folder.subfolder1, self.request)
 #         displayMenuItems = [i for i in items if
 #                             i['extra']['id'] == 'plone-contentmenu-display'][0]
@@ -724,7 +732,6 @@ class TestManagePortletsMenuAT(TestManagePortletsMenuDX):
 #         self.folder.setConstrainTypesMode(1)
 #         self.folder.setLocallyAllowedTypes(())
 #         self.folder.setImmediatelyAddableTypes(())
-#         self.loginAsPortalOwner()
 #         items = self.menu.getMenuItems(self.folder, self.request)
 #         factoriesMenuItem = [
 #             i for i in items if
@@ -820,20 +827,28 @@ class TestManagePortletsMenuAT(TestManagePortletsMenuDX):
 #                     [a['extra']['id'] for a in actions])
 
 
-# class TestDisplayViewsMenu(unittest.TestCase):
+class TestContentMenuAT(TestContentMenuDX):
 
-#     def setUp(self):
-#         # BBB for Zope 2.12
-#         try:
-#             from Zope2.App import zcml
-#         except ImportError:
-#             from Products.Five import zcml
-#         import Products.Five
-#         import plone.app.contentmenu
-#         zcml.load_config("meta.zcml", Products.Five)
-#         zcml.load_config('configure.zcml', plone.app.contentmenu)
-#         zcml.load_config('tests.zcml', plone.app.contentmenu)
-#         self.menu = getUtility(IBrowserMenu, 'plone_displayviews')
+    layer = PLONE_APP_CONTENTMENU_AT_INTEGRATION_TESTING
+
+
+class TestDisplayViewsMenuDX(unittest.TestCase):
+
+    layer = PLONE_APP_CONTENTMENU_DX_INTEGRATION_TESTING
+
+    def setUp(self):
+        # BBB for Zope 2.12
+        try:
+            from Zope2.App import zcml
+        except ImportError:
+            from Products.Five import zcml
+        import Products.Five
+        import plone.app.contentmenu
+        zcml.load_config("meta.zcml", Products.Five)
+        zcml.load_config('configure.zcml', plone.app.contentmenu)
+        zcml.load_config('tests.zcml', plone.app.contentmenu)
+        self.menu = getUtility(IBrowserMenu, 'plone_displayviews')
+        # self.is_dx = self.folder.meta_type == 'Dexterity Container'
 
 #     def _getMenuItemByAction(self, action):
 #         from zope.publisher.browser import TestRequest
@@ -867,3 +882,8 @@ class TestManagePortletsMenuAT(TestManagePortletsMenuDX):
 #         """Attempt to retrieve a non-registered IBrowserMenuItem"""
 #         item = self._getMenuItemByAction('nonesuch.html')
 #         self.assertTrue(item is None)
+
+
+class TestDisplayViewsMenuAT(TestDisplayViewsMenuDX):
+
+    layer = PLONE_APP_CONTENTMENU_AT_INTEGRATION_TESTING
