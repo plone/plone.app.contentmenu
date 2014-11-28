@@ -50,6 +50,7 @@ class PloneAppContentmenuAT(PloneAppContentmenu):
         z2.uninstallProduct(app, 'Products.Archetypes')
 
     def setUpPloneSite(self, portal):
+        portal.portal_workflow.setDefaultChain("simple_publication_workflow")
         # install Products.ATContentTypes manually if profile is available
         # (this is only needed for Plone >= 5)
         profiles = [x['id'] for x in portal.portal_setup.listProfileInfo()]

@@ -34,39 +34,35 @@ from zope.component import getUtility
 from zope.interface import alsoProvides
 from zope.interface import directlyProvides
 
-import transaction
 import unittest
 
 
-# class TestActionsMenuAT(unittest.TestCase):
-#     layer = PLONE_APP_CONTENTMENU_AT_INTEGRATION_TESTING
+class TestActionsMenuAT(unittest.TestCase):
+    layer = PLONE_APP_CONTENTMENU_AT_INTEGRATION_TESTING
 
-#     def setUp(self):
-#         self.portal = self.layer['portal']
-#         setRoles(self.portal, TEST_USER_ID, ['Manager'])
-#         self.portal.invokeFactory('Folder', 'folder')
-#         self.folder = self.portal['folder']
-#         self.menu = getUtility(
-#             IBrowserMenu, name='plone_contentmenu_actions',
-#             context=self.folder)
-#         self.request = self.layer['request']
+    def setUp(self):
+        self.portal = self.layer['portal']
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+        self.portal.invokeFactory('Folder', 'folder')
+        self.folder = self.portal['folder']
+        self.menu = getUtility(
+            IBrowserMenu, name='plone_contentmenu_actions',
+            context=self.folder)
+        self.request = self.layer['request']
 
-#     def test_actionsMenuImplementsIBrowserMenu(self):
-#         self.failUnless(IBrowserMenu.providedBy(self.menu))
+    def test_actionsMenuImplementsIBrowserMenu(self):
+        self.failUnless(IBrowserMenu.providedBy(self.menu))
 
-#     def test_actionsMenuImplementsIActionsMenu(self):
-#         self.failUnless(IActionsMenu.providedBy(self.menu))
+    def test_actionsMenuImplementsIActionsMenu(self):
+        self.failUnless(IActionsMenu.providedBy(self.menu))
 
-#     def test_actionsMenuFindsActions(self):
-#         actions = self.menu.getMenuItems(self.folder, self.request)
-#         self.failUnless('plone-contentmenu-actions-copy' in [a['extra']['id'] for a in actions])
-
-
-# class TestActionsMenuDX(TestActionsMenuAT):
-#     layer = PLONE_APP_CONTENTMENU_DX_INTEGRATION_TESTING
+    def test_actionsMenuFindsActions(self):
+        actions = self.menu.getMenuItems(self.folder, self.request)
+        self.failUnless('plone-contentmenu-actions-copy' in [a['extra']['id'] for a in actions])
 
 
-
+class TestActionsMenuDX(TestActionsMenuAT):
+    layer = PLONE_APP_CONTENTMENU_DX_INTEGRATION_TESTING
 
 
 class TestDisplayMenuAT(unittest.TestCase):
@@ -474,97 +470,100 @@ class TestFactoriesMenuAT(TestFactoriesMenuDX):
     layer = PLONE_APP_CONTENTMENU_AT_INTEGRATION_TESTING
 
 
-# class TestWorkflowMenuDX(unittest.TestCase):
+class TestWorkflowMenuDX(unittest.TestCase):
 
-#     layer = PLONE_APP_CONTENTMENU_DX_INTEGRATION_TESTING
+    layer = PLONE_APP_CONTENTMENU_DX_INTEGRATION_TESTING
 
-#     def setUp(self):
-#         self.portal = self.layer['portal']
-#         setRoles(self.portal, TEST_USER_ID, ['Manager'])
-#         self.portal.invokeFactory('Folder', 'folder')
-#         self.folder = self.portal['folder']
-#         self.folder.invokeFactory('Document', 'doc1')
-#         self.menu = getUtility(
-#             IBrowserMenu, name='plone_contentmenu_workflow',
-#             context=self.folder)
-#         self.request = self.layer['request']
-#         self.is_dx = self.folder.meta_type == 'Dexterity Container'
+    def setUp(self):
+        self.portal = self.layer['portal']
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+        self.portal.invokeFactory('Folder', 'folder')
+        self.folder = self.portal['folder']
+        self.folder.invokeFactory('Document', 'doc1')
+        self.menu = getUtility(
+            IBrowserMenu, name='plone_contentmenu_workflow',
+            context=self.folder)
+        self.request = self.layer['request']
+        self.is_dx = self.folder.meta_type == 'Dexterity Container'
 
-#     def testMenuImplementsIBrowserMenu(self):
-#         self.failUnless(IBrowserMenu.providedBy(self.menu))
+    def testMenuImplementsIBrowserMenu(self):
+        self.failUnless(IBrowserMenu.providedBy(self.menu))
 
-#     def testMenuImplementsIActionsMenu(self):
-#         self.failUnless(IWorkflowMenu.providedBy(self.menu))
+    def testMenuImplementsIActionsMenu(self):
+        self.failUnless(IWorkflowMenu.providedBy(self.menu))
 
-#     def testMenuIncludesActions(self):
-#         self.loginAsPortalOwner()
-#         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
-#         self.failUnless('workflow-transition-submit' in
-#                         [a['extra']['id'] for a in actions])
-#         found = False
-#         for item in actions:
-#             if ('http://nohost/plone/Members/test_user_1_/doc1/'
-#                     'content_status_modify?'
-#                     'workflow_action=submit') in item['action']:
-#                 found = True
-#                 break
-#         self.assertTrue(found)
+    def testMenuIncludesActions(self):
+        actions = self.menu.getMenuItems(self.folder.doc1, self.request)
+        self.assertIn('workflow-transition-submit',
+                      [a['extra']['id'] for a in actions])
+        found = False
+        for item in actions:
+            if ('http://nohost/plone/folder/doc1/'
+                    'content_status_modify?'
+                    'workflow_action=submit') in item['action']:
+                found = True
+                break
+        self.assertTrue(found)
 
-#         # Let us try that again but with an empty url action, like is
-#         # usual in older workflows, and which is nice to keep
-#         # supporting.
-#         context = self.folder.doc1
-#         wf_tool = getToolByName(context, "portal_workflow")
-#         submit = wf_tool.plone_workflow.transitions['submit']
-#         submit.actbox_url = ""
-#         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
-#         self.failUnless('workflow-transition-submit' in
-#                         [a['extra']['id'] for a in actions])
-#         found = False
-#         for item in actions:
-#             if ('http://nohost/plone/Members/test_user_1_/doc1/'
-#                     'content_status_modify?'
-#                     'workflow_action=submit') in item['action']:
-#                 found = True
-#                 break
-#         self.assertTrue(found)
+        # Let us try that again but with an empty url action, like is
+        # usual in older workflows, and which is nice to keep
+        # supporting.
+        context = self.folder.doc1
+        wf_tool = getToolByName(context, "portal_workflow")
+        submit = wf_tool.plone_workflow.transitions['submit']
+        submit.actbox_url = ""
+        actions = self.menu.getMenuItems(self.folder.doc1, self.request)
+        self.failUnless('workflow-transition-submit' in
+                        [a['extra']['id'] for a in actions])
+        found = False
+        for item in actions:
+            if ('http://nohost/plone/folder/doc1/'
+                    'content_status_modify?'
+                    'workflow_action=submit') in item['action']:
+                found = True
+                break
+        self.assertTrue(found)
 
-#     def testNoTransitions(self):
-#         self.logout()
-#         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
-#         self.assertEqual(len(actions), 0)
+    def testNoTransitions(self):
+        logout()
+        actions = self.menu.getMenuItems(self.folder.doc1, self.request)
+        self.assertEqual(len(actions), 0)
 
-#     def testLockedItem(self):
-#         membership_tool = getToolByName(self.folder, 'portal_membership')
-#         membership_tool.addMember('anotherMember', 'secret', ['Member'], [])
-#         locking = ILockable(self.folder.doc1)
-#         locking.lock()
-#         self.login('anotherMember')
-#         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
-#         self.assertEqual(len(actions), 0)
+    def testLockedItem(self):
+        if self.is_dx:
+            # dexterity has no locking ootb
+            # see https://github.com/plone/plone.app.contenttypes/issues/140
+            return
+        membership_tool = getToolByName(self.folder, 'portal_membership')
+        membership_tool.addMember('anotherMember', 'secret', ['Member'], [])
+        locking = ILockable(self.folder.doc1)
+        locking.lock()
+        login(self.portal, 'anotherMember')
+        actions = self.menu.getMenuItems(self.folder.doc1, self.request)
+        self.assertEqual(len(actions), 0)
 
-#     def testAdvancedIncluded(self):
-#         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
-#         url = self.folder.doc1.absolute_url() + '/content_status_history'
-#         self.failUnless(url in [a['action'] for a in actions])
+    def testAdvancedIncluded(self):
+        actions = self.menu.getMenuItems(self.folder.doc1, self.request)
+        url = self.folder.doc1.absolute_url() + '/content_status_history'
+        self.assertIn(url, [a['action'] for a in actions])
 
-#     def testPolicyIncludedIfCMFPWIsInstalled(self):
-#         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
-#         url = self.folder.doc1.absolute_url(
-#             ) + '/placeful_workflow_configuration'
-#         self.failIf(url in [a['action'] for a in actions])
-#         self.portal.portal_quickinstaller.installProduct('CMFPlacefulWorkflow')
+    def testPolicyIncludedIfCMFPWIsInstalled(self):
+        actions = self.menu.getMenuItems(self.folder.doc1, self.request)
+        url = self.folder.doc1.absolute_url(
+            ) + '/placeful_workflow_configuration'
+        self.failIf(url in [a['action'] for a in actions])
+        self.portal.portal_quickinstaller.installProduct('CMFPlacefulWorkflow')
 
-#         # item needs permission
-#         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
-#         self.failIf(url in [a['action'] for a in actions])
-#         self.loginAsPortalOwner()
-#         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
-#         self.failUnless(url in [a['action'] for a in actions])
+        # item needs permission
+        logout()
+        actions = self.menu.getMenuItems(self.folder.doc1, self.request)
+        self.assertNotIn(url, [a['action'] for a in actions])
+        actions = self.menu.getMenuItems(self.folder.doc1, self.request)
+        self.assertNotIn(url, [a['action'] for a in actions])
 
-# class TestWorkflowMenuAT(TestWorkflowMenuDX):
+class TestWorkflowMenuAT(TestWorkflowMenuDX):
 
-#     layer = PLONE_APP_CONTENTMENU_AT_INTEGRATION_TESTING
+    layer = PLONE_APP_CONTENTMENU_AT_INTEGRATION_TESTING
 
 
 # class TestManagePortletsMenu(PloneTestCase):
@@ -591,7 +590,7 @@ class TestFactoriesMenuAT(TestFactoriesMenuDX):
 #                         in [a['action'] for a in actions])
 
 #     def testNoTransitions(self):
-#         self.logout()
+#         logout()
 #         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
 #         self.assertEqual(len(actions), 0)
 
@@ -698,7 +697,7 @@ class TestFactoriesMenuAT(TestFactoriesMenuDX):
 #         self.failUnless(len(factoriesMenuItem['submenu']) > 0)
 
 #     def testAddMenuNotIncludedIfNothingToAdd(self):
-#         self.logout()
+#         logout()
 #         items = self.menu.getMenuItems(self.folder, self.request)
 #         self.assertEqual(
 #             [i for i in items if
@@ -767,7 +766,7 @@ class TestFactoriesMenuAT(TestFactoriesMenuDX):
 #         self.failUnless(len(workflowMenuItem['submenu']) > 0)
 
 #     def testWorkflowMenuWithNoTransitionsDisabled(self):
-#         self.logout()
+#         logout()
 #         items = self.menu.getMenuItems(self.folder, self.request)
 #         workflowMenuItem = [
 #             i for i in items if
