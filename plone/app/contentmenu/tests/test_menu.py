@@ -561,43 +561,60 @@ class TestWorkflowMenuDX(unittest.TestCase):
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
         self.assertNotIn(url, [a['action'] for a in actions])
 
+
 class TestWorkflowMenuAT(TestWorkflowMenuDX):
 
     layer = PLONE_APP_CONTENTMENU_AT_INTEGRATION_TESTING
 
 
-# class TestManagePortletsMenu(PloneTestCase):
+class TestManagePortletsMenuDX(unittest.TestCase):
 
-#     def afterSetUp(self):
-#         self.folder.invokeFactory('Document', 'doc1')
-#         self.menu = getUtility(
-#             IBrowserMenu, name='plone_contentmenu_portletmanager',
-#             context=self.folder)
-#         self.request = self.app.REQUEST
+    layer = PLONE_APP_CONTENTMENU_DX_INTEGRATION_TESTING
 
-#     def testMenuImplementsIBrowserMenu(self):
-#         self.failUnless(IBrowserMenu.providedBy(self.menu))
+    def setUp(self):
+        self.portal = self.layer['portal']
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+        self.portal.invokeFactory('Folder', 'folder')
+        self.folder = self.portal['folder']
+        self.folder.invokeFactory('Document', 'doc1')
+        self.menu = getUtility(
+            IBrowserMenu, name='plone_contentmenu_portletmanager',
+            context=self.folder)
+        self.request = self.layer['request']
+        self.is_dx = self.folder.meta_type == 'Dexterity Container'
 
-#     def testMenuImplementsIActionsMenu(self):
-#         self.failUnless(IPortletManagerMenu.providedBy(self.menu))
+    def testMenuImplementsIBrowserMenu(self):
+        self.failUnless(IBrowserMenu.providedBy(self.menu))
 
-#     def testMenuIncludesActions(self):
-#         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
-#         self.failUnless('portlet-manager-plone.leftcolumn' in
-#                         [a['extra']['id'] for a in actions])
-#         self.failUnless(('http://nohost/plone/Members/test_user_1_/doc1/'
-#                          '/@@topbar-manage-portlets/plone.leftcolumn?ajax_load=1')
-#                         in [a['action'] for a in actions])
+    def testMenuImplementsIActionsMenu(self):
+        self.failUnless(IPortletManagerMenu.providedBy(self.menu))
 
-#     def testNoTransitions(self):
-#         logout()
-#         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
-#         self.assertEqual(len(actions), 0)
+    def testMenuIncludesActions(self):
+        actions = self.menu.getMenuItems(self.folder.doc1, self.request)
+        self.assertIn('portlet-manager-plone.leftcolumn',
+                      [a['extra']['id'] for a in actions])
+        self.assertIn(('http://nohost/plone/folder/doc1'
+                       '/@@topbar-manage-portlets/plone.leftcolumn?ajax_load=1'),
+                      [a['action'] for a in actions][1])
 
-#     def testAdvancedIncluded(self):
-#         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
-#         url = self.folder.doc1.absolute_url() + '/manage-portlets'
-#         self.failUnless(url in [a['action'] for a in actions])
+    def testNoTransitions(self):
+        logout()
+        actions = self.menu.getMenuItems(self.folder.doc1, self.request)
+        self.assertEqual(len(actions), 0)
+
+    def testAdvancedIncluded(self):
+        actions = self.menu.getMenuItems(self.folder.doc1, self.request)
+        if self.is_dx:
+            url = self.folder.doc1.absolute_url() + '/@@topbar-manage-portlets/plone.leftcolumn'
+            self.assertIn(url, [a['action'] for a in actions][1])
+        else:
+            url = self.folder.doc1.absolute_url() + '/manage-portlets'
+            self.assertIn(url, [a['action'] for a in actions])
+
+
+class TestManagePortletsMenuAT(TestManagePortletsMenuDX):
+
+    layer = PLONE_APP_CONTENTMENU_DX_INTEGRATION_TESTING
 
 
 # class TestContentMenu(PloneTestCase):
@@ -850,15 +867,3 @@ class TestWorkflowMenuAT(TestWorkflowMenuDX):
 #         """Attempt to retrieve a non-registered IBrowserMenuItem"""
 #         item = self._getMenuItemByAction('nonesuch.html')
 #         self.assertTrue(item is None)
-
-
-# def test_suite():
-#     from unittest import TestSuite, makeSuite
-#     suite = TestSuite()
-#     suite.addTest(makeSuite(TestActionsMenu))
-#     suite.addTest(makeSuite(TestDisplayMenu))
-#     suite.addTest(makeSuite(TestFactoriesMenu))
-#     suite.addTest(makeSuite(TestWorkflowMenu))
-#     suite.addTest(makeSuite(TestContentMenu))
-#     suite.addTest(makeSuite(TestDisplayViewsMenu))
-#     return suite
