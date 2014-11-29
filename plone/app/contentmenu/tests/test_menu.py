@@ -862,13 +862,13 @@ class TestDisplayViewsMenuDX(unittest.TestCase):
         from plone.app.contentmenu.interfaces import IDisplayViewsMenu
         self.assertTrue(IDisplayViewsMenu.providedBy(self.menu))
 
-    def testSimpleActionXXX(self):
+    def testSimpleAction(self):
         """Retrieve a registered IBrowserMenuItem"""
         item = self._getMenuItemByAction('folder_summary_view')
         self.assertFalse(item is None)
         self.assertEqual(item.title, u'Summary view')
 
-    def testViewActionXXX(self):
+    def testViewAction(self):
         """Retrieve a registered IBrowserMenuItem"""
         item = self._getMenuItemByAction('folder_listing')
         self.assertFalse(item is None)
