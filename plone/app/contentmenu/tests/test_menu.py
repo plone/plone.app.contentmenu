@@ -845,53 +845,40 @@ class TestDisplayViewsMenuDX(unittest.TestCase):
     layer = PLONE_APP_CONTENTMENU_DX_INTEGRATION_TESTING
 
     def setUp(self):
-        # BBB for Zope 2.12
-        try:
-            from Zope2.App import zcml
-        except ImportError:
-            from Products.Five import zcml
-        import Products.Five
-        import plone.app.contentmenu
-        zcml.load_config("meta.zcml", Products.Five)
-        zcml.load_config('configure.zcml', plone.app.contentmenu)
-        zcml.load_config('tests.zcml', plone.app.contentmenu)
+        self.portal = self.layer['portal']
+        self.portal.invokeFactory('Folder', 'folder')
+        self.folder = self.portal['folder']
+        self.request = self.layer['request']
         self.menu = getUtility(IBrowserMenu, 'plone_displayviews')
-        # self.is_dx = self.folder.meta_type == 'Dexterity Container'
 
-#     def _getMenuItemByAction(self, action):
-#         from zope.publisher.browser import TestRequest
-#         context = dummy.Dummy()
-#         request = TestRequest()
-#         return self.menu.getMenuItemByAction(context, request, action)
+    def _getMenuItemByAction(self, action):
+        from zope.publisher.browser import TestRequest
+        context = self.folder
+        request = self.request
+        return self.menu.getMenuItemByAction(context, request, action)
 
-#     def testInterface(self):
-#         """A DisplayViewsMenu implements an extended interface"""
-#         from plone.app.contentmenu.interfaces import IDisplayViewsMenu
-#         self.assertTrue(IDisplayViewsMenu.providedBy(self.menu))
+    def testInterface(self):
+        """A DisplayViewsMenu implements an extended interface"""
+        from plone.app.contentmenu.interfaces import IDisplayViewsMenu
+        self.assertTrue(IDisplayViewsMenu.providedBy(self.menu))
 
-#     def testSimpleAction(self):
-#         """Retrieve a registered IBrowserMenuItem"""
-#         item = self._getMenuItemByAction('foo.html')
-#         self.assertFalse(item is None)
-#         self.assertEqual(item.title, 'Test Menu Item')
+    def testSimpleActionXXX(self):
+        """Retrieve a registered IBrowserMenuItem"""
+        item = self._getMenuItemByAction('folder_summary_view')
+        self.assertFalse(item is None)
+        self.assertEqual(item.title, u'Summary view')
 
-#     def testViewAction(self):
-#         """Retrieve a registered IBrowserMenuItem"""
-#         item = self._getMenuItemByAction('bar.html')
-#         self.assertFalse(item is None)
-#         self.assertEqual(item.title, 'Another Test Menu Item')
+    def testViewActionXXX(self):
+        """Retrieve a registered IBrowserMenuItem"""
+        item = self._getMenuItemByAction('folder_listing')
+        self.assertFalse(item is None)
+        self.assertEqual(item.title, 'Standard view')
+        item = self._getMenuItemByAction('@@folder_listing')
+        self.assertEqual(item.title, 'Standard view')
+        item = self._getMenuItemByAction('++view++folder_listing')
+        self.assertEqual(item.title, 'Standard view')
 
-#         item = self._getMenuItemByAction('@@bar.html')
-#         self.assertEqual(item.title, 'Another Test Menu Item')
-#         item = self._getMenuItemByAction('++view++bar.html')
-#         self.assertEqual(item.title, 'Another Test Menu Item')
-
-#     def testNonExisting(self):
-#         """Attempt to retrieve a non-registered IBrowserMenuItem"""
-#         item = self._getMenuItemByAction('nonesuch.html')
-#         self.assertTrue(item is None)
-
-
-class TestDisplayViewsMenuAT(TestDisplayViewsMenuDX):
-
-    layer = PLONE_APP_CONTENTMENU_AT_INTEGRATION_TESTING
+    def testNonExisting(self):
+        """Attempt to retrieve a non-registered IBrowserMenuItem"""
+        item = self._getMenuItemByAction('nonesuch.html')
+        self.assertTrue(item is None)
