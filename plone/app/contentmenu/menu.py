@@ -251,29 +251,22 @@ class DisplayMenu(BrowserMenu):
         """Return menu item entries in a TAL-friendly form."""
         results = []
 
-        context_state = getMultiAdapter((obj, request),
-                                        name='plone_context_state')
+        context_state = getMultiAdapter(
+            (obj, request), name='plone_context_state'
+        )
         isDefaultPage = context_state.is_default_page()
 
         parent = None
-
         folder = None
-        context = None
-
-        folderLayouts = []
-        contextLayouts = []
-
-        # If this is a default page, also get menu items relative to the parent
         if isDefaultPage:
+            # If this is a default page, also get menu items relative to thr
+            # parent
             parent = utils.parent(obj)
             folder = ISelectableBrowserDefault(parent, None)
-
-        context = ISelectableBrowserDefault(obj, None)
 
         folderLayouts = []
         folderCanSetLayout = False
         folderCanSetDefaultPage = False
-
         if folder is not None:
             folderLayouts = folder.getAvailableLayouts()
             folderCanSetLayout = folder.canSetLayout()
@@ -283,6 +276,7 @@ class DisplayMenu(BrowserMenu):
         contextCanSetLayout = False
         contextCanSetDefaultPage = False
 
+        context = ISelectableBrowserDefault(obj, None)
         if context is not None:
             contextLayouts = context.getAvailableLayouts()
             contextCanSetLayout = context.canSetLayout()

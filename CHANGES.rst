@@ -4,6 +4,10 @@ Changelog
 2.1.3 (unreleased)
 ------------------
 
+- Fix Dexterity tests to use plone.app.contenttypes' browser layer. Fix tests
+  to work with new plone.app.contenttypes unified view names.
+  [thet]
+
 - Don't show the menu-item to add content to a folderish default_page if no
   content can be added to it.
   [pbauer]
