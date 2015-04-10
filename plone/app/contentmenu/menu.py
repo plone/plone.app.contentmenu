@@ -839,7 +839,7 @@ class PortletManagerSubMenuItem(BrowserSubMenuItem):
 
     MANAGE_SETTINGS_PERMISSION = 'Portlets: Manage portlets'
 
-    title = _(u'manage_portlets_link', default=u'Manage Portlets')
+    title = _(u'manage_portlets_link', default=u'Manage portlets')
     submenuId = 'plone_contentmenu_portletmanager'
     order = 50
 
