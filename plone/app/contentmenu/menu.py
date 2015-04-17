@@ -112,7 +112,7 @@ class ActionsMenu(BrowserMenu):
                 icon = action.get('icon', None)
                 modal = action.get('modal', None)
                 if modal:
-                    cssClass += ' pat-modal'
+                    cssClass += ' pat-plone-modal'
 
                 results.append({
                     'title': action['title'],
@@ -361,7 +361,7 @@ class DisplayMenu(BrowserMenu):
                     'extra': {
                         'id': 'folderChangeDefaultPage',
                         'separator': 'actionSeparator',
-                        'class': 'pat-modal'},
+                        'class': 'pat-plone-modal'},
                     'submenu': None,
                 })
 
@@ -436,7 +436,7 @@ class DisplayMenu(BrowserMenu):
                             'extra': {
                                 'id': 'contextSetDefaultPage',
                                 'separator': 'actionSeparator',
-                                'class': 'pat-modal'},
+                                'class': 'pat-plone-modal'},
                             'submenu': None,
                             })
                 else:
@@ -479,7 +479,7 @@ class DisplayMenu(BrowserMenu):
                             'extra': {
                                 'id': 'contextChangeDefaultPage',
                                 'separator': 'actionSeparator',
-                                'class': 'pat-modal'},
+                                'class': 'pat-plone-modal'},
                             'submenu': None,
                             })
 
@@ -644,7 +644,7 @@ class FactoriesMenu(BrowserMenu):
                 'extra': {
                     'id': 'plone-contentmenu-add-to-default-page',
                     'separator': None,
-                    'class': 'pat-modal',},
+                    'class': 'pat-plone-modal',},
                 'submenu': None,
                 })
 
@@ -811,7 +811,7 @@ class WorkflowMenu(BrowserMenu):
                 'extra': {
                     'id': 'workflow-transition-advanced',
                     'separator': 'actionSeparator',
-                    'class': 'pat-modal'},
+                    'class': 'pat-plone-modal'},
                 'submenu': None,
             })
 
@@ -932,7 +932,7 @@ class PortletManagerMenu(BrowserMenu):
                 'extra': {
                     'id': 'portlet-manager-%s' % manager_name,
                     'separator': None,
-                    'class': 'pat-modal'},
+                    'class': 'pat-plone-modal'},
                 'submenu': None,
             }
 
