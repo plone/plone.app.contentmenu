@@ -12,6 +12,9 @@ Changelog
   content can be added to it.
   [pbauer]
 
+- pat-modal pattern has been renamed to pat-plone-modal
+  [jcbrand]
+
 
 2.1.2 (2014-10-23)
 ------------------
