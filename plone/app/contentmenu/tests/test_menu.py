@@ -18,7 +18,6 @@ from plone.app.testing import login
 from plone.app.testing import logout
 from plone.app.testing import setRoles
 from plone.locking.interfaces import ILockable
-from plone.protect.authenticator import createToken
 from zope.browsermenu.interfaces import IBrowserMenu
 from zope.component import getUtility
 from zope.interface import directlyProvides
@@ -306,10 +305,11 @@ class TestFactoriesMenuAT(unittest.TestCase):
         if self.is_dx:
             self.assertIn('%s/++add++File' % self.folder.absolute_url(), urls)
         else:
-            token = createToken()
-            self.assertIn(
-                '%s/createObject?type_name=File&_authenticator=%s' % (self.folder.absolute_url(), token),
-                urls)
+            found = False
+            for url in urls:
+                if '%s/createObject?type_name=File' % self.folder.absolute_url() in url:  # noqa
+                    found = True
+            self.assertTrue(found)
 
     def testFrontPageExpressionContext(self):
         # If the expression context uses the front-page instead of the
@@ -334,12 +334,14 @@ class TestFactoriesMenuAT(unittest.TestCase):
             # DX does not use plusquote
             return
         actions = self.menu.getMenuItems(self.folder, self.request)
-        self.assertIn(
-            self.folder.absolute_url() + '/createObject?type_name=News+Item&_authenticator=' + createToken(),
-            [a['action'] for a in actions])
+        found = False
+        for url in [a['action'] for a in actions]:
+            if self.folder.absolute_url() + '/createObject?type_name=News+Item' in url:
+                found = True
+        self.assertTrue(found)
 
     def testMenuIncludesFactoriesOnNonFolderishContext(self):
-        actions = self.menu.getMenuItems(self.folder.doc1, self.request )
+        actions = self.menu.getMenuItems(self.folder.doc1, self.request)
         img = None
         for a in actions:
             if a['extra']['id'] == 'image':
@@ -389,9 +391,8 @@ class TestFactoriesMenuAT(unittest.TestCase):
                 actions[-2]['action'])
         else:
             self.assertEqual(len(actions), 10)
-            self.assertEqual(
-                'http://nohost/plone/folder1/createObject?type_name=Document&_authenticator=' + createToken(),
-                actions[-2]['action'])
+            self.assertTrue(
+                'http://nohost/plone/folder1/createObject?type_name=Document' in actions[-2]['action'])  # noqa
 
         # test non-folderish default_page
         self.portal.setDefaultPage('doc1')
@@ -401,9 +402,8 @@ class TestFactoriesMenuAT(unittest.TestCase):
                 'http://nohost/plone/++add++Document',
                 actions[-1]['action'])
         else:
-            self.assertEqual(
-                'http://nohost/plone/createObject?type_name=Document',
-                actions[-1]['action'])
+            self.assertTrue(
+                'http://nohost/plone/createObject?type_name=Document' in actions[-1]['action'])  # noqa
 
         # test folderish default_page
         # We need to test a different folder than folder1 to beat memoize.
@@ -426,9 +426,8 @@ class TestFactoriesMenuAT(unittest.TestCase):
                 'http://nohost/plone/++add++Document',
                 actions[-1]['action'])
         else:
-            self.assertEqual(
-                'http://nohost/plone/createObject?type_name=Document',
-                actions[-1]['action'])
+            self.assertTrue(
+                'http://nohost/plone/createObject?type_name=Document' in actions[-1]['action'])  # noqa
 
     def testConstrainTypes(self):
         constraints = ISelectableConstrainTypes(self.folder)
