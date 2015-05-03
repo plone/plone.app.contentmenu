@@ -18,6 +18,7 @@ from plone.app.testing import login
 from plone.app.testing import logout
 from plone.app.testing import setRoles
 from plone.locking.interfaces import ILockable
+from plone.protect.authenticator import createToken
 from zope.browsermenu.interfaces import IBrowserMenu
 from zope.component import getUtility
 from zope.interface import directlyProvides
@@ -305,8 +306,10 @@ class TestFactoriesMenuAT(unittest.TestCase):
         if self.is_dx:
             self.assertIn('%s/++add++File' % self.folder.absolute_url(), urls)
         else:
+            token = createToken()
             self.assertIn(
-                '%s/createObject?type_name=File' % self.folder.absolute_url(),
+                '%s/createObject?type_name=File&_authenticator=%s' % (
+                    (self.folder.absolute_url(), token),
                 urls)
 
     def testFrontPageExpressionContext(self):
@@ -333,7 +336,7 @@ class TestFactoriesMenuAT(unittest.TestCase):
             return
         actions = self.menu.getMenuItems(self.folder, self.request)
         self.assertIn(
-            self.folder.absolute_url() + '/createObject?type_name=News+Item',
+            self.folder.absolute_url() + '/createObject?type_name=News+Item&_authenticator=' + createToken(),
             [a['action'] for a in actions])
 
     def testMenuIncludesFactoriesOnNonFolderishContext(self):
@@ -387,8 +390,9 @@ class TestFactoriesMenuAT(unittest.TestCase):
                 actions[-2]['action'])
         else:
             self.assertEqual(len(actions), 10)
+            token = createToken()
             self.assertEqual(
-                'http://nohost/plone/folder1/createObject?type_name=Document',
+                'http://nohost/plone/folder1/createObject?type_name=Document&_authenticator=' + createToken(),
                 actions[-2]['action'])
 
         # test non-folderish default_page
