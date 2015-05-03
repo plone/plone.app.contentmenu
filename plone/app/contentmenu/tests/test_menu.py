@@ -308,8 +308,7 @@ class TestFactoriesMenuAT(unittest.TestCase):
         else:
             token = createToken()
             self.assertIn(
-                '%s/createObject?type_name=File&_authenticator=%s' % (
-                    (self.folder.absolute_url(), token),
+                '%s/createObject?type_name=File&_authenticator=%s' % (self.folder.absolute_url(), token),
                 urls)
 
     def testFrontPageExpressionContext(self):
@@ -340,7 +339,7 @@ class TestFactoriesMenuAT(unittest.TestCase):
             [a['action'] for a in actions])
 
     def testMenuIncludesFactoriesOnNonFolderishContext(self):
-        actions = self.menu.getMenuItems(self.folder.doc1, self.request)
+        actions = self.menu.getMenuItems(self.folder.doc1, self.request )
         img = None
         for a in actions:
             if a['extra']['id'] == 'image':
@@ -390,7 +389,6 @@ class TestFactoriesMenuAT(unittest.TestCase):
                 actions[-2]['action'])
         else:
             self.assertEqual(len(actions), 10)
-            token = createToken()
             self.assertEqual(
                 'http://nohost/plone/folder1/createObject?type_name=Document&_authenticator=' + createToken(),
                 actions[-2]['action'])
