@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.1.4 (unreleased)
+2.1.4 (2015-05-05)
 ------------------
 
 - Rerelease due to double distribution ending up on PyPI.
