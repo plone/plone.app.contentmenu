@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.1.3 (unreleased)
+2.1.3 (2015-05-04)
 ------------------
 
 - Change test-setup to allow testing AT and DX.
