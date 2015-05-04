@@ -4,7 +4,8 @@ Changelog
 2.1.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Rerelease due to double distribution ending up on PyPI.
+  [maurits]
 
 
 2.1.3 (2015-05-04)
