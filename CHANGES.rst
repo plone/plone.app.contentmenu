@@ -4,6 +4,9 @@ Changelog
 2.1.3 (unreleased)
 ------------------
 
+- Change test-setup to allow testing AT and DX.
+  [pbauer]
+
 - Fix Dexterity tests to use plone.app.contenttypes' browser layer. Fix tests
   to work with new plone.app.contenttypes unified view names.
   [thet]
