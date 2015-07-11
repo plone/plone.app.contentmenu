@@ -1,4 +1,5 @@
 from cgi import escape
+import json
 
 from plone.memoize.instance import memoize
 from plone.app.content.browser.folderfactories import _allowedTypes
@@ -504,7 +505,15 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
     def extra(self):
         return {'id': 'plone-contentmenu-factories',
                 'level': 0,
-                'li_class': 'plonetoolbar-contenttype'}
+                'li_class': 'plonetoolbar-contenttype',
+                'class': 'pat-plone-modal',
+                'attributes': {
+                    'data-pat-plone-modal': json.dumps({
+                        'actionOptions': {
+                            'disableAjaxFormSubmit': True
+                        }
+                    })
+                }}
 
     @property
     def action(self):
@@ -644,7 +653,7 @@ class FactoriesMenu(BrowserMenu):
                 'extra': {
                     'id': 'plone-contentmenu-add-to-default-page',
                     'separator': None,
-                    'class': 'pat-plone-modal',},
+                    'class': 'pat-plone-modal'},
                 'submenu': None,
                 })
 

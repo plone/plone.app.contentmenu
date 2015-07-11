@@ -12,10 +12,12 @@
       <a href="#"
          tal:omit-tag="not:menuItem/action"
          tal:define="state_class menuItem/extra/class | nothing;
-                     state_class python:state_class and state_class or ''"
+                     state_class python:state_class and state_class;
+                     attributes menuItem/extra/attributes | python:{}"
          tal:attributes="href menuItem/action;
                          title menuItem/description;
-                         class string:label-${state_class}"
+                         class string:${state_class} label-${state_class};
+                         attributes"
          i18n:attributes="title;">
 
           <span tal:condition="menuItem/extra/stateTitle | nothing"
