@@ -689,11 +689,18 @@ class WorkflowSubMenuItem(BrowserSubMenuItem):
         state = self.context_state.workflow_state()
         stateTitle = self._currentStateTitle()
         return {'id': 'plone-contentmenu-workflow',
-                'class': 'state-%s' % state,
+                'class': 'pat-plone-modal label-state-%s' % state,
                 'state': state,
                 'stateTitle': stateTitle,
                 'level': 0,
-                'li_class': 'plonetoolbar-workfow-transition'}
+                'li_class': 'plonetoolbar-workfow-transition',
+                'attributes': {
+                    'data-pat-plone-modal': json.dumps({
+                        'actionOptions': {
+                            'disableAjaxFormSubmit': True
+                        }
+                    })
+                }}
 
     @property
     def description(self):
