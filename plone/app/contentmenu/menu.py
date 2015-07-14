@@ -59,7 +59,6 @@ class ActionsSubMenuItem(BrowserSubMenuItem):
     order = 10
     extra = {
         'id': 'plone-contentmenu-actions',
-        'level': 1,
         'li_class': 'plonetoolbar-content-action'
     }
 
@@ -147,7 +146,6 @@ class DisplaySubMenuItem(BrowserSubMenuItem):
         return {
             'id': 'plone-contentmenu-display',
             'disabled': self.disabled(),
-            'level': 1,
             'li_class': 'plonetoolbar-display-view'
         }
 
@@ -503,7 +501,6 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
     @property
     def extra(self):
         return {'id': 'plone-contentmenu-factories',
-                'level': 0,
                 'li_class': 'plonetoolbar-contenttype'}
 
     @property
@@ -644,7 +641,7 @@ class FactoriesMenu(BrowserMenu):
                 'extra': {
                     'id': 'plone-contentmenu-add-to-default-page',
                     'separator': None,
-                    'class': 'pat-plone-modal',},
+                    'class': 'pat-plone-modal'},
                 'submenu': None,
                 })
 
@@ -683,7 +680,6 @@ class WorkflowSubMenuItem(BrowserSubMenuItem):
                 'class': 'state-%s' % state,
                 'state': state,
                 'stateTitle': stateTitle,
-                'level': 0,
                 'li_class': 'plonetoolbar-workfow-transition'}
 
     @property
@@ -852,8 +848,7 @@ class PortletManagerSubMenuItem(BrowserSubMenuItem):
     @property
     def extra(self):
         return {'id': 'plone-contentmenu-portetmanager',
-                'li_class': 'plonetoolbar-portlet-manager',
-                'level': 1}
+                'li_class': 'plonetoolbar-portlet-manager'}
 
     @property
     def description(self):

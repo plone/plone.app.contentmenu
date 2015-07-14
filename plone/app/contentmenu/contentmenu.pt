@@ -1,10 +1,8 @@
-<tal:contentactionmenus define="menu_dict view/menu;
-                                level0 python:menu_dict['level0'];
-                                level1 python:menu_dict['level1']"
+<tal:contentactionmenus define="menu view/menu;"
                         condition="view/available"
                         i18n:domain="plone">
 
-  <tal:menus repeat="menuItem level0">
+  <tal:menus repeat="menuItem menu">
     <li tal:define="submenu menuItem/submenu;
                     identifier menuItem/extra/id"
         tal:attributes="id menuItem/extra/id">
@@ -87,61 +85,4 @@
       </ul>
     </li>
   </tal:menus>
-
-  <tal:moreoptions tal:condition="level1">
-    <li id="plone-contentmenu-moreoptions">
-      <a href="#"
-         title="More options"
-         i18n:attributes="title;">
-          <span class="icon-moreOptions" aria-hidden="true"></span>
-          <span i18n:translate="">More options</span>
-          <span class="plone-toolbar-caret"></span>
-      </a>
-      <ul>
-        <tal:elements repeat="menuItem level1">
-          <tal:menulevel1 define="submenu menuItem/submenu;
-                                  identifier menuItem/extra/id">
-            <li class="plone-toolbar-submenu-header"
-                tal:attributes="id menuItem/extra/id">
-              <a tal:attributes="href menuItem/action;
-                                 title menuItem/description;"
-                 i18n:attributes="title;">
-                  <tal:title tal:content="menuItem/title"
-                        i18n:translate="">
-                    SubMenu title
-                  </tal:title>
-              </a>
-            </li>
-            <tal:block repeat="subMenuItem submenu">
-              <li tal:attributes="class string:${menuItem/extra/li_class | nothing} ${subMenuItem/extra/separator}">
-                <a href="#"
-                   tal:condition="subMenuItem/action"
-                   tal:attributes="href subMenuItem/action;
-                                   title subMenuItem/description;
-                                   id subMenuItem/extra/id | nothing;
-                                   data-pat-plone-modal subMenuItem/extra/modal | nothing;
-                                   class subMenuItem/extra/class | nothing"
-                   i18n:attributes="title">
-                    <tal:title tal:content="structure subMenuItem/title"
-                          i18n:translate="">
-                        Title
-                    </tal:title>
-                </a>
-                <span tal:condition="not:subMenuItem/action"
-                     tal:attributes="id subMenuItem/extra/id | nothing;
-                                     class subMenuItem/extra/class | nothing">
-
-                    <tal:title tal:content="structure subMenuItem/title"
-                          i18n:translate="">
-                        Title
-                    </tal:title>
-                </span>
-              </li>
-            </tal:block>
-          </tal:menulevel1>
-        </tal:elements>
-      </ul>
-    </li>
-  </tal:moreoptions>
-
 </tal:contentactionmenus>
