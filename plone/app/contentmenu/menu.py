@@ -847,7 +847,7 @@ class PortletManagerSubMenuItem(BrowserSubMenuItem):
 
     @property
     def extra(self):
-        return {'id': 'plone-contentmenu-portetmanager',
+        return {'id': 'plone-contentmenu-portletmanager',
                 'li_class': 'plonetoolbar-portlet-manager'}
 
     @property
