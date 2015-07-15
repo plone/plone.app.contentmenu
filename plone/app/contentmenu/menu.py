@@ -56,7 +56,7 @@ class ActionsSubMenuItem(BrowserSubMenuItem):
                     default=u'Actions for the current content item')
     submenuId = 'plone_contentmenu_actions'
 
-    order = 10
+    order = 30
     extra = {
         'id': 'plone-contentmenu-actions',
         'li_class': 'plonetoolbar-content-action'
@@ -134,7 +134,7 @@ class DisplaySubMenuItem(BrowserSubMenuItem):
     title = _(u'label_choose_template', default=u'Display')
     submenuId = 'plone_contentmenu_display'
 
-    order = 20
+    order = 40
 
     def __init__(self, context, request):
         BrowserSubMenuItem.__init__(self, context, request)
@@ -488,7 +488,7 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
     implements(IFactoriesSubMenuItem)
 
     submenuId = 'plone_contentmenu_factory'
-    order = 30
+    order = 10
     title = _(u'label_add_new_item', default=u'Add new\u2026')
     description = _(u'title_add_new_items_inside_item',
                     default=u'Add new items inside this item')
@@ -663,7 +663,7 @@ class WorkflowSubMenuItem(BrowserSubMenuItem):
 
     title = _(u'label_state', default=u'State:')
     submenuId = 'plone_contentmenu_workflow'
-    order = 40
+    order = 20
 
     def __init__(self, context, request):
         BrowserSubMenuItem.__init__(self, context, request)
