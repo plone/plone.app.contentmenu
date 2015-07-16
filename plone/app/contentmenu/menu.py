@@ -2,7 +2,6 @@ from cgi import escape
 
 from plone.memoize.instance import memoize
 from plone.app.content.browser.folderfactories import _allowedTypes
-from plone.app.content.browser.interfaces import IContentsPage
 from zope.browsermenu.menu import BrowserMenu
 from zope.browsermenu.menu import BrowserSubMenuItem
 from zope.interface import implements
@@ -56,10 +55,9 @@ class ActionsSubMenuItem(BrowserSubMenuItem):
                     default=u'Actions for the current content item')
     submenuId = 'plone_contentmenu_actions'
 
-    order = 10
+    order = 30
     extra = {
         'id': 'plone-contentmenu-actions',
-        'level': 1,
         'li_class': 'plonetoolbar-content-action'
     }
 
@@ -77,12 +75,6 @@ class ActionsSubMenuItem(BrowserSubMenuItem):
 
     @memoize
     def available(self):
-        if 'folder_contents' in self.request.getURL().split('/'):
-            return False
-        if IContentsPage.providedBy(self.request):
-            # Don't display action menu on folder_contents page.
-            # The cut/copy/paste submenu items are too confusing in this view.
-            return False
         actions_tool = getToolByName(self.context, 'portal_actions')
         editActions = actions_tool.listActionInfos(
             object=self.context, categories=('object_buttons',), max=1)
@@ -135,7 +127,7 @@ class DisplaySubMenuItem(BrowserSubMenuItem):
     title = _(u'label_choose_template', default=u'Display')
     submenuId = 'plone_contentmenu_display'
 
-    order = 20
+    order = 40
 
     def __init__(self, context, request):
         BrowserSubMenuItem.__init__(self, context, request)
@@ -147,7 +139,6 @@ class DisplaySubMenuItem(BrowserSubMenuItem):
         return {
             'id': 'plone-contentmenu-display',
             'disabled': self.disabled(),
-            'level': 1,
             'li_class': 'plonetoolbar-display-view'
         }
 
@@ -229,10 +220,6 @@ class DisplaySubMenuItem(BrowserSubMenuItem):
     def disabled(self):
         # As we don't have the view we need to parse the url to see
         # if its folder_contents
-        if 'folder_contents' in self.request.getURL().split('/'):
-            return True
-        if IContentsPage.providedBy(self.request):
-            return True
         context = self.context
         if self.context_state.is_default_page():
             context = utils.parent(context)
@@ -490,7 +477,7 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
     implements(IFactoriesSubMenuItem)
 
     submenuId = 'plone_contentmenu_factory'
-    order = 30
+    order = 10
     title = _(u'label_add_new_item', default=u'Add new\u2026')
     description = _(u'title_add_new_items_inside_item',
                     default=u'Add new items inside this item')
@@ -503,7 +490,6 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
     @property
     def extra(self):
         return {'id': 'plone-contentmenu-factories',
-                'level': 0,
                 'li_class': 'plonetoolbar-contenttype'}
 
     @property
@@ -515,8 +501,6 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
     def available(self):
         itemsToAdd = self._itemsToAdd()
         showConstrainOptions = self._showConstrainOptions()
-        if 'folder_contents' in self.request.getURL().split('/'):
-            return False
         if self._addingToParent() and not self.context_state.is_default_page():
             return False
         return (len(itemsToAdd) > 0 or showConstrainOptions)
@@ -644,7 +628,7 @@ class FactoriesMenu(BrowserMenu):
                 'extra': {
                     'id': 'plone-contentmenu-add-to-default-page',
                     'separator': None,
-                    'class': 'pat-plone-modal',},
+                    'class': 'pat-plone-modal'},
                 'submenu': None,
                 })
 
@@ -666,7 +650,7 @@ class WorkflowSubMenuItem(BrowserSubMenuItem):
 
     title = _(u'label_state', default=u'State:')
     submenuId = 'plone_contentmenu_workflow'
-    order = 40
+    order = 20
 
     def __init__(self, context, request):
         BrowserSubMenuItem.__init__(self, context, request)
@@ -683,7 +667,6 @@ class WorkflowSubMenuItem(BrowserSubMenuItem):
                 'class': 'state-%s' % state,
                 'state': state,
                 'stateTitle': stateTitle,
-                'level': 0,
                 'li_class': 'plonetoolbar-workfow-transition'}
 
     @property
@@ -703,8 +686,6 @@ class WorkflowSubMenuItem(BrowserSubMenuItem):
 
     @memoize
     def available(self):
-        if 'folder_contents' in self.request.getURL().split('/'):
-            return False
         return (self.context_state.workflow_state() is not None)
 
     def selected(self):
@@ -851,9 +832,8 @@ class PortletManagerSubMenuItem(BrowserSubMenuItem):
 
     @property
     def extra(self):
-        return {'id': 'plone-contentmenu-portetmanager',
-                'li_class': 'plonetoolbar-portlet-manager',
-                'level': 1}
+        return {'id': 'plone-contentmenu-portletmanager',
+                'li_class': 'plonetoolbar-portlet-manager'}
 
     @property
     def description(self):
@@ -871,10 +851,6 @@ class PortletManagerSubMenuItem(BrowserSubMenuItem):
 
     @memoize
     def available(self):
-        # As we don't have the view we need to parse the url to see
-        # if its folder_contents
-        if 'folder_contents' in self.request.getURL().split('/'):
-            return False
         secman = getSecurityManager()
         has_manage_portlets_permission = secman.checkPermission(
             'Portlets: Manage portlets',
