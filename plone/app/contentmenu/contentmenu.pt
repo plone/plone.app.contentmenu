@@ -44,7 +44,8 @@
           </span>
       </a>
 
-      <ul tal:condition="not:menuItem/extra/hideChildren | not:submenu | nothing">
+      <ul tal:condition="not:menuItem/extra/hideChildren | not:submenu | nothing"
+          aria-hidden="true">
         <li class="plone-toolbar-submenu-header">
           <span tal:omit-tag="not:menuItem/extra/stateTitle | nothing">
             <span tal:content="menuItem/title">Menu Title</span>
