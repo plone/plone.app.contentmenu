@@ -4,7 +4,9 @@ Changelog
 2.1.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- get rid of "more options", reorder menu, show actions in
+  folder contents, better accessibility.
+  [vangheem]
 
 
 2.1.4 (2015-05-05)
