@@ -4,6 +4,9 @@ Changelog
 2.1.5 (unreleased)
 ------------------
 
+- hide submenu so screen readers do not read full contents every time
+  [vangheem]
+
 - get rid of "more options", reorder menu, show actions in
   folder contents, better accessibility.
   [vangheem]
