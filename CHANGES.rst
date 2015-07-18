@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.1.5 (unreleased)
+2.1.5 (2015-07-18)
 ------------------
 
 - hide submenu so screen readers do not read full contents every time
