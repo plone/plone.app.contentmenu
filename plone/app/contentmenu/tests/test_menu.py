@@ -635,7 +635,7 @@ class TestManagePortletsMenuAT(unittest.TestCase):
                       [a['extra']['id'] for a in actions])
         self.assertIn(
             ('http://nohost/plone/folder/doc1'
-             '/@@topbar-manage-portlets/plone.leftcolumn?ajax_load=1'),
+             '/@@topbar-manage-portlets/plone.leftcolumn'),
             [a['action'] for a in actions][1]
         )
 

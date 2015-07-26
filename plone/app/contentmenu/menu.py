@@ -897,18 +897,16 @@ class PortletManagerMenu(BrowserMenu):
             item = {
                 'title': ' '.join(manager_name.split('.')).title(),
                 'description': ' '.join(manager_name.split('.')).title(),
-                'action': addTokenToUrl(utils.ajax_load_url(
+                'action': addTokenToUrl(
                     '%s/@@topbar-manage-portlets/%s' % (
                         current_url,
-                        manager_name)
-                    ),
+                        manager_name),
                     request),
                 'selected': False,
                 'icon': None,
                 'extra': {
                     'id': 'portlet-manager-%s' % manager_name,
-                    'separator': None,
-                    'class': 'pat-plone-modal'},
+                    'separator': None},
                 'submenu': None,
             }
 
