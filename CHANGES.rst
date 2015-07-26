@@ -4,7 +4,8 @@ Changelog
 2.1.6 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- do not open manage portlets in a modal
+  [vangheem]
 
 
 2.1.5 (2015-07-18)
