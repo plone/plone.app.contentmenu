@@ -1,10 +1,10 @@
+# -*- coding: utf-8 -*-
 from zope.browsermenu.interfaces import IBrowserMenu
 from zope.browsermenu.interfaces import IBrowserSubMenuItem
 from zope.browsermenu.interfaces import IMenuItemType
-from zope.interface import Interface
-from zope.interface import directlyProvides
-
 from zope.contentprovider.interfaces import IContentProvider
+from zope.interface import directlyProvides
+from zope.interface import Interface
 
 
 class IContentMenuView(IContentProvider):

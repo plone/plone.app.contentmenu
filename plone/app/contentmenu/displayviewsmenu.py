@@ -1,13 +1,12 @@
+# -*- coding: utf-8 -*-
+from plone.app.contentmenu.interfaces import IDisplayViewsMenu
 from zope.browsermenu.menu import BrowserMenu
 from zope.component import getAdapters
-from zope.interface import implements
-
-from plone.app.contentmenu.interfaces import IDisplayViewsMenu
+from zope.interface import implementer
 
 
+@implementer(IDisplayViewsMenu)
 class DisplayViewsMenu(BrowserMenu):
-
-    implements(IDisplayViewsMenu)
 
     def getMenuItemByAction(self, object, request, action):
         # Normalize actions; strip view prefix

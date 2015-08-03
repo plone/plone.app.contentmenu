@@ -1,18 +1,16 @@
+# -*- coding: utf-8 -*-
+from plone.app.contentmenu.interfaces import IContentMenuView
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.browsermenu.interfaces import IBrowserMenu
 from zope.component import getUtility
-from zope.interface import implements
 from zope.contentprovider.provider import ContentProviderBase
-
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-
-from plone.app.contentmenu.interfaces import IContentMenuView
+from zope.interface import implementer
 
 
+@implementer(IContentMenuView)
 class ContentMenuProvider(ContentProviderBase):
     """Content menu provider for the "view" tab: displays the menu
     """
-
-    implements(IContentMenuView)
 
     index = ViewPageTemplateFile('contentmenu.pt')
 
