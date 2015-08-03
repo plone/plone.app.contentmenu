@@ -1,3 +1,3 @@
-# Import PloneMessageFactory to create messages in the plone domain
+# -*- coding: utf-8 -*-
 from zope.i18nmessageid import MessageFactory
 PloneMessageFactory = MessageFactory('plone')

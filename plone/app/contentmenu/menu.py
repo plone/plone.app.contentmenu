@@ -1,26 +1,8 @@
-from cgi import escape
-
-from plone.memoize.instance import memoize
-from plone.app.content.browser.folderfactories import _allowedTypes
-from zope.browsermenu.menu import BrowserMenu
-from zope.browsermenu.menu import BrowserSubMenuItem
-from zope.interface import implements
-from zope.component import getMultiAdapter, queryMultiAdapter
-from zope.component import getUtilitiesFor
-from zope.component import getUtility
+# -*- coding: utf-8 -*-
 from AccessControl import getSecurityManager
-
 from Acquisition import aq_base
-from Products.CMFCore.utils import getToolByName, _checkPermission
-from Products.CMFDynamicViewFTI.interfaces import ISelectableBrowserDefault
-from Products.CMFPlone import utils
-from Products.CMFPlone.interfaces.structure import INonStructuralFolder
-from Products.CMFPlone.interfaces.constrains import IConstrainTypes
-from Products.CMFPlone.interfaces.constrains import ISelectableConstrainTypes
-from plone.portlets.interfaces import IPortletManager
-from plone.portlets.interfaces import ILocalPortletAssignable
-from plone.registry.interfaces import IRegistry
-
+from cgi import escape
+from plone.app.content.browser.folderfactories import _allowedTypes
 from plone.app.contentmenu import PloneMessageFactory as _
 from plone.app.contentmenu.interfaces import IActionsMenu
 from plone.app.contentmenu.interfaces import IActionsSubMenuItem
@@ -28,27 +10,38 @@ from plone.app.contentmenu.interfaces import IDisplayMenu
 from plone.app.contentmenu.interfaces import IDisplaySubMenuItem
 from plone.app.contentmenu.interfaces import IFactoriesMenu
 from plone.app.contentmenu.interfaces import IFactoriesSubMenuItem
-from plone.app.contentmenu.interfaces import IWorkflowMenu
-from plone.app.contentmenu.interfaces import IWorkflowSubMenuItem
 from plone.app.contentmenu.interfaces import IPortletManagerMenu
 from plone.app.contentmenu.interfaces import IPortletManagerSubMenuItem
+from plone.app.contentmenu.interfaces import IWorkflowMenu
+from plone.app.contentmenu.interfaces import IWorkflowSubMenuItem
+from plone.memoize.instance import memoize
+from plone.portlets.interfaces import ILocalPortletAssignable
+from plone.portlets.interfaces import IPortletManager
+from plone.protect.utils import addTokenToUrl
+from plone.registry.interfaces import IRegistry
+from Products.CMFCore.utils import getToolByName, _checkPermission
+from Products.CMFDynamicViewFTI.interfaces import ISelectableBrowserDefault
+from Products.CMFPlone import utils
+from Products.CMFPlone.interfaces.constrains import IConstrainTypes
+from Products.CMFPlone.interfaces.constrains import ISelectableConstrainTypes
+from Products.CMFPlone.interfaces.structure import INonStructuralFolder
+from zope.browsermenu.menu import BrowserMenu
+from zope.browsermenu.menu import BrowserSubMenuItem
+from zope.component import getMultiAdapter, queryMultiAdapter
+from zope.component import getUtilitiesFor
+from zope.component import getUtility
+from zope.interface import implementer
+import pkg_resources
 
 try:
+    pkg_resources.get_distribution('Products.CMFPlacefulWorkflow')
     from Products.CMFPlacefulWorkflow import ManageWorkflowPolicies
-except ImportError:
-    from Products.CMFCore.permissions import \
-        ManagePortal as ManageWorkflowPolicies
-from plone.protect.utils import addTokenToUrl
+except pkg_resources.DistributionNotFound:
+    from Products.CMFCore.permissions import ManagePortal as ManageWorkflowPolicies  # noqa
 
 
-def _safe_unicode(text):
-    if not isinstance(text, unicode):
-        text = unicode(text, 'utf-8', 'ignore')
-    return text
-
-
+@implementer(IActionsSubMenuItem)
 class ActionsSubMenuItem(BrowserSubMenuItem):
-    implements(IActionsSubMenuItem)
 
     title = _(u'label_actions_menu', default=u'Actions')
     description = _(u'title_actions_menu',
@@ -84,8 +77,8 @@ class ActionsSubMenuItem(BrowserSubMenuItem):
         return False
 
 
+@implementer(IActionsMenu)
 class ActionsMenu(BrowserMenu):
-    implements(IActionsMenu)
 
     def getMenuItems(self, context, request):
         """Return menu item entries in a TAL-friendly form."""
@@ -121,8 +114,8 @@ class ActionsMenu(BrowserMenu):
         return results
 
 
+@implementer(IDisplaySubMenuItem)
 class DisplaySubMenuItem(BrowserSubMenuItem):
-    implements(IDisplaySubMenuItem)
 
     title = _(u'label_choose_template', default=u'Display')
     submenuId = 'plone_contentmenu_display'
@@ -149,21 +142,18 @@ class DisplaySubMenuItem(BrowserSubMenuItem):
                      default=u'Delete or rename the index_html item to gain '
                              u'full control over how this folder is '
                              u'displayed.')
-        else:
-            return _(u'title_choose_default_view',
-                     default=u'Select the view mode for this folder, or set a '
-                             u'content item as its default view.')
+        return _(u'title_choose_default_view',
+                 default=u'Select the view mode for this folder, or set a '
+                         u'content item as its default view.')
 
     @property
     def action(self):
         if self.disabled():
             return ''
-        else:
-            if self.context_state.is_default_page():
-                return self.context_state.parent().absolute_url() + \
-                    '/select_default_view'
-            else:
-                return self.context.absolute_url() + '/select_default_view'
+        if self.context_state.is_default_page():
+            return self.context_state.parent().absolute_url() + \
+                '/select_default_view'
+        return self.context.absolute_url() + '/select_default_view'
 
     @memoize
     def available(self):
@@ -231,8 +221,8 @@ class DisplaySubMenuItem(BrowserSubMenuItem):
             return True
 
 
+@implementer(IDisplayMenu)
 class DisplayMenu(BrowserMenu):
-    implements(IDisplayMenu)
 
     def getMenuItems(self, obj, request):
         """Return menu item entries in a TAL-friendly form."""
@@ -322,7 +312,7 @@ class DisplayMenu(BrowserMenu):
                 'title': _(u'label_item_selected',
                            default=u'Item: ${contentitem}',
                            mapping={'contentitem': escape(
-                               _safe_unicode(obj.Title()))}),
+                               utils.safe_unicode(obj.Title()))}),
                 'description': '',
                 'action': None,
                 'selected': True,
@@ -440,7 +430,7 @@ class DisplayMenu(BrowserMenu):
                         'title': _(u'label_item_selected',
                                    default=u'Item: ${contentitem}',
                                    mapping={'contentitem': escape(
-                                       _safe_unicode(defaultPageTitle))}),
+                                       utils.safe_unicode(defaultPageTitle))}),
                         'description': '',
                         'action': None,
                         'selected': True,
@@ -473,8 +463,8 @@ class DisplayMenu(BrowserMenu):
         return results
 
 
+@implementer(IFactoriesSubMenuItem)
 class FactoriesSubMenuItem(BrowserSubMenuItem):
-    implements(IFactoriesSubMenuItem)
 
     submenuId = 'plone_contentmenu_factory'
     order = 10
@@ -549,8 +539,8 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
             return True
 
 
+@implementer(IFactoriesMenu)
 class FactoriesMenu(BrowserMenu):
-    implements(IFactoriesMenu)
 
     def getMenuItems(self, context, request):
         """Return menu item entries in a TAL-friendly form."""
@@ -643,8 +633,9 @@ class FactoriesMenu(BrowserMenu):
             return _allowedTypes(request, addContext)
         return constrain.getLocallyAllowedTypes()
 
+
+@implementer(IWorkflowSubMenuItem)
 class WorkflowSubMenuItem(BrowserSubMenuItem):
-    implements(IWorkflowSubMenuItem)
 
     MANAGE_SETTINGS_PERMISSION = 'Manage portal'
 
@@ -711,8 +702,8 @@ class WorkflowSubMenuItem(BrowserSubMenuItem):
                     return w.states[state].title or state
 
 
+@implementer(IWorkflowMenu)
 class WorkflowMenu(BrowserMenu):
-    implements(IWorkflowMenu)
 
     # BBB: These actions (url's) existed in old workflow definitions
     # but were never used. The scripts they reference don't exist in
@@ -815,8 +806,8 @@ class WorkflowMenu(BrowserMenu):
         return results
 
 
+@implementer(IPortletManagerSubMenuItem)
 class PortletManagerSubMenuItem(BrowserSubMenuItem):
-    implements(IPortletManagerSubMenuItem)
 
     MANAGE_SETTINGS_PERMISSION = 'Portlets: Manage portlets'
 
@@ -874,8 +865,8 @@ class PortletManagerSubMenuItem(BrowserSubMenuItem):
         return has_manage_portlets_permission
 
 
+@implementer(IPortletManagerMenu)
 class PortletManagerMenu(BrowserMenu):
-    implements(IPortletManagerMenu)
 
     def getMenuItems(self, context, request):
         """Return menu item entries in a TAL-friendly form."""

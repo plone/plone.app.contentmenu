@@ -4,6 +4,9 @@ Changelog
 2.1.6 (unreleased)
 ------------------
 
+- pep8, zca decorators, plone code conventions
+  [jensens]
+
 - do not open manage portlets in a modal
   [vangheem]
 

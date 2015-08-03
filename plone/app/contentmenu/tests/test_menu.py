@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-from Products.CMFCore.Expression import Expression
-from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.interfaces import INonStructuralFolder
-from Products.CMFPlone.interfaces import ISelectableConstrainTypes
-from Products.CMFPlone.tests import dummy
-from Products.CMFPlone.utils import _createObjectByType
 from plone.app.contentmenu.interfaces import IActionsMenu
 from plone.app.contentmenu.interfaces import IDisplayMenu
 from plone.app.contentmenu.interfaces import IFactoriesMenu
@@ -13,11 +7,17 @@ from plone.app.contentmenu.interfaces import IWorkflowMenu
 from plone.app.contentmenu.testing import PLONE_APP_CONTENTMENU_AT_INTEGRATION_TESTING  # noqa
 from plone.app.contentmenu.testing import PLONE_APP_CONTENTMENU_DX_INTEGRATION_TESTING  # noqa
 from plone.app.contenttypes.testing import set_browserlayer
-from plone.app.testing import TEST_USER_ID
 from plone.app.testing import login
 from plone.app.testing import logout
 from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
 from plone.locking.interfaces import ILockable
+from Products.CMFCore.Expression import Expression
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.interfaces import INonStructuralFolder
+from Products.CMFPlone.interfaces import ISelectableConstrainTypes
+from Products.CMFPlone.tests import dummy
+from Products.CMFPlone.utils import _createObjectByType
 from zope.browsermenu.interfaces import IBrowserMenu
 from zope.component import getUtility
 from zope.interface import directlyProvides
@@ -336,7 +336,7 @@ class TestFactoriesMenuAT(unittest.TestCase):
         actions = self.menu.getMenuItems(self.folder, self.request)
         found = False
         for url in [a['action'] for a in actions]:
-            if self.folder.absolute_url() + '/createObject?type_name=News+Item' in url:
+            if self.folder.absolute_url() + '/createObject?type_name=News+Item' in url:  # noqa
                 found = True
         self.assertTrue(found)
 
