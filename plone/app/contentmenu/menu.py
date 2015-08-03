@@ -35,7 +35,7 @@ import pkg_resources
 
 try:
     pkg_resources.get_distribution('Products.CMFPlacefulWorkflow')
-    from Products.CMFPlacefulWorkflow import ManageWorkflowPolicies
+    from Products.CMFPlacefulWorkflow.permissions import ManageWorkflowPolicies
 except pkg_resources.DistributionNotFound:
     from Products.CMFCore.permissions import ManagePortal as ManageWorkflowPolicies  # noqa
 

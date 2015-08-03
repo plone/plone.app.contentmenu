@@ -4,6 +4,11 @@ Changelog
 2.1.6 (unreleased)
 ------------------
 
+- Fix: Permission check ``ManageWorkflowPolicies`` was always on fallback to
+  ``ManagerPortal``. Now checks the correct permission after using the 
+  pkg_resources.get_distribution api for checking (never catch an ImportError).
+  [jensens]
+
 - pep8, zca decorators, plone code conventions
   [jensens]
 
