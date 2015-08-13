@@ -1,4 +1,4 @@
-include *rst
+include *
 
 recursive-include docs *
 recursive-include plone *
