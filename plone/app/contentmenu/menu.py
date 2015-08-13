@@ -10,7 +10,7 @@ from zope.component import getMultiAdapter, queryMultiAdapter
 
 from Acquisition import aq_base
 from Products.CMFCore.utils import getToolByName, _checkPermission
-from Products.CMFDynamicViewFTI.interface import ISelectableBrowserDefault
+from Products.CMFDynamicViewFTI.interfaces import ISelectableBrowserDefault
 from Products.CMFPlone import utils
 from Products.CMFPlone.interfaces.structure import INonStructuralFolder
 from Products.CMFPlone.interfaces.constrains import IConstrainTypes
