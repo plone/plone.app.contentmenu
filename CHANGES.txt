@@ -4,8 +4,7 @@ Changelog
 2.0.10 (unreleased)
 -------------------
 
-- Avoid DeprecationWarning for Products.CMFDynamicViewFTI.interface.
-  [maurits]
+- Nothing changed yet.
 
 
 2.0.9 (2014-01-27)
