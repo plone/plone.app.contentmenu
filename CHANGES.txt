@@ -1,10 +1,11 @@
 Changelog
 =========
 
-2.0.10 (unreleased)
+2.0.10 (2014-01-28)
 -------------------
 
-- Nothing changed yet.
+- Remove test changes targeted at Plone 5.
+  [esteele]
 
 
 2.0.9 (2014-01-27)
@@ -12,9 +13,6 @@ Changelog
 
 - Don't break if there's no portal_actionicons tool.
   [davisagli]
-
-- Ported tests to plone.app.testing
-  [tomgross]
 
 
 2.0.8 (2013-03-05)

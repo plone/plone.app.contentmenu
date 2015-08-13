@@ -1,6 +1,8 @@
 import unittest
 
-from plone.app.testing.bbb import PloneTestCase
+from Testing.ZopeTestCase.placeless import PlacelessSetup
+from Products.PloneTestCase import PloneTestCase as ptc
+ptc.setupPloneSite()
 
 from plone.locking.interfaces import ILockable
 from zope.browsermenu.interfaces import IBrowserMenu
@@ -20,7 +22,7 @@ from plone.app.contentmenu.interfaces import IFactoriesMenu
 from plone.app.contentmenu.interfaces import IWorkflowMenu
 
 
-class TestActionsMenu(PloneTestCase):
+class TestActionsMenu(ptc.PloneTestCase):
 
     def afterSetUp(self):
         self.menu = getUtility(
@@ -39,7 +41,7 @@ class TestActionsMenu(PloneTestCase):
         self.failUnless('plone-contentmenu-actions-copy' in [a['extra']['id'] for a in actions])
 
 
-class TestDisplayMenu(PloneTestCase):
+class TestDisplayMenu(ptc.PloneTestCase):
 
     def afterSetUp(self):
         self.menu = getUtility(
@@ -193,7 +195,7 @@ class TestDisplayMenu(PloneTestCase):
                           changeAction['title'].mapping['contentitem'])
 
 
-class TestFactoriesMenu(PloneTestCase):
+class TestFactoriesMenu(ptc.PloneTestCase):
 
     def afterSetUp(self):
         self.folder.invokeFactory('Document', 'doc1')
@@ -330,7 +332,7 @@ class TestFactoriesMenu(PloneTestCase):
         self.failIf(item['icon'])
 
 
-class TestWorkflowMenu(PloneTestCase):
+class TestWorkflowMenu(ptc.PloneTestCase):
 
     def afterSetUp(self):
         self.folder.invokeFactory('Document', 'doc1')
@@ -401,7 +403,7 @@ class TestWorkflowMenu(PloneTestCase):
         self.failUnless(url in [a['action'] for a in actions])
 
 
-class TestContentMenu(PloneTestCase):
+class TestContentMenu(ptc.PloneTestCase):
 
     def afterSetUp(self):
         self.menu = getUtility(
@@ -602,7 +604,7 @@ class TestContentMenu(PloneTestCase):
                     [a['extra']['id'] for a in actions])
 
 
-class TestDisplayViewsMenu(unittest.TestCase):
+class TestDisplayViewsMenu(PlacelessSetup, unittest.TestCase):
 
     def setUp(self):
         # BBB for Zope 2.12

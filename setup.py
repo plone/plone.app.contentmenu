@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-version = '2.0.10.dev0'
+version = '2.0.10'
 
 setup(name='plone.app.contentmenu',
       version=version,
@@ -26,7 +26,7 @@ setup(name='plone.app.contentmenu',
       zip_safe=False,
       extras_require=dict(
         test=[
-          'plone.app.testing',
+          'Products.PloneTestCase',
           ]
         ),
       install_requires=[
