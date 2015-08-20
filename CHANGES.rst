@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.1.6 (unreleased)
+2.1.6 (2015-08-20)
 ------------------
 
 - Fix: Permission check ``ManageWorkflowPolicies`` was always on fallback to
