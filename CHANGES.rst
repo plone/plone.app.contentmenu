@@ -4,14 +4,20 @@ Changelog
 2.1.7 (unreleased)
 ------------------
 
-- Nothing changed yet.
+New:
+
+- *add item here*
+
+Fixes:
+
+- *add item here*
 
 
 2.1.6 (2015-08-20)
 ------------------
 
 - Fix: Permission check ``ManageWorkflowPolicies`` was always on fallback to
-  ``ManagerPortal``. Now checks the correct permission after using the 
+  ``ManagerPortal``. Now checks the correct permission after using the
   pkg_resources.get_distribution api for checking (never catch an ImportError).
   [jensens]
 
