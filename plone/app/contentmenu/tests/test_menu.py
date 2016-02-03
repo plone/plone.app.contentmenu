@@ -896,6 +896,7 @@ class TestDisplayViewsMenuDX(unittest.TestCase):
 
     def setUp(self):
         self.portal = self.layer['portal']
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
         self.portal.invokeFactory('Folder', 'folder')
         self.folder = self.portal['folder']
         self.request = self.layer['request']
