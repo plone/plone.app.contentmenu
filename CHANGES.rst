@@ -4,13 +4,9 @@ Changelog
 2.1.7 (unreleased)
 ------------------
 
-New:
-
-- *add item here*
-
 Fixes:
 
-- *add item here*
+- Fixed test (don't expect role from pac-tests).  [pbauer]
 
 
 2.1.6 (2015-08-20)
