@@ -27,10 +27,12 @@ from Products.CMFPlone.interfaces.constrains import ISelectableConstrainTypes
 from Products.CMFPlone.interfaces.structure import INonStructuralFolder
 from zope.browsermenu.menu import BrowserMenu
 from zope.browsermenu.menu import BrowserSubMenuItem
-from zope.component import getMultiAdapter, queryMultiAdapter
+from zope.component import getMultiAdapter
+from zope.component import queryMultiAdapter
 from zope.component import getUtilitiesFor
 from zope.component import getUtility
 from zope.interface import implementer
+
 import pkg_resources
 
 try:
@@ -84,33 +86,36 @@ class ActionsMenu(BrowserMenu):
         """Return menu item entries in a TAL-friendly form."""
         results = []
 
-        context_state = getMultiAdapter((context, request),
-                                        name='plone_context_state')
+        context_state = getMultiAdapter(
+            (context, request),
+            name='plone_context_state'
+        )
         editActions = context_state.actions('object_buttons')
         if not editActions:
             return results
 
         for action in editActions:
-            if action['allowed']:
-                aid = action['id']
-                cssClass = 'actionicon-object_buttons-%s' % aid
-                icon = action.get('icon', None)
-                modal = action.get('modal', None)
-                if modal:
-                    cssClass += ' pat-plone-modal'
+            if not action['allowed']:
+                continue
+            aid = action['id']
+            cssClass = 'actionicon-object_buttons-%s' % aid
+            icon = action.get('icon', None)
+            modal = action.get('modal', None)
+            if modal:
+                cssClass += ' pat-plone-modal'
 
-                results.append({
-                    'title': action['title'],
-                    'description': '',
-                    'action': addTokenToUrl(action['url'], request),
-                    'selected': False,
-                    'icon': icon,
-                    'extra': {'id': 'plone-contentmenu-actions-' + aid,
-                              'separator': None,
-                              'class': cssClass,
-                              'modal': modal},
-                    'submenu': None,
-                })
+            results.append({
+                'title': action['title'],
+                'description': '',
+                'action': addTokenToUrl(action['url'], request),
+                'selected': False,
+                'icon': icon,
+                'extra': {'id': 'plone-contentmenu-actions-' + aid,
+                          'separator': None,
+                          'class': cssClass,
+                          'modal': modal},
+                'submenu': None,
+            })
         return results
 
 

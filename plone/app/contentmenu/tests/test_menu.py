@@ -85,8 +85,7 @@ class TestDisplayMenuAT(unittest.TestCase):
         actions = self.menu.getMenuItems(self.folder, self.request)
         templates = [a['extra']['id'] for a in actions]
         self.failUnless(
-            'plone-contentmenu-display-folder_listing' in templates
-            or
+            'plone-contentmenu-display-folder_listing' in templates or
             'plone-contentmenu-display-listing_view' in templates
             # plone.app.contenttypes has unified views
         )
@@ -151,8 +150,7 @@ class TestDisplayMenuAT(unittest.TestCase):
         actions = self.menu.getMenuItems(self.folder, self.request)
         selected = [a['extra']['id'] for a in actions if a['selected']]
         self.assertTrue(
-            selected == ['plone-contentmenu-display-folder_listing']
-            or
+            selected == ['plone-contentmenu-display-folder_listing'] or
             selected == ['plone-contentmenu-display-listing_view']
             # plone.app.contenttypes has unified views
         )
@@ -650,8 +648,7 @@ class TestManagePortletsMenuAT(unittest.TestCase):
         url_plone5 = '%s/@@topbar-manage-portlets/plone.leftcolumn' % base_url
         url_plone4 = '%s/manage-portlets' % base_url
         self.assertTrue(
-            url_plone5 in [a['action'] for a in actions][1]
-            or
+            url_plone5 in [a['action'] for a in actions][1] or
             url_plone4 in [a['action'] for a in actions][1]
         )
 

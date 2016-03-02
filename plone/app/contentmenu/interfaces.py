@@ -3,13 +3,12 @@ from zope.browsermenu.interfaces import IBrowserMenu
 from zope.browsermenu.interfaces import IBrowserSubMenuItem
 from zope.browsermenu.interfaces import IMenuItemType
 from zope.contentprovider.interfaces import IContentProvider
-from zope.interface import directlyProvides
 from zope.interface import Interface
+from zope.interface import provider
 
 
 class IContentMenuView(IContentProvider):
-    """The view that powers the content menu (the green bar at the top of
-    the editable border).
+    """The view that powers the content menu in the toolbar.
 
     This will construct a menu by finding an adapter to IContentMenu.
     """
@@ -31,10 +30,10 @@ class IContentMenuView(IContentProvider):
 # IInterface IMenuItemType)
 
 
+@provider(IMenuItemType)
 class IContentMenuItem(Interface):
     """Special menu item type for Plone's content menu."""
 
-directlyProvides(IContentMenuItem, IMenuItemType)
 
 # The sub-menus - because they require additional logic, each of these will be
 # implemented with a separate class. We provide markers here to distinguish

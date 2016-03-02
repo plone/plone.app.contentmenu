@@ -6,7 +6,8 @@ Changelog
 
 Breaking changes:
 
-- *add item here*
+- Documentation in README added.
+  [jensens]
 
 New features:
 
@@ -14,7 +15,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Minor code cleanup.
+  [jensens]
 
 
 2.1.8 (2016-05-26)

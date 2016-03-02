@@ -61,10 +61,10 @@
     party products to slot their own sub-menus in between the default menu
     items, these are registered with gaps:
 
-      actions menu   - order=10
-      display menu   - order=20
-      factories menu - order=30
-      workflows menu - order=40
+      factories menu - order=10
+      workflows menu - order=20
+      actions menu   - order=30
+      display menu   - order=40
       manage portlets menu - order=50
   -->
 
