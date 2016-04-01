@@ -556,7 +556,7 @@ class FactoriesMenu(BrowserMenu):
         constraints = IConstrainTypes(addContext, None)
         if constraints is not None:
             include = constraints.getImmediatelyAddableTypes()
-            if len(include) < len(allowedTypes):
+            if include and allowedTypes and len(include) < len(allowedTypes):
                 haveMore = True
 
         results = factories_view.addable_types(include=include)
