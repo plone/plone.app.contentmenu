@@ -10,8 +10,7 @@ New:
 
 Fixes:
 
-- Fixes Case, where ``FactoriesMenu`` broke, because a ``len`` conversion from a ``None`` value.
-  [thet]
+- *add item here*
 
 
 2.1.7 (2016-02-19)
