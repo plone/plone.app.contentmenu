@@ -10,7 +10,8 @@ New:
 
 Fixes:
 
-- *add item here*
+- Optimized display menu's check for `index_html`.
+  [davisagli]
 
 
 2.1.7 (2016-02-19)
