@@ -218,7 +218,7 @@ class DisplaySubMenuItem(BrowserSubMenuItem):
             context = utils.parent(context)
         if not getattr(context, 'isPrincipiaFolderish', False):
             return False
-        elif 'index_html' not in context.objectIds():
+        elif 'index_html' not in context:
             return False
         else:
             return True
