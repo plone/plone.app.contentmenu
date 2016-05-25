@@ -4,7 +4,8 @@ Changelog
 2.0.12 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Optimized display menu's check for `index_html`.
+  [davisagli]
 
 
 2.0.11 (2015-08-14)
