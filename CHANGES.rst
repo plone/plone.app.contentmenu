@@ -4,10 +4,6 @@ Changelog
 2.1.8 (unreleased)
 ------------------
 
-New:
-
-- *add item here*
-
 Fixes:
 
 - Optimized display menu's check for `index_html`.
