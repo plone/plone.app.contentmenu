@@ -18,12 +18,12 @@
 
           <span tal:condition="menuItem/extra/stateTitle | nothing"
                 class="" aria-hidden="true"
-                tal:attributes="class string:icon-${identifier} ${menuItem/extra/class}">
+                tal:attributes="class string:icon plone-icon-${identifier} ${menuItem/extra/class}">
           </span>
 
           <span tal:condition="not: menuItem/extra/stateTitle | nothing"
                 class="" aria-hidden="true"
-                tal:attributes="class string:icon-${identifier}">
+                tal:attributes="class string:icon plone-icon-${identifier}">
           </span>
 
           <span tal:omit-tag="not: menuItem/extra/stateTitle | nothing">
