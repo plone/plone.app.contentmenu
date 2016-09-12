@@ -21,6 +21,7 @@ from Products.CMFPlone.utils import _createObjectByType
 from zope.browsermenu.interfaces import IBrowserMenu
 from zope.component import getUtility
 from zope.interface import directlyProvides
+
 import unittest
 
 

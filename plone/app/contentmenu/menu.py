@@ -19,7 +19,8 @@ from plone.portlets.interfaces import ILocalPortletAssignable
 from plone.portlets.interfaces import IPortletManager
 from plone.protect.utils import addTokenToUrl
 from plone.registry.interfaces import IRegistry
-from Products.CMFCore.utils import getToolByName, _checkPermission
+from Products.CMFCore.utils import _checkPermission
+from Products.CMFCore.utils import getToolByName
 from Products.CMFDynamicViewFTI.interfaces import ISelectableBrowserDefault
 from Products.CMFPlone import utils
 from Products.CMFPlone.interfaces.constrains import IConstrainTypes
@@ -28,12 +29,13 @@ from Products.CMFPlone.interfaces.structure import INonStructuralFolder
 from zope.browsermenu.menu import BrowserMenu
 from zope.browsermenu.menu import BrowserSubMenuItem
 from zope.component import getMultiAdapter
-from zope.component import queryMultiAdapter
 from zope.component import getUtilitiesFor
 from zope.component import getUtility
+from zope.component import queryMultiAdapter
 from zope.interface import implementer
 
 import pkg_resources
+
 
 try:
     pkg_resources.get_distribution('Products.CMFPlacefulWorkflow')
