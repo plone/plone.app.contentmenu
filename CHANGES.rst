@@ -6,16 +6,16 @@ Changelog
 
 Breaking changes:
 
-- Documentation in README added.
-  [jensens]
+- *add item here*
 
 New features:
 
-- *add item here*
+- Documentation in README added.
+  [jensens]
 
 Bug fixes:
 
-- Minor code cleanup.
+- Minor code cleanup, some micro-optimizations.
   [jensens]
 
 

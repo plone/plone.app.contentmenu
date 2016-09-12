@@ -59,9 +59,11 @@ class ActionsSubMenuItem(BrowserSubMenuItem):
     }
 
     def __init__(self, context, request):
-        BrowserSubMenuItem.__init__(self, context, request)
-        self.context_state = getMultiAdapter((context, request),
-                                             name='plone_context_state')
+        super(ActionsSubMenuItem, self).__init__(context, request)
+        self.context_state = getMultiAdapter(
+            (context, request),
+            name='plone_context_state'
+        )
 
     @property
     def action(self):
@@ -130,9 +132,11 @@ class DisplaySubMenuItem(BrowserSubMenuItem):
     order = 40
 
     def __init__(self, context, request):
-        BrowserSubMenuItem.__init__(self, context, request)
-        self.context_state = getMultiAdapter((context, request),
-                                             name='plone_context_state')
+        super(DisplaySubMenuItem, self).__init__(context, request)
+        self.context_state = getMultiAdapter(
+            (context, request),
+            name='plone_context_state'
+        )
 
     @property
     def extra(self):
@@ -173,24 +177,24 @@ class DisplaySubMenuItem(BrowserSubMenuItem):
         context = None
 
         folderLayouts = []
+        folderCanSetLayout = False
         contextLayouts = []
 
         # If this is a default page, also get menu items relative to the parent
         if isDefaultPage:
-            folder = ISelectableBrowserDefault(utils.parent(self.context),
-                                               None)
-
-        context = ISelectableBrowserDefault(self.context, None)
-
-        folderLayouts = []
-        folderCanSetLayout = False
-        folderCanSetDefaultPage = False
+            folder = ISelectableBrowserDefault(
+                utils.parent(self.context),
+                None
+            )
 
         if folder is not None:
+            if folder.canSetDefaultPage():
+                # Always Show the menu if we can set a default-page (short cut)
+                return True
             folderLayouts = folder.getAvailableLayouts()
             folderCanSetLayout = folder.canSetLayout()
-            folderCanSetDefaultPage = folder.canSetDefaultPage()
 
+        context = ISelectableBrowserDefault(self.context, None)
         contextLayouts = []
         contextCanSetLayout = False
         contextCanSetDefaultPage = False
@@ -200,15 +204,12 @@ class DisplaySubMenuItem(BrowserSubMenuItem):
             contextCanSetLayout = context.canSetLayout()
             contextCanSetDefaultPage = context.canSetDefaultPage()
 
-        # Show the menu if we either can set a default-page, or we have more
-        # than one layout to choose from.
-        if (folderCanSetDefaultPage) or \
-           (folderCanSetLayout and len(folderLayouts) > 1) or \
-           (folder is None and contextCanSetDefaultPage) or \
-           (contextCanSetLayout and len(contextLayouts) > 1):
-            return True
-        else:
-            return False
+        # we have more than one layout to choose from?
+        return (
+            (folderCanSetLayout and len(folderLayouts) > 1) or
+            (folder is None and contextCanSetDefaultPage) or
+            (contextCanSetLayout and len(contextLayouts) > 1)
+        )
 
     def selected(self):
         return False
@@ -329,7 +330,7 @@ class DisplayMenu(BrowserMenu):
                     'separator': 'actionSeparator',
                     'class': 'actionMenuSelected'},
                 'submenu': None,
-                })
+            })
             # Let the user change the selection
             if folderCanSetDefaultPage:
                 results.append({
@@ -374,11 +375,7 @@ class DisplayMenu(BrowserMenu):
             # If context is a default-page in a folder, that folder's views
             # will be shown. Only show context views if there are any to show.
 
-            showLayouts = False
-            if not isDefaultPage:
-                showLayouts = True
-            elif len(layouts) > 1:
-                showLayouts = True
+            showLayouts = not isDefaultPage or len(layouts) > 1
 
             if showLayouts and contextCanSetLayout:
                 for id, title in contextLayouts:
@@ -395,7 +392,7 @@ class DisplayMenu(BrowserMenu):
                             'id': 'plone-contentmenu-display-' + id,
                             'separator': None,
                             'class': is_selected and 'actionMenuSelected' or ''
-                            },
+                        },
                         'submenu': None,
                     })
 
@@ -422,7 +419,7 @@ class DisplayMenu(BrowserMenu):
                                 'separator': 'actionSeparator',
                                 'class': 'pat-plone-modal'},
                             'submenu': None,
-                            })
+                        })
                 else:
                     defaultPageObj = getattr(obj, defaultPage, None)
                     defaultPageTitle = u""
@@ -465,7 +462,7 @@ class DisplayMenu(BrowserMenu):
                                 'separator': 'actionSeparator',
                                 'class': 'pat-plone-modal'},
                             'submenu': None,
-                            })
+                        })
 
         return results
 
@@ -480,9 +477,11 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
                     default=u'Add new items inside this item')
 
     def __init__(self, context, request):
-        BrowserSubMenuItem.__init__(self, context, request)
-        self.context_state = getMultiAdapter((context, request),
-                                             name='plone_context_state')
+        super(FactoriesSubMenuItem, self).__init__(context, request)
+        self.context_state = getMultiAdapter(
+            (context, request),
+            name='plone_context_state'
+        )
 
     @property
     def extra(self):
@@ -493,7 +492,8 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
     def action(self):
         return addTokenToUrl(
             '%s/folder_factories' % self._addContext().absolute_url(),
-            self.request)
+            self.request
+        )
 
     def available(self):
         itemsToAdd = self._itemsToAdd()
@@ -509,8 +509,7 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
     def _addContext(self):
         if self.context_state.is_structural_folder():
             return self.context
-        else:
-            return self.context_state.folder()
+        return self.context_state.folder()
 
     @memoize
     def _itemsToAdd(self):
@@ -522,10 +521,8 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
         constrain = IConstrainTypes(addContext, None)
         if constrain is None:
             return allowed_types
-        else:
-            locallyAllowed = constrain.getLocallyAllowedTypes()
-            return [fti for fti in allowed_types
-                    if fti.getId() in locallyAllowed]
+        locallyAllowed = constrain.getLocallyAllowedTypes()
+        return [fti for fti in allowed_types if fti.getId() in locallyAllowed]
 
     @memoize
     def _addingToParent(self):
@@ -604,7 +601,7 @@ class FactoriesMenu(BrowserMenu):
                         'separator': None,
                         'class': ''},
                     'submenu': None,
-                    })
+                })
 
         # Also add a menu item to add items to the default page
         context_state = getMultiAdapter((context, request),
@@ -627,7 +624,7 @@ class FactoriesMenu(BrowserMenu):
                     'separator': None,
                     'class': 'pat-plone-modal'},
                 'submenu': None,
-                })
+            })
 
         return results
 
@@ -672,15 +669,13 @@ class WorkflowSubMenuItem(BrowserSubMenuItem):
         if self._manageSettings() or len(self._transitions()) > 0:
             return _(u'title_change_state_of_item',
                      default=u'Change the state of this item')
-        else:
-            return u''
+        return u''
 
     @property
     def action(self):
         if self._manageSettings() or len(self._transitions()) > 0:
             return self.context.absolute_url() + '/content_status_history'
-        else:
-            return ''
+        return ''
 
     @memoize
     def available(self):
@@ -881,7 +876,9 @@ class PortletManagerMenu(BrowserMenu):
         sm = getSecurityManager()
         # Bail out if the user can't manage portlets
         if not sm.checkPermission(
-                PortletManagerSubMenuItem.MANAGE_SETTINGS_PERMISSION, context):
+                PortletManagerSubMenuItem.MANAGE_SETTINGS_PERMISSION,
+                context
+        ):
             return items
         blacklist = getUtility(IRegistry).get(
             'plone.app.portlets.PortletManagerBlacklist', [])
