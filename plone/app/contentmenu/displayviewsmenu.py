@@ -8,14 +8,14 @@ from zope.interface import implementer
 @implementer(IDisplayViewsMenu)
 class DisplayViewsMenu(BrowserMenu):
 
-    def getMenuItemByAction(self, object, request, action):
+    def getMenuItemByAction(self, context, request, action):
         # Normalize actions; strip view prefix
         if action.startswith('@@'):
             action = action[2:]
         if action.startswith('++view++'):
             action = action[8:]
 
-        for name, item in getAdapters((object, request),
+        for name, item in getAdapters((context, request),
                                       self.getMenuItemType()):
             item_action = item.action
             # Normalize menu item action; never uses ++view++

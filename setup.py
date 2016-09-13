@@ -3,24 +3,25 @@ from setuptools import find_packages
 from setuptools import setup
 
 version = '2.1.9.dev0'
-long_description = open("README.rst").read() + "\n"
-long_description += open("CHANGES.rst").read()
+long_description = open('README.rst').read() + '\n'
+long_description += open('CHANGES.rst').read()
+
 setup(
     name='plone.app.contentmenu',
     version=version,
-    description="Plone's content menu implementation",
+    description='Plone\'s content menu implementation',
     long_description=long_description,
     classifiers=[
-        "Environment :: Web Environment",
-        "Framework :: Plone",
-        "Framework :: Plone :: 5.0",
-        "Framework :: Plone :: 5.1",
-        "Framework :: Zope2",
-        "License :: OSI Approved :: GNU General Public License (GPL)",
-        "Operating System :: OS Independent",
-        "Programming Language :: Python",
-        "Programming Language :: Python :: 2.7",
-      ],
+        'Environment :: Web Environment',
+        'Framework :: Plone',
+        'Framework :: Plone :: 5.0',
+        'Framework :: Plone :: 5.1',
+        'Framework :: Zope2',
+        'License :: OSI Approved :: GNU General Public License (GPL)',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 2.7',
+    ],
     keywords='plone contentmenu menu',
     author='Plone Foundation',
     author_email='plone-developers@lists.sourceforge.net',

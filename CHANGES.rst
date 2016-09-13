@@ -10,11 +10,13 @@ Breaking changes:
 
 New features:
 
-- *add item here*
+- Documentation in README added.
+  [jensens]
 
 Bug fixes:
 
-- *add item here*
+- Minor code cleanup, some micro-optimizations.
+  [jensens]
 
 
 2.1.8 (2016-05-26)
