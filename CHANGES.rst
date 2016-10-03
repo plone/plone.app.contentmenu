@@ -4,10 +4,6 @@ Changelog
 2.1.9 (unreleased)
 ------------------
 
-Breaking changes:
-
-- *add item here*
-
 New features:
 
 - Documentation in README added.
