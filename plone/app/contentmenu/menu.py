@@ -102,7 +102,7 @@ class ActionsMenu(BrowserMenu):
             if not action['allowed']:
                 continue
             aid = action['id']
-            cssClass = 'actionicon-object_buttons-%s' % aid
+            cssClass = 'actionicon-object_buttons-{0}'.format(aid)
             icon = action.get('icon', None)
             modal = action.get('modal', None)
             if modal:
@@ -273,7 +273,7 @@ class DisplayMenu(BrowserMenu):
                 contextCanSetLayout or contextCanSetDefaultPage):
             return []
 
-        # Only show the block "Folder display" and "Item display" separators if
+        # Only show the block 'Folder display' and 'Item display' separators if
         # they are necessars
         useSeparators = False
         if folderCanSetLayout or folderCanSetDefaultPage:
@@ -305,8 +305,12 @@ class DisplayMenu(BrowserMenu):
                         'title': title,
                         'description': '',
                         'action': addTokenToUrl(
-                            '%s/selectViewTemplate?templateId=%s' % (
-                                folderUrl, id,), request),
+                            '{0}/selectViewTemplate?templateId={1}'.format(
+                                folderUrl,
+                                id,
+                            ),
+                            request
+                        ),
                         'selected': False,
                         'icon': None,
                         'extra': {
@@ -340,7 +344,7 @@ class DisplayMenu(BrowserMenu):
                     'description': _(u'title_change_default_view_item',
                                      default=u'Change the item used as default'
                                              u' view in this folder'),
-                    'action': '%s/select_default_page' % (folderUrl,),
+                    'action': '{0}/select_default_page'.format(folderUrl),
                     'selected': False,
                     'icon': None,
                     'extra': {
@@ -384,8 +388,12 @@ class DisplayMenu(BrowserMenu):
                         'title': title,
                         'description': '',
                         'action': addTokenToUrl(
-                            '%s/selectViewTemplate?templateId=%s' % (
-                                contextUrl, id,), request),
+                            '{0}/selectViewTemplate?templateId={1}'.format(
+                                contextUrl,
+                                id,
+                            ),
+                            request
+                        ),
                         'selected': is_selected,
                         'icon': None,
                         'extra': {
@@ -410,7 +418,7 @@ class DisplayMenu(BrowserMenu):
                                 default=u'Select an item to be used as '
                                         u'default view in this folder...'),
                             'action': addTokenToUrl(
-                                '%s/select_default_page' % (contextUrl,),
+                                '{0}/select_default_page'.format(contextUrl),
                                 request),
                             'selected': False,
                             'icon': None,
@@ -422,9 +430,9 @@ class DisplayMenu(BrowserMenu):
                         })
                 else:
                     defaultPageObj = getattr(obj, defaultPage, None)
-                    defaultPageTitle = u""
+                    defaultPageTitle = u''
                     if defaultPageObj is not None:
-                        if hasattr(aq_base(defaultPageObj), 'Title'):
+                        if getattr(aq_base(defaultPageObj), 'Title'):
                             defaultPageTitle = defaultPageObj.Title()
                         else:
                             defaultPageTitle = getattr(aq_base(defaultPageObj),
@@ -454,7 +462,9 @@ class DisplayMenu(BrowserMenu):
                                 u'title_change_default_view_item',
                                 default=u'Change the item used as default '
                                         u'view in this folder'),
-                            'action': '%s/select_default_page' % (contextUrl,),
+                            'action': '{0}/select_default_page'.format(
+                                contextUrl
+                            ),
                             'selected': False,
                             'icon': None,
                             'extra': {
@@ -491,7 +501,7 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
     @property
     def action(self):
         return addTokenToUrl(
-            '%s/folder_factories' % self._addContext().absolute_url(),
+            '{0}/folder_factories'.format(self._addContext().absolute_url()),
             self.request
         )
 
@@ -566,7 +576,7 @@ class FactoriesMenu(BrowserMenu):
         results = factories_view.addable_types(include=include)
 
         if haveMore:
-            url = '%s/folder_factories' % (addContext.absolute_url(),)
+            url = '{0}/folder_factories'.format(addContext.absolute_url())
             results.append({
                 'title': _(u'folder_add_more', default=u'More\u2026'),
                 'description': _(u'Show all available content types'),
@@ -584,8 +594,9 @@ class FactoriesMenu(BrowserMenu):
         if constraints is not None:
             if constraints.canSetConstrainTypes() and \
                     constraints.getDefaultAddableTypes():
-                url = '%s/folder_constraintypes_form' % (
-                    addContext.absolute_url(),)
+                url = '{0}/folder_constraintypes_form'.format(
+                    addContext.absolute_url(),
+                )
                 results.append({
                     'title': _(u'folder_add_settings',
                                default=u'Restrictions\u2026'),
@@ -659,7 +670,7 @@ class WorkflowSubMenuItem(BrowserSubMenuItem):
         state = self.context_state.workflow_state()
         stateTitle = self._currentStateTitle()
         return {'id': 'plone-contentmenu-workflow',
-                'class': 'state-%s' % state,
+                'class': 'state-{0}'.format(state),
                 'state': state,
                 'stateTitle': stateTitle,
                 'li_class': 'plonetoolbar-workfow-transition'}
@@ -739,9 +750,12 @@ class WorkflowMenu(BrowserMenu):
 
             cssClass = ''
             actionUrl = action['url']
-            if actionUrl == "":
-                actionUrl = '%s/content_status_modify?workflow_action=%s' % (
-                    context.absolute_url(), action['id'])
+            if actionUrl == '':
+                actionUrl = '{0}/content_status_modify?workflow_action={1}'
+                actionUrl = actionUrl.format(
+                    context.absolute_url(),
+                    action['id'],
+                )
                 cssClass = ''
 
             description = ''
@@ -750,12 +764,14 @@ class WorkflowMenu(BrowserMenu):
             if transition is not None:
                 description = transition.description
 
+            baseUrl = '{0}/content_status_modify?workflow_action={1}'
             for bogus in self.BOGUS_WORKFLOW_ACTIONS:
                 if actionUrl.endswith(bogus):
                     if getattr(context, bogus, None) is None:
-                        baseUrl = '%s/content_status_modify?workflow_action=%s'
-                        actionUrl = baseUrl % (context.absolute_url(),
-                                               action['id'])
+                        actionUrl = baseUrl.format(
+                            context.absolute_url(),
+                            action['id'],
+                        )
                         cssClass = ''
                     break
 
@@ -767,7 +783,7 @@ class WorkflowMenu(BrowserMenu):
                     'selected': False,
                     'icon': None,
                     'extra': {
-                        'id': 'workflow-transition-%s' % action['id'],
+                        'id': 'workflow-transition-{0}'.format(action['id']),
                         'separator': None,
                         'class': cssClass},
                     'submenu': None,
@@ -893,14 +909,14 @@ class PortletManagerMenu(BrowserMenu):
                 'title': ' '.join(manager_name.split('.')).title(),
                 'description': ' '.join(manager_name.split('.')).title(),
                 'action': addTokenToUrl(
-                    '%s/@@topbar-manage-portlets/%s' % (
+                    '{0}/@@topbar-manage-portlets/{1}'.format(
                         current_url,
                         manager_name),
                     request),
                 'selected': False,
                 'icon': None,
                 'extra': {
-                    'id': 'portlet-manager-%s' % manager_name,
+                    'id': 'portlet-manager-{0}'.format(manager_name),
                     'separator': None},
                 'submenu': None,
             }
