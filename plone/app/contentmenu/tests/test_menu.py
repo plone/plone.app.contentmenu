@@ -39,14 +39,14 @@ class TestActionsMenuAT(unittest.TestCase):
         self.request = self.layer['request']
 
     def test_actionsMenuImplementsIBrowserMenu(self):
-        self.failUnless(IBrowserMenu.providedBy(self.menu))
+        self.assertTrue(IBrowserMenu.providedBy(self.menu))
 
     def test_actionsMenuImplementsIActionsMenu(self):
-        self.failUnless(IActionsMenu.providedBy(self.menu))
+        self.assertTrue(IActionsMenu.providedBy(self.menu))
 
     def test_actionsMenuFindsActions(self):
         actions = self.menu.getMenuItems(self.folder, self.request)
-        self.failUnless(
+        self.assertTrue(
             'plone-contentmenu-actions-copy'
             in [a['extra']['id'] for a in actions]
         )
@@ -75,17 +75,17 @@ class TestDisplayMenuAT(unittest.TestCase):
         self.is_dx = self.folder.meta_type == 'Dexterity Container'
 
     def testActionsMenuImplementsIBrowserMenu(self):
-        self.failUnless(IBrowserMenu.providedBy(self.menu))
+        self.assertTrue(IBrowserMenu.providedBy(self.menu))
 
     def testActionsMenuImplementsIActionsMenu(self):
-        self.failUnless(IDisplayMenu.providedBy(self.menu))
+        self.assertTrue(IDisplayMenu.providedBy(self.menu))
 
     # Template selection
 
     def testTemplatesIncluded(self):
         actions = self.menu.getMenuItems(self.folder, self.request)
         templates = [a['extra']['id'] for a in actions]
-        self.failUnless(
+        self.assertTrue(
             'plone-contentmenu-display-folder_listing' in templates or
             'plone-contentmenu-display-listing_view' in templates
             # plone.app.contenttypes has unified views
@@ -112,9 +112,9 @@ class TestDisplayMenuAT(unittest.TestCase):
         self.folder.invokeFactory('Document', 'doc1')
         self.folder.setDefaultPage('doc1')
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
-        self.failUnless('folderDefaultPageDisplay' in
+        self.assertTrue('folderDefaultPageDisplay' in
                         [a['extra']['id'] for a in actions])
-        self.failIf('document_view' in [a['extra']['id'] for a in actions])
+        self.assertFalse('document_view' in [a['extra']['id'] for a in actions])
 
     def testDefaultPageIncludesParentAndItemViewsWhenItemHasMultipleViews(self):  # noqa
         fti = self.portal.portal_types['Document']
@@ -160,9 +160,9 @@ class TestDisplayMenuAT(unittest.TestCase):
 
     def testFolderCanSetDefaultPage(self):
         self.folder.invokeFactory('Folder', 'f1')
-        self.failUnless(self.folder.f1.canSetDefaultPage())
+        self.assertTrue(self.folder.f1.canSetDefaultPage())
         actions = self.menu.getMenuItems(self.folder.f1, self.request)
-        self.failUnless('contextSetDefaultPage' in
+        self.assertTrue('contextSetDefaultPage' in
                         [a['extra']['id'] for a in actions])
 
     def testWithCanSetDefaultPageFalse(self):
@@ -180,7 +180,7 @@ class TestDisplayMenuAT(unittest.TestCase):
         self.folder.invokeFactory('Folder', 'f1')
         directlyProvides(self.folder.f1, INonStructuralFolder)
         actions = self.menu.getMenuItems(self.folder.f1, self.request)
-        self.failIf('contextSetDefaultPage' in
+        self.assertFalse('contextSetDefaultPage' in
                     [a['extra']['id'] for a in actions])
 
     def testDefaultPageSelectedAndOverridesLayout(self):
@@ -194,16 +194,16 @@ class TestDisplayMenuAT(unittest.TestCase):
         self.folder.invokeFactory('Document', 'doc1')
         self.folder.setDefaultPage('doc1')
         actions = self.menu.getMenuItems(self.folder, self.request)
-        self.failUnless('contextChangeDefaultPage' in
+        self.assertTrue('contextChangeDefaultPage' in
                         [a['extra']['id'] for a in actions])
 
     def testDefaultPageCanBeChangedInFolder(self):
         self.folder.invokeFactory('Document', 'doc1')
         self.folder.setDefaultPage('doc1')
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
-        self.failUnless('folderChangeDefaultPage' in
+        self.assertTrue('folderChangeDefaultPage' in
                         [a['extra']['id'] for a in actions])
-        self.failIf('contextChangeDefaultPage' in
+        self.assertFalse('contextChangeDefaultPage' in
                     [a['extra']['id'] for a in actions])
 
     # Headers/separators
@@ -220,8 +220,8 @@ class TestDisplayMenuAT(unittest.TestCase):
         self.folder.setDefaultPage('doc1')
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
         ids = [a['extra']['id'] for a in actions]
-        self.failUnless('folderHeader' in ids)
-        self.failUnless('contextHeader' in ids)
+        self.assertTrue('folderHeader' in ids)
+        self.assertTrue('contextHeader' in ids)
 
     def testSeparatorsNotIncludedWhenViewingDefaultPageWithoutViews(self):
         self.folder.invokeFactory('Document', 'doc1')
@@ -231,8 +231,8 @@ class TestDisplayMenuAT(unittest.TestCase):
         self.assertEqual(len(self.folder.doc1.getAvailableLayouts()), 1)
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
         ids = [a['extra']['id'] for a in actions]
-        self.failIf('folderHeader' in ids)
-        self.failIf('contextHeader' in ids)
+        self.assertFalse('folderHeader' in ids)
+        self.assertFalse('contextHeader' in ids)
 
     def testSeparatorsNotDisplayedWhenViewingFolder(self):
         fti = self.portal.portal_types['Document']
@@ -242,8 +242,8 @@ class TestDisplayMenuAT(unittest.TestCase):
         self.folder.setDefaultPage('doc1')
         actions = self.menu.getMenuItems(self.folder, self.request)
         ids = [a['extra']['id'] for a in actions]
-        self.failIf('folderHeader' in ids)
-        self.failIf('contextHeader' in ids)
+        self.assertFalse('folderHeader' in ids)
+        self.assertFalse('contextHeader' in ids)
 
     # Regressions
 
@@ -320,11 +320,11 @@ class TestFactoriesMenuAT(unittest.TestCase):
         aggregator = self.folder['aggregator']
         self.folder.setDefaultPage('aggregator')
         actions = self.menu.getMenuItems(aggregator, self.request)
-        self.failUnless(
+        self.assertTrue(
             'http://nohost/plone/folder/+/addATEvent' in
             [a['action'] for a in actions]
         )
-        self.failIf(
+        self.assertFalse(
             'http://nohost/plone/folder/aggregator/+/addATEvent' in
             [a['action'] for a in actions])
 
@@ -346,12 +346,12 @@ class TestFactoriesMenuAT(unittest.TestCase):
             if a['extra']['id'] == 'image':
                 img = a
                 break
-        self.failIf(img is None)
+        self.assertFalse(img is None)
         action = img['action']
         url = self.folder.absolute_url()
-        self.failUnless(action.startswith(url))
+        self.assertTrue(action.startswith(url))
         url = self.folder.doc1.absolute_url()
-        self.failIf(action.startswith(url))
+        self.assertFalse(action.startswith(url))
 
     def testNoAddableTypes(self):
         actions = self.menu.getMenuItems(self.portal, self.request)
@@ -449,7 +449,7 @@ class TestFactoriesMenuAT(unittest.TestCase):
     def testSettingsNotIncludedWhereNotSupported(self):
         self.folder.manage_permission('Modify constrain types', ('Manager',))
         actions = self.menu.getMenuItems(self.folder, self.request)
-        self.failIf('_settings' in [a['extra']['id'] for a in actions])
+        self.assertFalse('_settings' in [a['extra']['id'] for a in actions])
 
     def testMoreIncluded(self):
         constraints = ISelectableConstrainTypes(self.folder)
@@ -457,12 +457,12 @@ class TestFactoriesMenuAT(unittest.TestCase):
         constraints.setLocallyAllowedTypes(('Document', 'Image',))
         constraints.setImmediatelyAddableTypes(('Document',))
         actions = self.menu.getMenuItems(self.folder, self.request)
-        self.failIf('image' in [a['extra']['id'] for a in actions])
-        self.failUnless('document' in [a['extra']['id'] for a in actions])
-        self.failUnless(
+        self.assertFalse('image' in [a['extra']['id'] for a in actions])
+        self.assertTrue('document' in [a['extra']['id'] for a in actions])
+        self.assertTrue(
             'plone-contentmenu-more' in [a['extra']['id'] for a in actions]
         )
-        self.failUnless(
+        self.assertTrue(
             'plone-contentmenu-settings' in [a['extra']['id'] for a in actions]
         )
 
@@ -487,7 +487,7 @@ class TestFactoriesMenuAT(unittest.TestCase):
         constraints.setImmediatelyAddableTypes(('Document',))
         actions = self.menu.getMenuItems(self.folder.folder1, self.request)
         action_ids = [a['extra']['id'] for a in actions]
-        self.failUnless('event' in action_ids)
+        self.assertTrue('event' in action_ids)
 
     def testImgConditionalOnTypeIcon(self):
         """The <img> element should not render if the content type has
@@ -497,7 +497,7 @@ class TestFactoriesMenuAT(unittest.TestCase):
         for item in self.menu.getMenuItems(self.folder, self.request):
             if item['id'] == folder_fti.getId():
                 break
-        self.failIf(item['icon'])
+        self.assertFalse(item['icon'])
 
 
 class TestFactoriesMenuDX(TestFactoriesMenuAT):
@@ -524,10 +524,10 @@ class TestWorkflowMenuAT(unittest.TestCase):
         self.is_dx = self.folder.meta_type == 'Dexterity Container'
 
     def testMenuImplementsIBrowserMenu(self):
-        self.failUnless(IBrowserMenu.providedBy(self.menu))
+        self.assertTrue(IBrowserMenu.providedBy(self.menu))
 
     def testMenuImplementsIActionsMenu(self):
-        self.failUnless(IWorkflowMenu.providedBy(self.menu))
+        self.assertTrue(IWorkflowMenu.providedBy(self.menu))
 
     def testMenuIncludesActions(self):
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
@@ -550,7 +550,7 @@ class TestWorkflowMenuAT(unittest.TestCase):
         submit = wf_tool.plone_workflow.transitions['submit']
         submit.actbox_url = ""
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
-        self.failUnless('workflow-transition-submit' in
+        self.assertTrue('workflow-transition-submit' in
                         [a['extra']['id'] for a in actions])
         found = False
         for item in actions:
@@ -588,7 +588,7 @@ class TestWorkflowMenuAT(unittest.TestCase):
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
         url = self.folder.doc1.absolute_url()\
             + '/placeful_workflow_configuration'
-        self.failIf(url in [a['action'] for a in actions])
+        self.assertFalse(url in [a['action'] for a in actions])
         self.portal.portal_quickinstaller.installProduct('CMFPlacefulWorkflow')
 
         # item needs permission
@@ -623,10 +623,10 @@ class TestManagePortletsMenuAT(unittest.TestCase):
         self.is_dx = self.folder.meta_type == 'Dexterity Container'
 
     def testMenuImplementsIBrowserMenu(self):
-        self.failUnless(IBrowserMenu.providedBy(self.menu))
+        self.assertTrue(IBrowserMenu.providedBy(self.menu))
 
     def testMenuImplementsIActionsMenu(self):
-        self.failUnless(IPortletManagerMenu.providedBy(self.menu))
+        self.assertTrue(IPortletManagerMenu.providedBy(self.menu))
 
     def testMenuIncludesActions(self):
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
@@ -684,7 +684,7 @@ class TestContentMenuAT(unittest.TestCase):
                            i['extra']['id'] == 'plone-contentmenu-actions'][0]
         self.assertEqual(actionsMenuItem['action'],
                          self.folder.absolute_url() + '/folder_contents')
-        self.failUnless(len(actionsMenuItem['submenu']) > 0)
+        self.assertTrue(len(actionsMenuItem['submenu']) > 0)
 
     # Display sub-menu
 
@@ -694,7 +694,7 @@ class TestContentMenuAT(unittest.TestCase):
                            i['extra']['id'] == 'plone-contentmenu-display'][0]
         self.assertEqual(displayMenuItem['action'],
                          self.folder.absolute_url() + '/select_default_view')
-        self.failUnless(len(displayMenuItem['submenu']) > 0)
+        self.assertTrue(len(displayMenuItem['submenu']) > 0)
 
     def testDisplayMenuNotIncludedIfContextDoesNotSupportBrowserDefault(self):
         if self.is_dx:
@@ -768,7 +768,7 @@ class TestContentMenuAT(unittest.TestCase):
             i['extra']['id'] == 'plone-contentmenu-factories'][0]
         self.assertIn(self.folder.absolute_url() + '/folder_factories',
                       factoriesMenuItem['action'])
-        self.failUnless(len(factoriesMenuItem['submenu']) > 0)
+        self.assertTrue(len(factoriesMenuItem['submenu']) > 0)
 
     def testAddMenuNotIncludedIfNothingToAdd(self):
         logout()
@@ -812,7 +812,7 @@ class TestContentMenuAT(unittest.TestCase):
         items = self.menu.getMenuItems(self.folder.f1, self.request)
         factoriesMenuItem = [i for i in items if
                              i['extra']['id'] == 'plone-contentmenu-factories']
-        self.failIf(factoriesMenuItem)
+        self.assertFalse(factoriesMenuItem)
 
     def testAddMenuWithAddViewExpr(self):
         # we need a dummy to test this - should test that if the item does not
@@ -841,7 +841,7 @@ class TestContentMenuAT(unittest.TestCase):
         self.assertEqual(
             workflowMenuItem['action'],
             self.folder.absolute_url() + '/content_status_history')
-        self.failUnless(len(workflowMenuItem['submenu']) > 0)
+        self.assertTrue(len(workflowMenuItem['submenu']) > 0)
 
     def testWorkflowMenuWithNoTransitionsDisabled(self):
         logout()
@@ -868,8 +868,8 @@ class TestContentMenuAT(unittest.TestCase):
             i['extra']['id'] == 'plone-contentmenu-workflow'][0]
 
         # A regular user doesn't see any actions
-        self.failUnless(workflowMenuItem['action'] == '')
-        self.failUnless(workflowMenuItem['submenu'] is None)
+        self.assertTrue(workflowMenuItem['action'] == '')
+        self.assertTrue(workflowMenuItem['submenu'] is None)
 
         self.fail('Unable to write a proper test so far')
 
@@ -877,7 +877,7 @@ class TestContentMenuAT(unittest.TestCase):
         self.portal.portal_workflow.setChainForPortalTypes(('Document',), ())
         self.folder.invokeFactory('Document', 'doc1')
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
-        self.failIf('plone_contentmenu_workflow' in
+        self.assertFalse('plone_contentmenu_workflow' in
                     [a['extra']['id'] for a in actions])
 
 
