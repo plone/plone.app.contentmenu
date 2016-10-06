@@ -112,9 +112,14 @@ class TestDisplayMenuAT(unittest.TestCase):
         self.folder.invokeFactory('Document', 'doc1')
         self.folder.setDefaultPage('doc1')
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
-        self.assertTrue('folderDefaultPageDisplay' in
-                        [a['extra']['id'] for a in actions])
-        self.assertFalse('document_view' in [a['extra']['id'] for a in actions])
+        self.assertIn(
+            'folderDefaultPageDisplay',
+            [a['extra']['id'] for a in actions],
+        )
+        self.assertNotIn(
+            'document_view',
+            [a['extra']['id'] for a in actions],
+        )
 
     def testDefaultPageIncludesParentAndItemViewsWhenItemHasMultipleViews(self):  # noqa
         fti = self.portal.portal_types['Document']
@@ -180,8 +185,10 @@ class TestDisplayMenuAT(unittest.TestCase):
         self.folder.invokeFactory('Folder', 'f1')
         directlyProvides(self.folder.f1, INonStructuralFolder)
         actions = self.menu.getMenuItems(self.folder.f1, self.request)
-        self.assertFalse('contextSetDefaultPage' in
-                    [a['extra']['id'] for a in actions])
+        self.assertNotIn(
+            'contextSetDefaultPage',
+            [a['extra']['id'] for a in actions],
+        )
 
     def testDefaultPageSelectedAndOverridesLayout(self):
         self.folder.invokeFactory('Document', 'doc1')
@@ -201,10 +208,14 @@ class TestDisplayMenuAT(unittest.TestCase):
         self.folder.invokeFactory('Document', 'doc1')
         self.folder.setDefaultPage('doc1')
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
-        self.assertTrue('folderChangeDefaultPage' in
-                        [a['extra']['id'] for a in actions])
-        self.assertFalse('contextChangeDefaultPage' in
-                    [a['extra']['id'] for a in actions])
+        self.assertIn(
+            'folderChangeDefaultPage',
+            [a['extra']['id'] for a in actions],
+        )
+        self.assertNotIn(
+            'contextChangeDefaultPage',
+            [a['extra']['id'] for a in actions],
+        )
 
     # Headers/separators
 
@@ -249,14 +260,14 @@ class TestDisplayMenuAT(unittest.TestCase):
 
     def testDefaultPageTemplateTitle(self):
         self.folder.invokeFactory('Document', 'doc1')
-        self.folder.doc1.setTitle("New Document")
+        self.folder.doc1.setTitle('New Document')
         self.folder.setDefaultPage('doc1')
         actions = self.menu.getMenuItems(self.folder, self.request)
         changeAction = [x for x in actions if
                         x['extra']['id'] == 'contextDefaultPageDisplay'][0]
         changeAction['title'].default
         self.assertEqual(
-            u"New Document",
+            u'New Document',
             changeAction['title'].mapping['contentitem']
         )
 
@@ -302,11 +313,16 @@ class TestFactoriesMenuAT(unittest.TestCase):
         urls = [a['action'] for a in actions]
         self.assertIn('custom_expr', urls)
         if self.is_dx:
-            self.assertIn('%s/++add++File' % self.folder.absolute_url(), urls)
+            self.assertIn(
+                '{0}/++add++File'.format(self.folder.absolute_url()),
+                urls,
+            )
         else:
             found = False
+            create_url = '{0}/createObject?type_name=File'
+            create_url = create_url.format(self.folder.absolute_url())
             for url in urls:
-                if '%s/createObject?type_name=File' % self.folder.absolute_url() in url:  # noqa
+                if create_url in url:
                     found = True
             self.assertTrue(found)
 
@@ -546,9 +562,9 @@ class TestWorkflowMenuAT(unittest.TestCase):
         # usual in older workflows, and which is nice to keep
         # supporting.
         context = self.folder.doc1
-        wf_tool = getToolByName(context, "portal_workflow")
+        wf_tool = getToolByName(context, 'portal_workflow')
         submit = wf_tool.plone_workflow.transitions['submit']
-        submit.actbox_url = ""
+        submit.actbox_url = ''
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
         self.assertTrue('workflow-transition-submit' in
                         [a['extra']['id'] for a in actions])
@@ -646,8 +662,9 @@ class TestManagePortletsMenuAT(unittest.TestCase):
     def testAdvancedIncluded(self):
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
         base_url = self.folder.doc1.absolute_url()
-        url_plone5 = '%s/@@topbar-manage-portlets/plone.leftcolumn' % base_url
-        url_plone4 = '%s/manage-portlets' % base_url
+        url_plone5 = '{0}/@@topbar-manage-portlets/plone.leftcolumn'
+        url_plone5 = url_plone5.format(base_url)
+        url_plone4 = '{0}/manage-portlets'.format(base_url)
         self.assertTrue(
             url_plone5 in [a['action'] for a in actions][1] or
             url_plone4 in [a['action'] for a in actions][1]
@@ -851,7 +868,7 @@ class TestContentMenuAT(unittest.TestCase):
             i['extra']['id'] == 'plone-contentmenu-workflow'][0]
         self.assertEqual(workflowMenuItem['action'], '')
 
-    @unittest.skip("Unable to write a proper test so far")
+    @unittest.skip('Unable to write a proper test so far')
     def testWorkflowMenuWithNoTransitionsEnabledAsManager(self):
         # set workflow guard condition that fails, so there are no transitions.
         # then show that manager will get a drop-down with settings whilst
@@ -877,8 +894,10 @@ class TestContentMenuAT(unittest.TestCase):
         self.portal.portal_workflow.setChainForPortalTypes(('Document',), ())
         self.folder.invokeFactory('Document', 'doc1')
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
-        self.assertFalse('plone_contentmenu_workflow' in
-                    [a['extra']['id'] for a in actions])
+        self.assertNotIn(
+            'plone_contentmenu_workflow',
+            [a['extra']['id'] for a in actions],
+        )
 
 
 class TestContentMenuDX(TestContentMenuAT):

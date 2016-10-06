@@ -14,8 +14,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
-
+- Code cleanup.
+  [gforcad]
 
 2.1.9 (2016-10-03)
 ------------------

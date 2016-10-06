@@ -51,7 +51,7 @@ class PloneAppContentmenuAT(PloneAppContentmenu):
         z2.uninstallProduct(app, 'Products.Archetypes')
 
     def setUpPloneSite(self, portal):
-        portal.portal_workflow.setDefaultChain("simple_publication_workflow")
+        portal.portal_workflow.setDefaultChain('simple_publication_workflow')
         # install Products.ATContentTypes manually if profile is available
         # (this is only needed for Plone >= 5)
         profiles = [x['id'] for x in portal.portal_setup.listProfileInfo()]
@@ -67,26 +67,26 @@ class PloneAppContentmenuAT(PloneAppContentmenu):
 PLONE_APP_CONTENTMENU_FIXTURE = PloneAppContentmenu()
 PLONE_APP_CONTENTMENU_INTEGRATION_TESTING = IntegrationTesting(
     bases=(PLONE_APP_CONTENTMENU_FIXTURE, ),
-    name="PloneAppContentmenu:Integration")
+    name='PloneAppContentmenu:Integration')
 PLONE_APP_CONTENTMENU_FUNCTIONAL_TESTING = FunctionalTesting(
     bases=(PLONE_APP_CONTENTMENU_FIXTURE, ),
-    name="PloneAppContentmenu:Functional")
+    name='PloneAppContentmenu:Functional')
 
 
 # Dexterity test layers
 PLONE_APP_CONTENTMENU_DX_INTEGRATION_TESTING = IntegrationTesting(
     bases=(PLONE_APP_CONTENTTYPES_FIXTURE, ),
-    name="PloneAppContentmenuDX:Integration")
+    name='PloneAppContentmenuDX:Integration')
 PLONE_APP_CONTENTMENU_DX_FUNCTIONAL_TESTING = FunctionalTesting(
     bases=(PLONE_APP_CONTENTTYPES_FIXTURE, ),
-    name="PloneAppContentmenuDX:Functional")
+    name='PloneAppContentmenuDX:Functional')
 
 
 # AT test layers
 PLONE_APP_CONTENTMENU_AT_FIXTURE = PloneAppContentmenuAT()
 PLONE_APP_CONTENTMENU_AT_INTEGRATION_TESTING = IntegrationTesting(
     bases=(PLONE_APP_CONTENTMENU_AT_FIXTURE, ),
-    name="PloneAppContentmenuAT:Integration")
+    name='PloneAppContentmenuAT:Integration')
 PLONE_APP_CONTENTMENU_AT_FUNCTIONAL_TESTING = FunctionalTesting(
     bases=(PLONE_APP_CONTENTMENU_AT_FIXTURE, ),
-    name="PloneAppContentmenuAT:Functional")
+    name='PloneAppContentmenuAT:Functional')
