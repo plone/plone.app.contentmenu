@@ -10,7 +10,9 @@ Breaking changes:
 
 New features:
 
-- *add item here*
+- Add ability to specify a short title for the collapsed sidebar by setting
+  extras['shortTitle'], in the same way as stateTitle.
+  [MatthewWilkes]
 
 Bug fixes:
 

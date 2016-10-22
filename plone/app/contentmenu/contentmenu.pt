@@ -28,11 +28,19 @@
             tal:condition="not: menuItem/extra/stateTitle | nothing"></span>
         <span tal:omit-tag="not: menuItem/extra/stateTitle | nothing">
           <span
+              class="plone-toolbar-title"
               i18n:translate=""
               tal:content="menuItem/title">
               Menu Title
             </span>
+        <span
+            class="plone-toolbar-short-title"
+            i18n:translate=""
+            tal:content="menuItem/extra/shortTitle | menuItem/title">
+            Short Title
+          </span>
           <span
+              class="plone-toolbar-state-title"
               i18n:translate=""
               tal:condition="menuItem/extra/stateTitle | nothing"
               tal:content="menuItem/extra/stateTitle">

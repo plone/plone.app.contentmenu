@@ -655,6 +655,7 @@ class WorkflowSubMenuItem(BrowserSubMenuItem):
     MANAGE_SETTINGS_PERMISSION = 'Manage portal'
 
     title = _(u'label_state', default=u'State:')
+    short_title = _(u'State')
     submenuId = 'plone_contentmenu_workflow'
     order = 20
 
@@ -673,6 +674,7 @@ class WorkflowSubMenuItem(BrowserSubMenuItem):
                 'class': 'state-{0}'.format(state),
                 'state': state,
                 'stateTitle': stateTitle,
+                'shortTitle': self.short_title,
                 'li_class': 'plonetoolbar-workfow-transition'}
 
     @property
