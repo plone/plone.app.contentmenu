@@ -7,6 +7,7 @@ from plone.app.contentmenu.interfaces import IWorkflowMenu
 from plone.app.contentmenu.testing import PLONE_APP_CONTENTMENU_AT_INTEGRATION_TESTING  # noqa
 from plone.app.contentmenu.testing import PLONE_APP_CONTENTMENU_DX_INTEGRATION_TESTING  # noqa
 from plone.app.contenttypes.testing import set_browserlayer
+from plone.app.layout.globals.interfaces import IViewView
 from plone.app.testing import login
 from plone.app.testing import logout
 from plone.app.testing import setRoles
@@ -21,6 +22,8 @@ from Products.CMFPlone.utils import _createObjectByType
 from zope.browsermenu.interfaces import IBrowserMenu
 from zope.component import getUtility
 from zope.interface import directlyProvides
+
+from plone.app.contentmenu.view import ContentMenuProvider
 
 import unittest
 
@@ -270,6 +273,26 @@ class TestDisplayMenuAT(unittest.TestCase):
             u'New Document',
             changeAction['title'].mapping['contentitem']
         )
+
+    def testWorkflowNotShownOnFolderContents(self):
+        folder_name = self.folder.invokeFactory('Folder', 'folder1')
+        folder = self.folder[folder_name]
+        viewlet = ContentMenuProvider(folder, self.request, None)
+
+        class FakeView(object):
+            pass
+
+        try:
+            fake_view_view = FakeView()
+            directlyProvides(fake_view_view, IViewView)
+            self.request.PUBLISHED = fake_view_view
+            self.assertTrue(viewlet.available())
+
+            fake_folder_view = FakeView()
+            self.request.PUBLISHED = fake_folder_view
+            self.assertFalse(viewlet.available())
+        finally:
+            del self.request.PUBLISHED
 
 
 class TestDisplayMenuDX(TestDisplayMenuAT):
