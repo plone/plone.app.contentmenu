@@ -19,12 +19,12 @@
         <span
             aria-hidden="true"
             class=""
-            tal:attributes="class string:icon-${identifier} ${menuItem/extra/class}"
+            tal:attributes="class string:icon-${identifier} ${menuItem/extra/class} toolbar-menu-icon"
             tal:condition="menuItem/extra/stateTitle | nothing"></span>
         <span
             aria-hidden="true"
             class=""
-            tal:attributes="class string:icon-${identifier}"
+            tal:attributes="class string:icon-${identifier} toolbar-menu-icon"
             tal:condition="not: menuItem/extra/stateTitle | nothing"></span>
         <span tal:omit-tag="not: menuItem/extra/stateTitle | nothing">
           <span

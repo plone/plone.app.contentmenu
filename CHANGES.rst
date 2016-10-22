@@ -14,6 +14,9 @@ New features:
 
 Bug fixes:
 
+- Add default icon for top-level toolbar entries
+  [alecm]
+
 - Code cleanup.
   [gforcad]
 
