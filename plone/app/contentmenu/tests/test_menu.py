@@ -773,6 +773,9 @@ class TestContentMenuAT(unittest.TestCase):
         for extra in extras[1:]:
             if not extra['separator'] is None:
                 break
+            if extra['id'] in ('folderDefaultPageDisplay',
+                               'folderChangeDefaultPage'):
+                break
             else:
                 self.assertEqual(extra['id'][0:len(prefix)], prefix)
 

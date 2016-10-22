@@ -29,6 +29,10 @@ New features:
   manager management.
   [alecm]
 
+- Display menu reorganization. Selected view/item should be on top of section
+  and headings should appear as headings.
+  [alecm]
+
 - Add ability to specify a short title for the collapsed sidebar by setting
   extras['shortTitle'], in the same way as stateTitle.
   [MatthewWilkes]
