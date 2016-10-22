@@ -14,7 +14,9 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Prevent content menu items from being shown outside of the context of
+  a view page, which was a regression for the 5.0 line.
+  [MatthewWilkes]
 
 2.1.10 (unreleased)
 -------------------

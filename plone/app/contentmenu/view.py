@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from plone.app.contentmenu.interfaces import IContentMenuView
+from plone.app.layout.globals.interfaces import IViewView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.browsermenu.interfaces import IBrowserMenu
 from zope.component import getUtility
@@ -20,7 +21,7 @@ class ContentMenuProvider(ContentProviderBase):
     # From IContentMenuView
 
     def available(self):
-        return True
+        return IViewView.providedBy(self.request.PUBLISHED)
 
     def menu(self):
         menu = getUtility(IBrowserMenu, name='plone_contentmenu')
