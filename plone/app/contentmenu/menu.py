@@ -902,14 +902,31 @@ class PortletManagerMenu(BrowserMenu):
             'plone.app.portlets.PortletManagerBlacklist', [])
         managers = getUtilitiesFor(IPortletManager)
         current_url = context.absolute_url()
+
+        items.append({
+            'title': _(u'manage_all_portlets', default=u'All…'),
+            'description': 'Manage all portlets',
+            'action': addTokenToUrl(
+                '{0}/manage-portlets'.format(
+                    current_url),
+                request),
+            'selected': False,
+            'icon': None,
+            'extra': {
+                'id': 'portlet-manager-all',
+                'separator': None},
+            'submenu': None,
+        })
+
         for manager in managers:
             manager_name = manager[0]
             # Don't show items like 'plone.dashboard1' by default
             if manager_name in blacklist:
                 continue
             item = {
-                'title': ' '.join(manager_name.split('.')).title(),
-                'description': ' '.join(manager_name.split('.')).title(),
+                'title': _(manager_name,
+                           default=u' '.join(manager_name.split(u'.')).title()),
+                'description': manager_name,
                 'action': addTokenToUrl(
                     '{0}/@@topbar-manage-portlets/{1}'.format(
                         current_url,

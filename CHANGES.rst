@@ -25,6 +25,10 @@ Breaking changes:
 
 New features:
 
+- Make portlet manager names translatable. Add an "All" option for portlet
+  manager management.
+  [alecm]
+
 - Add ability to specify a short title for the collapsed sidebar by setting
   extras['shortTitle'], in the same way as stateTitle.
   [MatthewWilkes]
