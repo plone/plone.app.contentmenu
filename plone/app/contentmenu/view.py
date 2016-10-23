@@ -21,7 +21,10 @@ class ContentMenuProvider(ContentProviderBase):
     # From IContentMenuView
 
     def available(self):
-        return IViewView.providedBy(self.request.PUBLISHED)
+        try:
+            return IViewView.providedBy(self.request.PUBLISHED)
+        except AttributeError:
+            return True
 
     def menu(self):
         menu = getUtility(IBrowserMenu, name='plone_contentmenu')
