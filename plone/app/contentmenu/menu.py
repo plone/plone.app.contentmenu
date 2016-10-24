@@ -281,6 +281,7 @@ class DisplayMenu(BrowserMenu):
                     contextCanSetDefaultPage:
                 useSeparators = True
 
+        folder_index = 0
         # 1. If this is a default-page, first render folder options
         if folder is not None:
             folderUrl = parent.absolute_url()
@@ -298,6 +299,24 @@ class DisplayMenu(BrowserMenu):
                               'class': ''},
                     'submenu': None,
                 })
+                folder_index = len(results)
+
+            # Display the selected item (i.e. the context)
+            results.insert(folder_index, {
+                'title': _(u'label_item_selected',
+                           default=u'Item: ${contentitem}',
+                           mapping={'contentitem': escape(
+                               utils.safe_unicode(obj.Title()))}),
+                'description': '',
+                'action': None,
+                'selected': True,
+                'icon': None,
+                'extra': {
+                    'id': 'folderDefaultPageDisplay',
+                    'separator': None,
+                    'class': 'actionMenuSelected'},
+                'submenu': None,
+            })
 
             if folderCanSetLayout:
                 for id, title in folderLayouts:
@@ -319,22 +338,6 @@ class DisplayMenu(BrowserMenu):
                             'class': ''},
                         'submenu': None,
                     })
-            # Display the selected item (i.e. the context)
-            results.append({
-                'title': _(u'label_item_selected',
-                           default=u'Item: ${contentitem}',
-                           mapping={'contentitem': escape(
-                               utils.safe_unicode(obj.Title()))}),
-                'description': '',
-                'action': None,
-                'selected': True,
-                'icon': None,
-                'extra': {
-                    'id': 'folderDefaultPageDisplay',
-                    'separator': 'actionSeparator',
-                    'class': 'actionMenuSelected'},
-                'submenu': None,
-            })
             # Let the user change the selection
             if folderCanSetDefaultPage:
                 results.append({
@@ -349,12 +352,13 @@ class DisplayMenu(BrowserMenu):
                     'icon': None,
                     'extra': {
                         'id': 'folderChangeDefaultPage',
-                        'separator': 'actionSeparator',
+                        'separator': None,
                         'class': 'pat-plone-modal'},
                     'submenu': None,
                 })
 
         # 2. Render context options
+        item_index = 0
         if context is not None:
             contextUrl = obj.absolute_url()
             selected = context.getLayout()
@@ -375,6 +379,7 @@ class DisplayMenu(BrowserMenu):
                         'class': ''},
                     'submenu': None,
                 })
+                item_index = len(results)
 
             # If context is a default-page in a folder, that folder's views
             # will be shown. Only show context views if there are any to show.
@@ -384,7 +389,9 @@ class DisplayMenu(BrowserMenu):
             if showLayouts and contextCanSetLayout:
                 for id, title in contextLayouts:
                     is_selected = (defaultPage is None and id == selected)
-                    results.append({
+                    # Selected item on top
+                    index = item_index if is_selected else len(results)
+                    results.insert(index, {
                         'title': title,
                         'description': '',
                         'action': addTokenToUrl(
@@ -424,7 +431,7 @@ class DisplayMenu(BrowserMenu):
                             'icon': None,
                             'extra': {
                                 'id': 'contextSetDefaultPage',
-                                'separator': 'actionSeparator',
+                                'separator': None,
                                 'class': 'pat-plone-modal'},
                             'submenu': None,
                         })
@@ -438,7 +445,8 @@ class DisplayMenu(BrowserMenu):
                             defaultPageTitle = getattr(aq_base(defaultPageObj),
                                                        'title', u'')
 
-                    results.append({
+                    # Selected item on top
+                    results.insert(item_index, {
                         'title': _(u'label_item_selected',
                                    default=u'Item: ${contentitem}',
                                    mapping={'contentitem': escape(
@@ -449,7 +457,7 @@ class DisplayMenu(BrowserMenu):
                         'icon': None,
                         'extra': {
                             'id': 'contextDefaultPageDisplay',
-                            'separator': 'actionSeparator',
+                            'separator': None,
                             'class': ''},
                         'submenu': None,
                     })
@@ -469,7 +477,7 @@ class DisplayMenu(BrowserMenu):
                             'icon': None,
                             'extra': {
                                 'id': 'contextChangeDefaultPage',
-                                'separator': 'actionSeparator',
+                                'separator': None,
                                 'class': 'pat-plone-modal'},
                             'submenu': None,
                         })
