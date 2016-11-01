@@ -4,25 +4,6 @@ Changelog
 2.2.0 (unreleased)
 ------------------
 
-Breaking changes:
-
-- *add item here*
-
-New features:
-
-- *add item here*
-
-Bug fixes:
-
-- *add item here*
-
-2.1.10 (unreleased)
--------------------
-
-Breaking changes:
-
-- *add item here*
-
 New features:
 
 - Make portlet manager names translatable. Add an "All" option for portlet
@@ -44,6 +25,7 @@ Bug fixes:
 
 - Code cleanup.
   [gforcad]
+
 
 2.1.9 (2016-10-03)
 ------------------
