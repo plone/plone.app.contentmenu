@@ -36,6 +36,8 @@ from zope.interface import implementer
 
 import pkg_resources
 
+PMF = _  # used for dynamic messages we don't want to extract
+
 
 try:
     pkg_resources.get_distribution('Products.CMFPlacefulWorkflow')
@@ -932,7 +934,7 @@ class PortletManagerMenu(BrowserMenu):
             if manager_name in blacklist:
                 continue
             item = {
-                'title': _(manager_name,
+                'title': PMF(manager_name,
                            default=u' '.join(manager_name.split(u'.')).title()),
                 'description': manager_name,
                 'action': addTokenToUrl(

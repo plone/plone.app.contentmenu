@@ -14,7 +14,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Don't extract dynamic messages with i18ndude.
+  [vincentfretin]
 
 
 2.2 (2016-11-01)
