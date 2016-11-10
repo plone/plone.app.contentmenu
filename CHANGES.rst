@@ -4,14 +4,6 @@ Changelog
 2.2.1 (unreleased)
 ------------------
 
-Breaking changes:
-
-- *add item here*
-
-New features:
-
-- *add item here*
-
 Bug fixes:
 
 - Don't extract dynamic messages with i18ndude.
