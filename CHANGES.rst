@@ -4,10 +4,6 @@ Changelog
 2.1.10 (unreleased)
 -------------------
 
-Breaking changes:
-
-- *add item here*
-
 New features:
 
 - Add ability to specify a short title for the collapsed sidebar by setting
