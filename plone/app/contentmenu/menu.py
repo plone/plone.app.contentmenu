@@ -60,6 +60,8 @@ class ActionsSubMenuItem(BrowserSubMenuItem):
         'li_class': 'plonetoolbar-content-action'
     }
 
+    permission = 'zope2.View'
+
     def __init__(self, context, request):
         super(ActionsSubMenuItem, self).__init__(context, request)
         self.context_state = getMultiAdapter(
@@ -76,6 +78,8 @@ class ActionsSubMenuItem(BrowserSubMenuItem):
 
     @memoize
     def available(self):
+        if not super(ActionsSubMenuItem, self).available():
+            return False
         actions_tool = getToolByName(self.context, 'portal_actions')
         editActions = actions_tool.listActionInfos(
             object=self.context, categories=('object_buttons',), max=1)
@@ -133,6 +137,8 @@ class DisplaySubMenuItem(BrowserSubMenuItem):
 
     order = 40
 
+    permission = 'cmf.ModifyPortalContent'
+
     def __init__(self, context, request):
         super(DisplaySubMenuItem, self).__init__(context, request)
         self.context_state = getMultiAdapter(
@@ -170,6 +176,8 @@ class DisplaySubMenuItem(BrowserSubMenuItem):
 
     @memoize
     def available(self):
+        if not super(DisplaySubMenuItem, self).available():
+            return False
         if self.disabled():
             return False
 
@@ -496,6 +504,8 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
     description = _(u'title_add_new_items_inside_item',
                     default=u'Add new items inside this item')
 
+    permission = 'cmf.AddPortalContent'
+
     def __init__(self, context, request):
         super(FactoriesSubMenuItem, self).__init__(context, request)
         self.context_state = getMultiAdapter(
@@ -516,6 +526,8 @@ class FactoriesSubMenuItem(BrowserSubMenuItem):
         )
 
     def available(self):
+        if not super(FactoriesSubMenuItem, self).available():
+            return False
         itemsToAdd = self._itemsToAdd()
         showConstrainOptions = self._showConstrainOptions()
         if self._addingToParent() and not self.context_state.is_default_page():
@@ -668,9 +680,10 @@ class WorkflowSubMenuItem(BrowserSubMenuItem):
     short_title = _(u'State')
     submenuId = 'plone_contentmenu_workflow'
     order = 20
+    permission = 'zope2.View'
 
     def __init__(self, context, request):
-        BrowserSubMenuItem.__init__(self, context, request)
+        super(BrowserSubMenuItem, self).__init__(context, request)
         self.tools = getMultiAdapter((context, request), name='plone_tools')
         self.context = context
         self.context_state = getMultiAdapter((context, request),
@@ -702,6 +715,8 @@ class WorkflowSubMenuItem(BrowserSubMenuItem):
 
     @memoize
     def available(self):
+        if not super(FactoriesSubMenuItem, self).available():
+            return False
         return (self.context_state.workflow_state() is not None)
 
     def selected(self):
@@ -839,11 +854,14 @@ class WorkflowMenu(BrowserMenu):
 @implementer(IPortletManagerSubMenuItem)
 class PortletManagerSubMenuItem(BrowserSubMenuItem):
 
-    MANAGE_SETTINGS_PERMISSION = 'Portlets: Manage portlets'
-
     title = _(u'manage_portlets_link', default=u'Manage portlets')
+    description = _(
+        u'title_change_portlets',
+        default=u'Change the portlets of this item'
+    )
     submenuId = 'plone_contentmenu_portletmanager'
     order = 50
+    permission = 'plone.app.portlets.ManagePortlets'
 
     def __init__(self, context, request):
         BrowserSubMenuItem.__init__(self, context, request)
@@ -857,42 +875,17 @@ class PortletManagerSubMenuItem(BrowserSubMenuItem):
                 'li_class': 'plonetoolbar-portlet-manager'}
 
     @property
-    def description(self):
-        if self._manageSettings():
-            return _(
-                u'title_change_portlets',
-                default=u'Change the portlets of this item'
-            )
-        else:
-            return u''
-
-    @property
     def action(self):
         return self.context.absolute_url() + '/manage-portlets'
 
     @memoize
     def available(self):
-        secman = getSecurityManager()
-        has_manage_portlets_permission = secman.checkPermission(
-            'Portlets: Manage portlets',
-            self.context
-        )
-        if not has_manage_portlets_permission:
+        if not super(FactoriesSubMenuItem, self).available():
             return False
-        else:
-            return ILocalPortletAssignable.providedBy(self.context)
+        return ILocalPortletAssignable.providedBy(self.context)
 
     def selected(self):
         return False
-
-    @memoize
-    def _manageSettings(self):
-        secman = getSecurityManager()
-        has_manage_portlets_permission = secman.checkPermission(
-            self.MANAGE_SETTINGS_PERMISSION,
-            self.context
-        )
-        return has_manage_portlets_permission
 
 
 @implementer(IPortletManagerMenu)
@@ -934,8 +927,10 @@ class PortletManagerMenu(BrowserMenu):
             if manager_name in blacklist:
                 continue
             item = {
-                'title': PMF(manager_name,
-                           default=u' '.join(manager_name.split(u'.')).title()),
+                'title': PMF(
+                    manager_name,
+                    default=u' '.join(manager_name.split(u'.')).title()
+                ),
                 'description': manager_name,
                 'action': addTokenToUrl(
                     '{0}/@@topbar-manage-portlets/{1}'.format(

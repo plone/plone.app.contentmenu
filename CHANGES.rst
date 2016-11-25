@@ -14,7 +14,9 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Fix: Let menu-items respect permissions if set (i.e. in subclasses).
+  This also simplifies code.
+  [jensens]
 
 
 2.2.1 (2016-11-10)
