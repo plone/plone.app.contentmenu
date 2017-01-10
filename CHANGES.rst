@@ -14,8 +14,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
-
+- Fix portlets ZCML title registration.
+  [gforcada]
 
 2.2.1 (2016-11-10)
 ------------------
