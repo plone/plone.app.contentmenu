@@ -38,7 +38,7 @@
 
   <browser:menu
     id="plone_contentmenu_portletmanager"
-    title="The 'workflow' menu - allows the user to execute workflow transitions"
+    title="The 'portlet' menu - allows the user to manage portlets"
     class=".menu.PortletManagerMenu"
     />
 
