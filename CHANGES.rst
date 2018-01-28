@@ -14,7 +14,7 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Use ``get_installer`` in tests.  [maurits]
 
 
 2.2.2 (2017-02-12)
