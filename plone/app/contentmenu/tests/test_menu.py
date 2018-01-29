@@ -17,6 +17,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces import INonStructuralFolder
 from Products.CMFPlone.interfaces import ISelectableConstrainTypes
 from Products.CMFPlone.tests import dummy
+from Products.CMFPlone.utils import get_installer
 from Products.CMFPlone.utils import _createObjectByType
 from zope.browsermenu.interfaces import IBrowserMenu
 from zope.component import getUtility
@@ -605,7 +606,8 @@ class TestWorkflowMenuAT(unittest.TestCase):
         url = self.folder.doc1.absolute_url()\
             + '/placeful_workflow_configuration'
         self.assertFalse(url in [a['action'] for a in actions])
-        self.portal.portal_quickinstaller.installProduct('CMFPlacefulWorkflow')
+        qi = get_installer(self.portal)
+        qi.install_product('Products.CMFPlacefulWorkflow')
 
         # item needs permission
         logout()
