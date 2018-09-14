@@ -6,22 +6,25 @@ from plone.app.contentmenu.interfaces import IPortletManagerMenu
 from plone.app.contentmenu.interfaces import IWorkflowMenu
 from plone.app.contentmenu.testing import PLONE_APP_CONTENTMENU_DX_INTEGRATION_TESTING  # noqa
 from plone.app.contenttypes.testing import set_browserlayer
+from plone.app.testing import applyProfile
 from plone.app.testing import login
 from plone.app.testing import logout
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.locking.interfaces import ILockable
+from plone.testing import z2
 from Products.CMFCore.Expression import Expression
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces import INonStructuralFolder
 from Products.CMFPlone.interfaces import ISelectableConstrainTypes
 from Products.CMFPlone.tests import dummy
-from Products.CMFPlone.utils import get_installer
 from Products.CMFPlone.utils import _createObjectByType
+from Products.CMFPlone.utils import get_installer
 from zope.browsermenu.interfaces import IBrowserMenu
 from zope.component import getUtility
 from zope.interface import directlyProvides
 
+import pkg_resources
 import unittest
 import six
 
@@ -864,6 +867,7 @@ class TestContentMenu(unittest.TestCase):
             [a['extra']['id'] for a in actions],
         )
 
+
 class TestDisplayViewsMenu(unittest.TestCase):
     layer = PLONE_APP_CONTENTMENU_DX_INTEGRATION_TESTING
 
@@ -921,6 +925,10 @@ class TestDisplayViewsMenu(unittest.TestCase):
 
 
 if six.PY2:
+    from plone.app.contentmenu.testing import PloneAppContentmenu
+    from plone.app.testing import FunctionalTesting
+    from plone.app.testing import IntegrationTesting
+
     class PloneAppContentmenuAT(PloneAppContentmenu):
 
         def setUpZope(self, app, configurationContext):
@@ -949,7 +957,8 @@ if six.PY2:
             z2.uninstallProduct(app, 'Products.Archetypes')
 
         def setUpPloneSite(self, portal):
-            portal.portal_workflow.setDefaultChain('simple_publication_workflow')
+            portal.portal_workflow.setDefaultChain(
+                'simple_publication_workflow')
             # install Products.ATContentTypes manually if profile is available
             # (this is only needed for Plone >= 5)
             profiles = [x['id'] for x in portal.portal_setup.listProfileInfo()]
@@ -970,30 +979,23 @@ if six.PY2:
         bases=(PLONE_APP_CONTENTMENU_AT_FIXTURE, ),
         name='PloneAppContentmenuAT:Functional')
 
-
     class TestDisplayViewsMenuAT(TestDisplayViewsMenu):
         layer = PLONE_APP_CONTENTMENU_AT_INTEGRATION_TESTING
-
 
     class TestActionsMenuAT(TestActionsMenu):
         layer = PLONE_APP_CONTENTMENU_AT_INTEGRATION_TESTING
 
-
     class TestDisplayMenuAT(TestDisplayMenu):
         layer = PLONE_APP_CONTENTMENU_AT_INTEGRATION_TESTING
-
 
     class TestContentMenuAT(TestContentMenu):
         layer = PLONE_APP_CONTENTMENU_AT_INTEGRATION_TESTING
 
-
     class TestManagePortletsMenuAT(TestManagePortletsMenu):
         layer = PLONE_APP_CONTENTMENU_AT_INTEGRATION_TESTING
 
-
     class TestWorkflowMenuAT(TestWorkflowMenu):
         layer = PLONE_APP_CONTENTMENU_AT_INTEGRATION_TESTING
-
 
     class TestFactoriesMenuAT(TestFactoriesMenu):
         layer = PLONE_APP_CONTENTMENU_AT_INTEGRATION_TESTING
