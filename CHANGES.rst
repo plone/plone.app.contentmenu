@@ -14,7 +14,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Fix sorting of portletmanager-menuitems in py3.
+  [pbauer]
 
 
 2.2.3 (2018-02-05)
