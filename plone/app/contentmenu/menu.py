@@ -2,6 +2,7 @@
 from AccessControl import getSecurityManager
 from Acquisition import aq_base
 from cgi import escape
+from operator import itemgetter
 from plone.app.content.browser.folderfactories import _allowedTypes
 from plone.app.contentmenu import PloneMessageFactory as _
 from plone.app.contentmenu.interfaces import IActionsMenu
@@ -951,5 +952,4 @@ class PortletManagerMenu(BrowserMenu):
             }
 
             items.append(item)
-        items.sort()
-        return items
+        return sorted(items, key=itemgetter('title'))
