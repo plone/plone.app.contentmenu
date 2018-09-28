@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.2.0 (unreleased)
+2.2.5 (unreleased)
 ------------------
 
 Breaking changes:
@@ -18,14 +18,53 @@ Bug fixes:
   a view page, which was a regression for the 5.0 line.
   [MatthewWilkes]
 
-2.1.10 (unreleased)
--------------------
 
-Breaking changes:
+2.2.4 (2018-09-23)
+------------------
 
-- *add item here*
+Bug fixes:
+
+- Fix sorting of portletmanager-menuitems in py3.
+  [pbauer]
+
+
+2.2.3 (2018-02-05)
+------------------
+
+Bug fixes:
+
+- Use ``get_installer`` in tests.  [maurits]
+
+
+2.2.2 (2017-02-12)
+------------------
+
+Bug fixes:
+
+- Fix portlets ZCML title registration.
+  [gforcada]
+
+2.2.1 (2016-11-10)
+------------------
+
+Bug fixes:
+
+- Don't extract dynamic messages with i18ndude.
+  [vincentfretin]
+
+
+2.2 (2016-11-01)
+----------------
 
 New features:
+
+- Make portlet manager names translatable. Add an "All" option for portlet
+  manager management.
+  [alecm]
+
+- Display menu reorganization. Selected view/item should be on top of section
+  and headings should appear as headings.
+  [alecm]
 
 - Add ability to specify a short title for the collapsed sidebar by setting
   extras['shortTitle'], in the same way as stateTitle.
@@ -38,6 +77,7 @@ Bug fixes:
 
 - Code cleanup.
   [gforcad]
+
 
 2.1.9 (2016-10-03)
 ------------------

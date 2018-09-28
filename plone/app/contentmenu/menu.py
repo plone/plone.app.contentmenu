@@ -2,6 +2,7 @@
 from AccessControl import getSecurityManager
 from Acquisition import aq_base
 from cgi import escape
+from operator import itemgetter
 from plone.app.content.browser.folderfactories import _allowedTypes
 from plone.app.contentmenu import PloneMessageFactory as _
 from plone.app.contentmenu.interfaces import IActionsMenu
@@ -35,6 +36,8 @@ from zope.component import queryMultiAdapter
 from zope.interface import implementer
 
 import pkg_resources
+
+PMF = _  # used for dynamic messages we don't want to extract
 
 
 try:
@@ -281,6 +284,7 @@ class DisplayMenu(BrowserMenu):
                     contextCanSetDefaultPage:
                 useSeparators = True
 
+        folder_index = 0
         # 1. If this is a default-page, first render folder options
         if folder is not None:
             folderUrl = parent.absolute_url()
@@ -298,6 +302,24 @@ class DisplayMenu(BrowserMenu):
                               'class': ''},
                     'submenu': None,
                 })
+                folder_index = len(results)
+
+            # Display the selected item (i.e. the context)
+            results.insert(folder_index, {
+                'title': _(u'label_item_selected',
+                           default=u'Item: ${contentitem}',
+                           mapping={'contentitem': escape(
+                               utils.safe_unicode(obj.Title()))}),
+                'description': '',
+                'action': None,
+                'selected': True,
+                'icon': None,
+                'extra': {
+                    'id': 'folderDefaultPageDisplay',
+                    'separator': None,
+                    'class': 'actionMenuSelected'},
+                'submenu': None,
+            })
 
             if folderCanSetLayout:
                 for id, title in folderLayouts:
@@ -319,22 +341,6 @@ class DisplayMenu(BrowserMenu):
                             'class': ''},
                         'submenu': None,
                     })
-            # Display the selected item (i.e. the context)
-            results.append({
-                'title': _(u'label_item_selected',
-                           default=u'Item: ${contentitem}',
-                           mapping={'contentitem': escape(
-                               utils.safe_unicode(obj.Title()))}),
-                'description': '',
-                'action': None,
-                'selected': True,
-                'icon': None,
-                'extra': {
-                    'id': 'folderDefaultPageDisplay',
-                    'separator': 'actionSeparator',
-                    'class': 'actionMenuSelected'},
-                'submenu': None,
-            })
             # Let the user change the selection
             if folderCanSetDefaultPage:
                 results.append({
@@ -349,12 +355,13 @@ class DisplayMenu(BrowserMenu):
                     'icon': None,
                     'extra': {
                         'id': 'folderChangeDefaultPage',
-                        'separator': 'actionSeparator',
+                        'separator': None,
                         'class': 'pat-plone-modal'},
                     'submenu': None,
                 })
 
         # 2. Render context options
+        item_index = 0
         if context is not None:
             contextUrl = obj.absolute_url()
             selected = context.getLayout()
@@ -375,6 +382,7 @@ class DisplayMenu(BrowserMenu):
                         'class': ''},
                     'submenu': None,
                 })
+                item_index = len(results)
 
             # If context is a default-page in a folder, that folder's views
             # will be shown. Only show context views if there are any to show.
@@ -384,7 +392,9 @@ class DisplayMenu(BrowserMenu):
             if showLayouts and contextCanSetLayout:
                 for id, title in contextLayouts:
                     is_selected = (defaultPage is None and id == selected)
-                    results.append({
+                    # Selected item on top
+                    index = item_index if is_selected else len(results)
+                    results.insert(index, {
                         'title': title,
                         'description': '',
                         'action': addTokenToUrl(
@@ -424,7 +434,7 @@ class DisplayMenu(BrowserMenu):
                             'icon': None,
                             'extra': {
                                 'id': 'contextSetDefaultPage',
-                                'separator': 'actionSeparator',
+                                'separator': None,
                                 'class': 'pat-plone-modal'},
                             'submenu': None,
                         })
@@ -438,7 +448,8 @@ class DisplayMenu(BrowserMenu):
                             defaultPageTitle = getattr(aq_base(defaultPageObj),
                                                        'title', u'')
 
-                    results.append({
+                    # Selected item on top
+                    results.insert(item_index, {
                         'title': _(u'label_item_selected',
                                    default=u'Item: ${contentitem}',
                                    mapping={'contentitem': escape(
@@ -449,7 +460,7 @@ class DisplayMenu(BrowserMenu):
                         'icon': None,
                         'extra': {
                             'id': 'contextDefaultPageDisplay',
-                            'separator': 'actionSeparator',
+                            'separator': None,
                             'class': ''},
                         'submenu': None,
                     })
@@ -469,7 +480,7 @@ class DisplayMenu(BrowserMenu):
                             'icon': None,
                             'extra': {
                                 'id': 'contextChangeDefaultPage',
-                                'separator': 'actionSeparator',
+                                'separator': None,
                                 'class': 'pat-plone-modal'},
                             'submenu': None,
                         })
@@ -902,14 +913,31 @@ class PortletManagerMenu(BrowserMenu):
             'plone.app.portlets.PortletManagerBlacklist', [])
         managers = getUtilitiesFor(IPortletManager)
         current_url = context.absolute_url()
+
+        items.append({
+            'title': _(u'manage_all_portlets', default=u'All…'),
+            'description': 'Manage all portlets',
+            'action': addTokenToUrl(
+                '{0}/manage-portlets'.format(
+                    current_url),
+                request),
+            'selected': False,
+            'icon': None,
+            'extra': {
+                'id': 'portlet-manager-all',
+                'separator': None},
+            'submenu': None,
+        })
+
         for manager in managers:
             manager_name = manager[0]
             # Don't show items like 'plone.dashboard1' by default
             if manager_name in blacklist:
                 continue
             item = {
-                'title': ' '.join(manager_name.split('.')).title(),
-                'description': ' '.join(manager_name.split('.')).title(),
+                'title': PMF(manager_name,
+                           default=u' '.join(manager_name.split(u'.')).title()),
+                'description': manager_name,
                 'action': addTokenToUrl(
                     '{0}/@@topbar-manage-portlets/{1}'.format(
                         current_url,
@@ -924,5 +952,4 @@ class PortletManagerMenu(BrowserMenu):
             }
 
             items.append(item)
-        items.sort()
-        return items
+        return sorted(items, key=itemgetter('title'))

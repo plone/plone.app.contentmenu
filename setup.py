@@ -2,7 +2,7 @@
 from setuptools import find_packages
 from setuptools import setup
 
-version = '2.2.0.dev0'
+version = '2.2.5.dev0'
 long_description = open('README.rst').read() + '\n'
 long_description += open('CHANGES.rst').read()
 
@@ -14,13 +14,15 @@ setup(
     classifiers=[
         'Environment :: Web Environment',
         'Framework :: Plone',
-        'Framework :: Plone :: 5.0',
         'Framework :: Plone :: 5.1',
+        'Framework :: Plone :: 5.2',
         'Framework :: Zope2',
-        'License :: OSI Approved :: GNU General Public License (GPL)',
+        'License :: OSI Approved :: GNU General Public License v2 (GPLv2)',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
     ],
     keywords='plone contentmenu menu',
     author='Plone Foundation',
@@ -35,6 +37,7 @@ setup(
         test=[
             'plone.app.testing',
             'plone.app.contenttypes',
+            'six',
         ]
     ),
     install_requires=[
