@@ -27,7 +27,7 @@ setup(
     keywords='plone contentmenu menu',
     author='Plone Foundation',
     author_email='plone-developers@lists.sourceforge.net',
-    url='https://pypi.python.org/pypi/plone.app.contentmenu',
+    url='https://pypi.org/project/plone.app.contentmenu',
     license='GPL version 2',
     packages=find_packages(exclude=['ez_setup']),
     namespace_packages=['plone', 'plone.app'],
