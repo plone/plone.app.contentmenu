@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from AccessControl import getSecurityManager
 from Acquisition import aq_base
-from cgi import escape
 from operator import itemgetter
 from plone.app.content.browser.folderfactories import _allowedTypes
 from plone.app.contentmenu import PloneMessageFactory as _
@@ -39,6 +38,11 @@ import pkg_resources
 
 PMF = _  # used for dynamic messages we don't want to extract
 
+
+try:
+    from html import escape
+except ImportError:
+    from cgi import escape
 
 try:
     pkg_resources.get_distribution('Products.CMFPlacefulWorkflow')
