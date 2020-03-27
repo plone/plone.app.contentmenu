@@ -13,20 +13,20 @@
           tal:attributes="href menuItem/action;
                           title menuItem/description;
                           class string:label-${state_class}"
-          tal:define="state_class menuItem/extra/class | nothing;
+          tal:define="state_class menuItem/extra/class|nothing;
                       state_class python:state_class and state_class or ''"
           tal:omit-tag="not:menuItem/action">
         <span
             aria-hidden="true"
             class=""
             tal:attributes="class string:icon-${identifier} ${menuItem/extra/class} toolbar-menu-icon"
-            tal:condition="menuItem/extra/stateTitle | nothing"></span>
+            tal:condition="menuItem/extra/stateTitle|nothing"></span>
         <span
             aria-hidden="true"
             class=""
             tal:attributes="class string:icon-${identifier} toolbar-menu-icon"
-            tal:condition="not: menuItem/extra/stateTitle | nothing"></span>
-        <span tal:omit-tag="not: menuItem/extra/stateTitle | nothing">
+            tal:condition="not: menuItem/extra/stateTitle|nothing"></span>
+        <span tal:omit-tag="not: menuItem/extra/stateTitle|nothing">
           <span
               class="plone-toolbar-title"
               i18n:translate=""
@@ -36,47 +36,47 @@
         <span
             class="plone-toolbar-short-title"
             i18n:translate=""
-            tal:content="menuItem/extra/shortTitle | menuItem/title">
+            tal:content="menuItem/extra/shortTitle|menuItem/title">
             Short Title
           </span>
           <span
               class="plone-toolbar-state-title"
               i18n:translate=""
-              tal:condition="menuItem/extra/stateTitle | nothing"
+              tal:condition="menuItem/extra/stateTitle|nothing"
               tal:content="menuItem/extra/stateTitle">
                 State title
             </span>
         </span>
         <span
             class="plone-toolbar-caret"
-            tal:condition="not:menuItem/extra/hideChildren | not:submenu | nothing"></span>
+            tal:condition="not:menuItem/extra/hideChildren|not:submenu|nothing"></span>
       </a>
       <ul
           aria-hidden="true"
-          tal:condition="not:menuItem/extra/hideChildren | not:submenu | nothing">
+          tal:condition="not:menuItem/extra/hideChildren|not:submenu|nothing">
         <li class="plone-toolbar-submenu-header">
-          <span tal:omit-tag="not:menuItem/extra/stateTitle | nothing">
+          <span tal:omit-tag="not:menuItem/extra/stateTitle|nothing">
             <span tal:content="menuItem/title">Menu Title</span>
             <span
                 i18n:translate=""
                 tal:attributes="class string:${menuItem/extra/class}"
-                tal:condition="menuItem/extra/stateTitle | nothing"
+                tal:condition="menuItem/extra/stateTitle|nothing"
                 tal:content="menuItem/extra/stateTitle">
                 State title
             </span>
           </span>
         </li>
         <li
-            tal:attributes="class string:${menuItem/extra/li_class | nothing} ${subMenuItem/extra/separator}"
+            tal:attributes="class string:${menuItem/extra/li_class|nothing} ${subMenuItem/extra/separator}"
             tal:repeat="subMenuItem submenu">
           <a
               href="#"
               i18n:attributes="title"
               tal:attributes="href subMenuItem/action;
                               title subMenuItem/description;
-                              id subMenuItem/extra/id | nothing;
-                              class subMenuItem/extra/class | nothing;
-                              data-pat-plone-modal subMenuItem/extra/modal | nothing;"
+                              id subMenuItem/extra/id|nothing;
+                              class subMenuItem/extra/class|nothing;
+                              data-pat-plone-modal subMenuItem/extra/modal|nothing;"
               tal:condition="subMenuItem/action">
             <tal:title
                 content="structure subMenuItem/title"
@@ -85,8 +85,8 @@
               </tal:title>
           </a>
           <span
-              tal:attributes="id subMenuItem/extra/id | nothing;
-                              class subMenuItem/extra/class | nothing"
+              tal:attributes="id subMenuItem/extra/id|nothing;
+                              class subMenuItem/extra/class|nothing"
               tal:condition="not:subMenuItem/action">
             <span
                 i18n:translate=""

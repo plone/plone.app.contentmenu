@@ -1,0 +1,4 @@
+Removed spaces around pipes in templates.
+Fixes syntax problem with newer Chameleon, where ``string:${x| nothing}`` would end up in the html literally.
+See `Zope issue 807 <https://github.com/zopefoundation/Zope/pull/807#issuecomment-604983868>`_.
+[maurits]
