@@ -1,0 +1,3 @@
+Fix review state icon position in toolbar when the user doesn't have the permission to change the review state.
+This fixes https://github.com/plone/plonetheme.barceloneta/issues/110
+[vincentfretin]

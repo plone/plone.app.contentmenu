@@ -10,12 +10,13 @@
       <a
           href="#"
           i18n:attributes="title;"
-          tal:attributes="href menuItem/action;
+          tal:attributes="href python:menuItem['action'] or 'javascript:void(0)';
+                          style python:not menuItem['action'] and 'cursor: default;; pointer-events: none' or None;
                           title menuItem/description;
                           class string:label-${state_class}"
           tal:define="state_class menuItem/extra/class | nothing;
                       state_class python:state_class and state_class or ''"
-          tal:omit-tag="not:menuItem/action">
+          >
         <span
             aria-hidden="true"
             class=""
