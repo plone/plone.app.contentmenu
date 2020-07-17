@@ -8,6 +8,17 @@ Changelog
 
 .. towncrier release notes start
 
+2.3.2 (2020-07-17)
+------------------
+
+Bug fixes:
+
+
+- Fix review state icon position in toolbar when the user doesn't have the permission to change the review state.
+  This fixes https://github.com/plone/plonetheme.barceloneta/issues/110
+  [vincentfretin] (#29)
+
+
 2.3.1 (2020-03-21)
 ------------------
 
