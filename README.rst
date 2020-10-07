@@ -79,7 +79,7 @@ im ``menu.py`` the class looks like so::
         @property
         def action(self):
             # return the url to be loaded if clicked on the link.
-            # even if a submenu exists it will be active if javascript is disbaled
+            # even if a submenu exists it will be active if javascript is disabled
             return self.context.absolute_url()
 
         @memoize
