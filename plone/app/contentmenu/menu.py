@@ -58,7 +58,7 @@ class ActionsSubMenuItem(BrowserSubMenuItem):
     description = _(u'title_actions_menu',
                     default=u'Actions for the current content item')
     submenuId = 'plone_contentmenu_actions'
-
+    icon = "toolbar-action/actions"
     order = 30
     extra = {
         'id': 'plone-contentmenu-actions',
@@ -135,7 +135,7 @@ class DisplaySubMenuItem(BrowserSubMenuItem):
 
     title = _(u'label_choose_template', default=u'Display')
     submenuId = 'plone_contentmenu_display'
-
+    icon = "toolbar-action/display"
     order = 40
 
     def __init__(self, context, request):
@@ -495,9 +495,10 @@ class DisplayMenu(BrowserMenu):
 @implementer(IFactoriesSubMenuItem)
 class FactoriesSubMenuItem(BrowserSubMenuItem):
 
-    submenuId = 'plone_contentmenu_factory'
-    order = 10
     title = _(u'label_add_new_item', default=u'Add new\u2026')
+    submenuId = 'plone_contentmenu_factory'
+    icon = "toolbar-action/factories"
+    order = 10
     description = _(u'title_add_new_items_inside_item',
                     default=u'Add new items inside this item')
 
@@ -671,6 +672,7 @@ class WorkflowSubMenuItem(BrowserSubMenuItem):
 
     title = _(u'label_state', default=u'State:')
     short_title = _(u'State')
+    icon = "toolbar-action/workflows"
     submenuId = 'plone_contentmenu_workflow'
     order = 20
 
@@ -848,6 +850,7 @@ class PortletManagerSubMenuItem(BrowserSubMenuItem):
 
     title = _(u'manage_portlets_link', default=u'Manage portlets')
     submenuId = 'plone_contentmenu_portletmanager'
+    icon = "toolbar-action/portlet"
     order = 50
 
     def __init__(self, context, request):

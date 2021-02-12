@@ -1,6 +1,7 @@
 <tal:contentactionmenus
     condition="view/available"
-    define="menu view/menu;"
+    define="menu view/menu;
+            icons python:context.restrictedTraverse('@@iconresolver');"
     i18n:domain="plone">
   <tal:menus repeat="menuItem menu">
     <li
@@ -79,6 +80,9 @@
                               class subMenuItem/extra/class | nothing;
                               data-pat-plone-modal subMenuItem/extra/modal | nothing;"
               tal:condition="subMenuItem/action">
+            <tal:icon tal:condition="python:subMenuItem['icon']"
+              tal:replace="structure python:icons.tag(subMenuItem['icon'], tag_alt=subMenuItem['title'], tag_class='toolbarIcon')" />
+  
             <tal:title
                 content="structure subMenuItem/title"
                 i18n:translate="">
