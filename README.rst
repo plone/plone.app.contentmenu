@@ -19,16 +19,22 @@ Custom menus
 
 Custom menus are registered in ``configure.zcml`` like so::
 
+    <!-- the main menu item -->
+    <adapter for="* *"
+        name="plone.contentmenu.my_menu_item"
+        factory=".menu.MyMainMenuItem"
+        provides="plone.app.contentmenu.interfaces.IContentMenuItem" />
+
+    <!-- the sub menu items - name must match submenuId of MyMainMenuItem class -->
     <browser:menu
-        id="my_content_menu"
+        id="my_fancy_menu"
         title="The 'My' menu - allows to do new exciting stuff"
         class=".menu.MyMenu"
     />
 
-im ``menu.py`` the class looks like so::
+in ``menu.py`` the class looks like so::
 
     # -*- coding: utf-8 -*-
-    from plone.memoize.instance import memoize
     from zope.browsermenu.interfaces import IBrowserMenu
     from zope.browsermenu.menu import BrowserMenu
     from zope.browsermenu.menu import BrowserSubMenuItem
@@ -69,20 +75,12 @@ im ``menu.py`` the class looks like so::
             'li_class': 'plonetoolbar-content-my-fancy'
         }
 
-        def __init__(self, context, request):
-            super(BrowserSubMenuItem, self).__init__(context, request)
-            self.context_state = getMultiAdapter(
-                (context, request),
-                name='plone_context_state'
-            )
-
         @property
         def action(self):
             # return the url to be loaded if clicked on the link.
             # even if a submenu exists it will be active if javascript is disabled
             return self.context.absolute_url()
 
-        @memoize
         def available(self):
             # check if the menu is available and shown or not
             return True
@@ -93,7 +91,7 @@ im ``menu.py`` the class looks like so::
 
 
     @implementer(IMyMenu)
-    class ActionsMenu(BrowserMenu):
+    class MyMenu(BrowserMenu):
 
         def getMenuItems(self, context, request):
             """Return menu item entries in a TAL-friendly form."""
