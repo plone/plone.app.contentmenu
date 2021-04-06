@@ -34,7 +34,6 @@ Custom menus are registered in ``configure.zcml`` like so::
 
 in ``menu.py`` the class looks like so::
 
-    # -*- coding: utf-8 -*-
     from zope.browsermenu.interfaces import IBrowserMenu
     from zope.browsermenu.menu import BrowserMenu
     from zope.browsermenu.menu import BrowserSubMenuItem
@@ -65,13 +64,12 @@ in ``menu.py`` the class looks like so::
         # of the inherited class tells it, don't be confused.
 
         title = _(u'label_my_menu', default=u'My')
-        description = _(u'title_my_menu',
-                        default=u'My for the current content item')
-        submenuId = 'my_fance_menu'
+        description = _(u'title_my_menu', default=u'My for the current content item')
+        submenuId = 'my_fancy_menu'
 
-        order = 35
+        order = 70  # after the default menus
         extra = {
-            'id': 'my-fance-menu',
+            'id': 'my-fancy-menu',
             'li_class': 'plonetoolbar-content-my-fancy'
         }
 
