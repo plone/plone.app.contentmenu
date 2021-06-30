@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+2.3.3 (2021-06-30)
+------------------
+
+Bug fixes:
+
+
+- Updated README.rst.
+  [ksuess, jensens] (#1)
+
+
 2.3.2 (2020-07-17)
 ------------------
 
