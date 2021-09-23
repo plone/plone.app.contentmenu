@@ -18,16 +18,21 @@
           tal:define="state_class menuItem/extra/class | nothing;
                       state_class python:state_class and state_class or ''"
           >
+
         <span
             aria-hidden="true"
             class=""
             tal:attributes="class string:icon-${identifier} ${menuItem/extra/class} toolbar-menu-icon"
-            tal:condition="menuItem/extra/stateTitle | nothing"></span>
+            tal:condition="menuItem/extra/stateTitle | nothing">
+          <tal:icon tal:replace="structure python:icons.tag(menuItem.get('icon','') and menuItem['icon'] or 'toolbar-action', tag_alt=menuItem.get('id','toolbarIcon'), tag_class='toolbarIcon')" />
+        </span>
         <span
             aria-hidden="true"
             class=""
             tal:attributes="class string:icon-${identifier} toolbar-menu-icon"
-            tal:condition="not: menuItem/extra/stateTitle | nothing"></span>
+            tal:condition="not: menuItem/extra/stateTitle | nothing">
+          <tal:icon tal:replace="structure python:icons.tag(menuItem.get('icon','') and menuItem['icon'] or 'toolbar-action', tag_alt=menuItem.get('id','toolbarIcon'), tag_class='toolbarIcon')" />
+        </span>
         <span tal:omit-tag="not: menuItem/extra/stateTitle | nothing">
           <span
               class="plone-toolbar-title"

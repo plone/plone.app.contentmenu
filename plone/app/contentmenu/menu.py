@@ -672,7 +672,7 @@ class WorkflowSubMenuItem(BrowserSubMenuItem):
 
     title = _(u'label_state', default=u'State:')
     short_title = _(u'State')
-    icon = "toolbar-action/workflows"
+    icon = "toolbar-action/workflow"
     submenuId = 'plone_contentmenu_workflow'
     order = 20
 
@@ -850,7 +850,7 @@ class PortletManagerSubMenuItem(BrowserSubMenuItem):
 
     title = _(u'manage_portlets_link', default=u'Manage portlets')
     submenuId = 'plone_contentmenu_portletmanager'
-    icon = "toolbar-action/portlet"
+    icon = "toolbar-action/portlets"
     order = 50
 
     def __init__(self, context, request):
