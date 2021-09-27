@@ -321,7 +321,7 @@ class DisplayMenu(BrowserMenu):
                 'extra': {
                     'id': 'folderDefaultPageDisplay',
                     'separator': None,
-                    'class': 'actionMenuSelected'},
+                    'class': 'active'},
                 'submenu': None,
             })
 
@@ -413,7 +413,7 @@ class DisplayMenu(BrowserMenu):
                         'extra': {
                             'id': 'plone-contentmenu-display-' + id,
                             'separator': None,
-                            'class': is_selected and 'actionMenuSelected' or ''
+                            'class': is_selected and 'active' or ''
                         },
                         'submenu': None,
                     })

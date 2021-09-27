@@ -8,104 +8,76 @@
         tal:attributes="id menuItem/extra/id"
         tal:define="submenu menuItem/submenu;
                     identifier menuItem/extra/id">
-      <a
-          href="#"
+
+      <a href="#"
           i18n:attributes="title;"
           tal:attributes="href python:menuItem['action'] or 'javascript:void(0)';
-                          style python:not menuItem['action'] and 'cursor: default;; pointer-events: none' or None;
-                          title menuItem/description;
-                          class string:label-${state_class}"
+                          style python:'cursor: default;; pointer-events: none' if not menuItem['action'] else None;
+                          title menuItem/description;"
           tal:define="state_class menuItem/extra/class | nothing;
-                      state_class python:state_class and state_class or ''"
-          >
+                      state_class python:'label-%s' % state_class if state_class else ''"
+          class="text-white ${python:'nav-link dropdown-toggle collapsed' if submenu else ''}"
+          data-bs-toggle="collapse"
+          data-bs-target="#collapse-${identifier}"
+          aria-expanded="${python:'false' if submenu else None}">
+
+        <tal:icon tal:replace="structure python:icons.tag(menuItem.get('icon','') and menuItem['icon'] or 'toolbar-action', tag_alt=menuItem.get('id','toolbarIcon'), tag_class='me-1')" />
 
         <span
-            aria-hidden="true"
-            class=""
-            tal:attributes="class string:icon-${identifier} ${menuItem/extra/class} toolbar-menu-icon"
-            tal:condition="menuItem/extra/stateTitle | nothing">
-          <tal:icon tal:replace="structure python:icons.tag(menuItem.get('icon','') and menuItem['icon'] or 'toolbar-action', tag_alt=menuItem.get('id','toolbarIcon'), tag_class='toolbarIcon')" />
-        </span>
-        <span
-            aria-hidden="true"
-            class=""
-            tal:attributes="class string:icon-${identifier} toolbar-menu-icon"
-            tal:condition="not: menuItem/extra/stateTitle | nothing">
-          <tal:icon tal:replace="structure python:icons.tag(menuItem.get('icon','') and menuItem['icon'] or 'toolbar-action', tag_alt=menuItem.get('id','toolbarIcon'), tag_class='toolbarIcon')" />
-        </span>
-        <span tal:omit-tag="not: menuItem/extra/stateTitle | nothing">
-          <span
-              class="plone-toolbar-title"
-              i18n:translate=""
-              tal:content="menuItem/title">
-              Menu Title
-            </span>
-        <span
-            class="plone-toolbar-short-title"
             i18n:translate=""
-            tal:content="menuItem/extra/shortTitle | menuItem/title">
-            Short Title
-          </span>
-          <span
-              class="plone-toolbar-state-title"
-              i18n:translate=""
-              tal:condition="menuItem/extra/stateTitle | nothing"
-              tal:content="menuItem/extra/stateTitle">
-                State title
-            </span>
+            tal:replace="menuItem/title">
+            Menu Title
         </span>
         <span
-            class="plone-toolbar-caret"
-            tal:condition="not:menuItem/extra/hideChildren | not:submenu | nothing"></span>
+            i18n:translate=""
+            class="ms-1 ${state_class}"
+            tal:content="menuItem/extra/stateTitle | nothing">
+              State title
+        </span>
+
       </a>
-      <ul
-          aria-hidden="true"
-          tal:condition="not:menuItem/extra/hideChildren | not:submenu | nothing">
-        <li class="plone-toolbar-submenu-header">
-          <span tal:omit-tag="not:menuItem/extra/stateTitle | nothing">
-            <span tal:content="menuItem/title">Menu Title</span>
-            <span
-                i18n:translate=""
-                tal:attributes="class string:${menuItem/extra/class}"
-                tal:condition="menuItem/extra/stateTitle | nothing"
-                tal:content="menuItem/extra/stateTitle">
-                State title
+
+      <div id="collapse-${identifier}" class="collapse"
+             tal:condition="submenu | nothing">
+
+        <ul class="nav nav-pills flex-column small">
+          <li tal:repeat="subMenuItem submenu" class="ps-3">
+            <tal:block define="extra_class subMenuItem/extra/class | string:">
+            <a class="text-white nav-link ${extra_class}"
+                href="#"
+                i18n:attributes="title"
+                tal:attributes="href subMenuItem/action;
+                                title subMenuItem/description;
+                                id subMenuItem/extra/id | nothing;
+                                data-pat-plone-modal subMenuItem/extra/modal | nothing;"
+                tal:condition="subMenuItem/action">
+
+                <tal:icon tal:replace="structure python:icons.tag('check' if 'active' in extra_class else (subMenuItem.get('icon') or 'dot'), tag_alt=subMenuItem['title'], tag_class='me-1')" />
+
+              <tal:title
+                  content="structure subMenuItem/title"
+                  i18n:translate="">
+                    Title
+                </tal:title>
+            </a>
+            <span class="text-white nav-link ${extra_class}"
+                tal:attributes="id subMenuItem/extra/id | nothing"
+                tal:condition="not:subMenuItem/action">
+                <tal:icon tal:condition="python:'active' in extra_class"
+                          tal:replace="structure python:icons.tag('check', tag_class='me-1')" />
+                <span
+                  i18n:translate=""
+                  tal:replace="structure subMenuItem/title">
+                    Title
+                </span>
             </span>
-          </span>
-        </li>
-        <li
-            tal:attributes="class string:${menuItem/extra/li_class | nothing} ${subMenuItem/extra/separator}"
-            tal:repeat="subMenuItem submenu">
-          <a
-              href="#"
-              i18n:attributes="title"
-              tal:attributes="href subMenuItem/action;
-                              title subMenuItem/description;
-                              id subMenuItem/extra/id | nothing;
-                              class subMenuItem/extra/class | nothing;
-                              data-pat-plone-modal subMenuItem/extra/modal | nothing;"
-              tal:condition="subMenuItem/action">
-            <tal:icon tal:condition="python:subMenuItem['icon']"
-              tal:replace="structure python:icons.tag(subMenuItem['icon'], tag_alt=subMenuItem['title'], tag_class='toolbarIcon')" />
-  
-            <tal:title
-                content="structure subMenuItem/title"
-                i18n:translate="">
-                  Title
-              </tal:title>
-          </a>
-          <span
-              tal:attributes="id subMenuItem/extra/id | nothing;
-                              class subMenuItem/extra/class | nothing"
-              tal:condition="not:subMenuItem/action">
-            <span
-                i18n:translate=""
-                tal:content="structure subMenuItem/title">
-                  Title
-              </span>
-          </span>
-        </li>
-      </ul>
+            </tal:block>
+          </li>
+          <li tal:condition="not:repeat/menuItem/end">
+            <hr />
+          </li>
+        </ul>
+      </div>
     </li>
   </tal:menus>
 </tal:contentactionmenus>
