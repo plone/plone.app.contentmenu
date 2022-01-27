@@ -16,7 +16,7 @@
                           title menuItem/description;"
           tal:define="state_class menuItem/extra/class | nothing;
                       state_class python:'label-%s' % state_class if state_class else ''"
-          class="text-white ${python:'nav-link dropdown-toggle collapsed' if submenu else ''}"
+          class="${python:'nav-link dropdown-toggle collapsed' if submenu else ''}"
           data-bs-toggle="collapse"
           data-bs-target="#collapse-${identifier}"
           aria-expanded="${python:'false' if submenu else None}">
@@ -43,7 +43,7 @@
         <ul class="nav nav-pills flex-column small">
           <li tal:repeat="subMenuItem submenu" class="ps-3">
             <tal:block define="extra_class subMenuItem/extra/class | string:">
-            <a class="text-white nav-link ${extra_class}"
+            <a class="nav-link ${extra_class}"
                 href="#"
                 i18n:attributes="title"
                 tal:attributes="href subMenuItem/action;
@@ -60,7 +60,7 @@
                     Title
                 </tal:title>
             </a>
-            <span class="text-white nav-link ${extra_class}"
+            <span class="nav-link ${extra_class}"
                 tal:attributes="id subMenuItem/extra/id | nothing"
                 tal:condition="not:subMenuItem/action">
                 <tal:icon tal:condition="python:'active' in extra_class"
@@ -73,9 +73,7 @@
             </span>
             </tal:block>
           </li>
-          <li tal:condition="not:repeat/menuItem/end">
-            <hr />
-          </li>
+          <li class="border-top my-2" tal:condition="not:repeat/menuItem/end"></li>
         </ul>
       </div>
     </li>
