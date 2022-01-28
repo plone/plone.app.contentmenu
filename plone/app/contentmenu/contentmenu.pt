@@ -4,10 +4,9 @@
             icons python:context.restrictedTraverse('@@iconresolver');"
     i18n:domain="plone">
   <tal:menus repeat="menuItem menu">
-    <li
-        tal:attributes="id menuItem/extra/id"
-        tal:define="submenu menuItem/submenu;
-                    identifier menuItem/extra/id">
+    <tal:def define="submenu menuItem/submenu;
+                     identifier menuItem/extra/id">
+    <li tal:attributes="id menuItem/extra/id">
 
       <a href="#"
           i18n:attributes="title;"
@@ -37,11 +36,11 @@
 
       </a>
 
-      <div id="collapse-${identifier}" class="collapse" data-bs-parent=".plone-toolbar-main"
+      <div id="collapse-${identifier}" class="collapse" data-bs-parent="#edit-zone"
              tal:condition="submenu | nothing">
 
         <ul class="nav nav-pills flex-column small">
-          <li tal:repeat="subMenuItem submenu" class="ps-3">
+          <li tal:repeat="subMenuItem submenu">
             <tal:block define="extra_class subMenuItem/extra/class | string:">
             <a class="nav-link ${extra_class}"
                 href="#"
@@ -77,5 +76,6 @@
         </ul>
       </div>
     </li>
+    </tal:def>
   </tal:menus>
 </tal:contentactionmenus>
