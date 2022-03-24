@@ -51,6 +51,7 @@ class IContentMenuItem(Interface):
 #   stateTitle   :   The title of the state - to be displayed after the main
 #                        item title
 #   class        :   A CSS class to apply
+#   icon         :   Icon name from registry
 #   separator    :   True if the item should be preceded by a separator
 #   hideChildren :   True if the item's children should not be rendered
 
