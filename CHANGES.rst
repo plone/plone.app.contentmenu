@@ -8,6 +8,18 @@ Changelog
 
 .. towncrier release notes start
 
+3.0.0a1 (2022-04-04)
+--------------------
+
+Breaking changes:
+
+
+- Changes for new Plone 6 toolbar.
+  [petschki] (#30)
+- Use Plone 6 icon resolver and SVG icons.
+  [agitator] (#30)
+
+
 2.3.4 (2021-09-15)
 ------------------
 
