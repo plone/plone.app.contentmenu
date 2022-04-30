@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from plone.app.contentmenu.interfaces import IDisplayViewsMenu
 from zope.browsermenu.menu import BrowserMenu
 from zope.component import getAdapters

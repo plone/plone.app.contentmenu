@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from zope.browsermenu.interfaces import IBrowserMenu
 from zope.browsermenu.interfaces import IBrowserSubMenuItem
 from zope.browsermenu.interfaces import IMenuItemType

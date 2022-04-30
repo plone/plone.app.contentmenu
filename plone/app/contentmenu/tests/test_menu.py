@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from plone.app.contentmenu.interfaces import IActionsMenu
 from plone.app.contentmenu.interfaces import IDisplayMenu
 from plone.app.contentmenu.interfaces import IFactoriesMenu
@@ -257,7 +256,7 @@ class TestDisplayMenu(unittest.TestCase):
             x for x in actions if x["extra"]["id"] == "contextDefaultPageDisplay"
         ][0]
         changeAction["title"].default
-        self.assertEqual(u"New Document", changeAction["title"].mapping["contentitem"])
+        self.assertEqual("New Document", changeAction["title"].mapping["contentitem"])
 
 
 class TestFactoriesMenu(unittest.TestCase):
@@ -295,7 +294,7 @@ class TestFactoriesMenu(unittest.TestCase):
         self.assertIn("custom_expr", urls)
         if self.is_dx:
             self.assertIn(
-                "{0}/++add++File".format(self.folder.absolute_url()),
+                f"{self.folder.absolute_url()}/++add++File",
                 urls,
             )
         else:
@@ -645,7 +644,7 @@ class TestManagePortletsMenu(unittest.TestCase):
         base_url = self.folder.doc1.absolute_url()
         url_plone5 = "{0}/@@topbar-manage-portlets/plone.leftcolumn"
         url_plone5 = url_plone5.format(base_url)
-        url_plone4 = "{0}/manage-portlets".format(base_url)
+        url_plone4 = f"{base_url}/manage-portlets"
         urls = [a["action"].split("?_authenticator")[0] for a in actions]
         self.assertIn(url_plone5, urls)
         self.assertIn(url_plone4, urls)
@@ -719,7 +718,7 @@ class TestContentMenu(unittest.TestCase):
             i for i in items if i["extra"]["id"] == "plone-contentmenu-display"
         ][0]
         selected = [a for a in displayMenuItem["submenu"] if a["selected"]][0]
-        self.assertEqual(u"Foo", selected["title"].mapping["contentitem"])
+        self.assertEqual("Foo", selected["title"].mapping["contentitem"])
 
     def testDisplayMenuNotIncludedIfNoActionsAvailable(self):
         self.folder.invokeFactory("Document", "doc1")
@@ -924,7 +923,7 @@ class TestDisplayViewsMenu(unittest.TestCase):
             # Pre Plone 5
             item = self._getMenuItemByAction("folder_summary_view")
         self.assertFalse(item is None)
-        self.assertEqual(item.title, u"Summary view")
+        self.assertEqual(item.title, "Summary view")
 
     def testViewAction(self):
         """Retrieve a registered IBrowserMenuItem"""

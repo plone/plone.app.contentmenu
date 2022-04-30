@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from plone.app.contentmenu.interfaces import IContentMenuView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.browsermenu.interfaces import IBrowserMenu
