@@ -14,24 +14,25 @@ class PloneAppContentmenu(PloneSandboxLayer):
     def setUpZope(self, app, configurationContext):
         # Load ZCML
         import plone.app.contentmenu
-        xmlconfig.file('configure.zcml',
-                       plone.app.contentmenu,
-                       context=configurationContext)
+
+        xmlconfig.file(
+            "configure.zcml", plone.app.contentmenu, context=configurationContext
+        )
 
 
 PLONE_APP_CONTENTMENU_FIXTURE = PloneAppContentmenu()
 PLONE_APP_CONTENTMENU_INTEGRATION_TESTING = IntegrationTesting(
-    bases=(PLONE_APP_CONTENTMENU_FIXTURE, ),
-    name='PloneAppContentmenu:Integration')
+    bases=(PLONE_APP_CONTENTMENU_FIXTURE,), name="PloneAppContentmenu:Integration"
+)
 PLONE_APP_CONTENTMENU_FUNCTIONAL_TESTING = FunctionalTesting(
-    bases=(PLONE_APP_CONTENTMENU_FIXTURE, ),
-    name='PloneAppContentmenu:Functional')
+    bases=(PLONE_APP_CONTENTMENU_FIXTURE,), name="PloneAppContentmenu:Functional"
+)
 
 
 # Dexterity test layers
 PLONE_APP_CONTENTMENU_DX_INTEGRATION_TESTING = IntegrationTesting(
-    bases=(PLONE_APP_CONTENTTYPES_FIXTURE, ),
-    name='PloneAppContentmenuDX:Integration')
+    bases=(PLONE_APP_CONTENTTYPES_FIXTURE,), name="PloneAppContentmenuDX:Integration"
+)
 PLONE_APP_CONTENTMENU_DX_FUNCTIONAL_TESTING = FunctionalTesting(
-    bases=(PLONE_APP_CONTENTTYPES_FIXTURE, ),
-    name='PloneAppContentmenuDX:Functional')
+    bases=(PLONE_APP_CONTENTTYPES_FIXTURE,), name="PloneAppContentmenuDX:Functional"
+)

@@ -9,10 +9,9 @@ from zope.interface import implementer
 
 @implementer(IContentMenuView)
 class ContentMenuProvider(ContentProviderBase):
-    """Content menu provider for the "view" tab: displays the menu
-    """
+    """Content menu provider for the "view" tab: displays the menu"""
 
-    index = ViewPageTemplateFile('contentmenu.pt')
+    index = ViewPageTemplateFile("contentmenu.pt")
 
     def render(self):
         return self.index()
@@ -23,6 +22,6 @@ class ContentMenuProvider(ContentProviderBase):
         return True
 
     def menu(self):
-        menu = getUtility(IBrowserMenu, name='plone_contentmenu')
+        menu = getUtility(IBrowserMenu, name="plone_contentmenu")
         items = menu.getMenuItems(self.context, self.request)
         return items
