@@ -81,7 +81,6 @@ class TestDisplayMenu(unittest.TestCase):
             IBrowserMenu, name="plone_contentmenu_display", context=self.folder
         )
         self.request = self.layer["request"]
-        self.is_dx = self.folder.meta_type == "Dexterity Container"
 
     def testActionsMenuImplementsIBrowserMenu(self):
         self.assertTrue(IBrowserMenu.providedBy(self.menu))
@@ -102,8 +101,7 @@ class TestDisplayMenu(unittest.TestCase):
 
     def testSingleTemplateIncluded(self):
         self.folder.invokeFactory("Document", "doc1")
-        if self.is_dx:
-            set_browserlayer(self.request)
+        set_browserlayer(self.request)
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
         self.assertEqual(len(actions), 1)
         self.assertEqual(
@@ -131,11 +129,8 @@ class TestDisplayMenu(unittest.TestCase):
 
     def testDefaultPageIncludesParentAndItemViewsWhenItemHasMultipleViews(self):  # noqa
         fti = self.portal.portal_types["Document"]
-        if self.is_dx:
-            documentViews = fti.view_methods + ("content-core",)
-            set_browserlayer(self.request)
-        else:
-            documentViews = fti.view_methods + ("base_view",)
+        documentViews = fti.view_methods + ("content-core",)
+        set_browserlayer(self.request)
         fti.manage_changeProperties(view_methods=documentViews)
         self.folder.invokeFactory("Document", "doc1")
         self.folder.setDefaultPage("doc1")
@@ -145,16 +140,10 @@ class TestDisplayMenu(unittest.TestCase):
             "plone-contentmenu-display-document_view",
             [a["extra"]["id"] for a in actions],
         )
-        if self.is_dx:
-            self.assertIn(
-                "plone-contentmenu-display-content-core",
-                [a["extra"]["id"] for a in actions],
-            )
-        else:
-            self.assertIn(
-                "plone-contentmenu-display-base_view",
-                [a["extra"]["id"] for a in actions],
-            )
+        self.assertIn(
+            "plone-contentmenu-display-content-core",
+            [a["extra"]["id"] for a in actions],
+        )
 
     def testCurrentTemplateSelected(self):
         self.folder.getLayout()
@@ -223,11 +212,8 @@ class TestDisplayMenu(unittest.TestCase):
 
     def testSeparatorsIncludedWhenViewingDefaultPageWithViews(self):
         fti = self.portal.portal_types["Document"]
-        if self.is_dx:
-            documentViews = fti.view_methods + ("content-core",)
-            set_browserlayer(self.request)
-        else:
-            documentViews = fti.view_methods + ("base_view",)
+        documentViews = fti.view_methods + ("content-core",)
+        set_browserlayer(self.request)
         fti.manage_changeProperties(view_methods=documentViews)
         self.folder.invokeFactory("Document", "doc1")
         self.folder.setDefaultPage("doc1")
@@ -239,8 +225,7 @@ class TestDisplayMenu(unittest.TestCase):
     def testSeparatorsNotIncludedWhenViewingDefaultPageWithoutViews(self):
         self.folder.invokeFactory("Document", "doc1")
         self.folder.setDefaultPage("doc1")
-        if self.is_dx:
-            set_browserlayer(self.request)
+        set_browserlayer(self.request)
         self.assertEqual(len(self.folder.doc1.getAvailableLayouts()), 1)
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
         ids = [a["extra"]["id"] for a in actions]
@@ -285,7 +270,6 @@ class TestFactoriesMenu(unittest.TestCase):
             IBrowserMenu, name="plone_contentmenu_factory", context=self.folder
         )
         self.request = self.layer["request"]
-        self.is_dx = self.folder.meta_type == "Dexterity Container"
 
     def testMenuImplementsIBrowserMenu(self):
         self.assertTrue(IBrowserMenu.providedBy(self.menu))
@@ -305,19 +289,10 @@ class TestFactoriesMenu(unittest.TestCase):
         actions = self.menu.getMenuItems(self.folder, self.request)
         urls = [a["action"] for a in actions]
         self.assertIn("custom_expr", urls)
-        if self.is_dx:
-            self.assertIn(
-                f"{self.folder.absolute_url()}/++add++File",
-                urls,
-            )
-        else:
-            found = False
-            create_url = "{0}/createObject?type_name=File"
-            create_url = create_url.format(self.folder.absolute_url())
-            for url in urls:
-                if create_url in url:
-                    found = True
-            self.assertTrue(found)
+        self.assertIn(
+            f"{self.folder.absolute_url()}/++add++File",
+            urls,
+        )
 
     def testFrontPageExpressionContext(self):
         # If the expression context uses the front-page instead of the
@@ -338,19 +313,6 @@ class TestFactoriesMenu(unittest.TestCase):
             in [a["action"] for a in actions]
         )
 
-    def testTypeNameIsURLQuoted(self):
-        if self.is_dx:
-            # DX does not use plusquote
-            return
-        actions = self.menu.getMenuItems(self.folder, self.request)
-        found = False
-        for url in [a["action"] for a in actions]:
-            if (
-                self.folder.absolute_url() + "/createObject?type_name=News+Item" in url
-            ):  # noqa
-                found = True
-        self.assertTrue(found)
-
     def testMenuIncludesFactoriesOnNonFolderishContext(self):
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
         img = None
@@ -367,10 +329,7 @@ class TestFactoriesMenu(unittest.TestCase):
 
     def testNoAddableTypes(self):
         actions = self.menu.getMenuItems(self.portal, self.request)
-        if self.is_dx:
-            self.assertEqual(len(actions), 8)
-        else:
-            self.assertEqual(len(actions), 9)
+        self.assertEqual(len(actions), 8)
 
         # set no types for folders and check the menu is not shown
         folder_fti = self.portal.portal_types["Folder"]
@@ -396,31 +355,15 @@ class TestFactoriesMenu(unittest.TestCase):
             "http://nohost/plone/folder1/folder_constraintypes_form",
             actions[-1]["action"],
         )
-        if self.is_dx:
-            # DX has no Topics
-            self.assertEqual(len(actions), 9)
-            self.assertEqual(
-                "http://nohost/plone/folder1/++add++Document", actions[-2]["action"]
-            )
-        else:
-            self.assertEqual(len(actions), 10)
-            self.assertTrue(
-                "http://nohost/plone/folder1/createObject?type_name=Document"
-                in actions[-2]["action"]
-            )  # noqa
+        self.assertEqual(len(actions), 9)
+        self.assertEqual(
+            "http://nohost/plone/folder1/++add++Document", actions[-2]["action"]
+        )
 
         # test non-folderish default_page
         self.portal.setDefaultPage("doc1")
         actions = self.menu.getMenuItems(doc1, self.request)
-        if self.is_dx:
-            self.assertEqual(
-                "http://nohost/plone/++add++Document", actions[-1]["action"]
-            )
-        else:
-            self.assertTrue(
-                "http://nohost/plone/createObject?type_name=Document"
-                in actions[-1]["action"]
-            )  # noqa
+        self.assertEqual("http://nohost/plone/++add++Document", actions[-1]["action"])
 
         # test folderish default_page
         # We need to test a different folder than folder1 to beat memoize.
@@ -439,15 +382,7 @@ class TestFactoriesMenu(unittest.TestCase):
         )
         self.portal.setDefaultPage("folder3")
         actions = self.menu.getMenuItems(folder3, self.request)
-        if self.is_dx:
-            self.assertEqual(
-                "http://nohost/plone/++add++Document", actions[-1]["action"]
-            )
-        else:
-            self.assertTrue(
-                "http://nohost/plone/createObject?type_name=Document"
-                in actions[-1]["action"]
-            )  # noqa
+        self.assertEqual("http://nohost/plone/++add++Document", actions[-1]["action"])
 
     def testConstrainTypes(self):
         constraints = ISelectableConstrainTypes(self.folder)
@@ -531,7 +466,6 @@ class TestWorkflowMenu(unittest.TestCase):
             IBrowserMenu, name="plone_contentmenu_workflow", context=self.folder
         )
         self.request = self.layer["request"]
-        self.is_dx = self.folder.meta_type == "Dexterity Container"
 
     def testMenuImplementsIBrowserMenu(self):
         self.assertTrue(IBrowserMenu.providedBy(self.menu))
@@ -580,19 +514,6 @@ class TestWorkflowMenu(unittest.TestCase):
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
         self.assertEqual(len(actions), 0)
 
-    def testLockedItem(self):
-        if self.is_dx:
-            # dexterity has no locking ootb
-            # see https://github.com/plone/plone.app.contenttypes/issues/140
-            return
-        membership_tool = getToolByName(self.folder, "portal_membership")
-        membership_tool.addMember("anotherMember", "secret", ["Member"], [])
-        locking = ILockable(self.folder.doc1)
-        locking.lock()
-        login(self.portal, "anotherMember")
-        actions = self.menu.getMenuItems(self.folder.doc1, self.request)
-        self.assertEqual(len(actions), 0)
-
     def testAdvancedIncluded(self):
         actions = self.menu.getMenuItems(self.folder.doc1, self.request)
         url = self.folder.doc1.absolute_url() + "/content_status_history"
@@ -626,7 +547,6 @@ class TestManagePortletsMenu(unittest.TestCase):
             IBrowserMenu, name="plone_contentmenu_portletmanager", context=self.folder
         )
         self.request = self.layer["request"]
-        self.is_dx = self.folder.meta_type == "Dexterity Container"
 
     def testMenuImplementsIBrowserMenu(self):
         self.assertTrue(IBrowserMenu.providedBy(self.menu))
@@ -676,7 +596,6 @@ class TestContentMenu(unittest.TestCase):
             IBrowserMenu, name="plone_contentmenu", context=self.folder
         )
         self.request = self.layer["request"]
-        self.is_dx = self.folder.meta_type == "Dexterity Container"
 
     # Actions sub-menu
 
@@ -702,36 +621,6 @@ class TestContentMenu(unittest.TestCase):
             self.folder.absolute_url() + "/select_default_view",
         )
         self.assertTrue(len(displayMenuItem["submenu"]) > 0)
-
-    def testDisplayMenuNotIncludedIfContextDoesNotSupportBrowserDefault(self):
-        if self.is_dx:
-            # DX has no ATListCriterion
-            return
-        # We need to create an object that does not have
-        # IBrowserDefault enabled
-        unrestricted_construct_instance("ATListCriterion", self.folder, "c1")
-        items = self.menu.getMenuItems(self.folder.c1, self.request)
-        self.assertEqual(
-            [i for i in items if i["extra"]["id"] == "plone-contentmenu-display"], []
-        )
-
-    def testWhenContextDoesNotSupportSelectableBrowserDefault(self):
-        """Display Menu Show Folder Default Page When Context Does Not
-        Support Selectable Browser Default"""
-        if self.is_dx:
-            # DX has no ATListCriterion
-            return
-        # We need to create an object that is not
-        # ISelectableBrowserDefault aware
-        unrestricted_construct_instance("ATListCriterion", self.folder, "c1")
-        self.folder.c1.setTitle("Foo")
-        self.folder.setDefaultPage("c1")
-        items = self.menu.getMenuItems(self.folder.c1, self.request)
-        displayMenuItem = [
-            i for i in items if i["extra"]["id"] == "plone-contentmenu-display"
-        ][0]
-        selected = [a for a in displayMenuItem["submenu"] if a["selected"]][0]
-        self.assertEqual("Foo", selected["title"].mapping["contentitem"])
 
     def testDisplayMenuNotIncludedIfNoActionsAvailable(self):
         self.folder.invokeFactory("Document", "doc1")
@@ -932,9 +821,6 @@ class TestDisplayViewsMenu(unittest.TestCase):
             # The menuitem is there in 'real life' though.
             raise unittest.SkipTest("Fails with AT and this setup")
         item = self._getMenuItemByAction("summary_view")
-        if item is None:
-            # Pre Plone 5
-            item = self._getMenuItemByAction("folder_summary_view")
         self.assertFalse(item is None)
         self.assertEqual(item.title, "Summary view")
 
@@ -945,102 +831,14 @@ class TestDisplayViewsMenu(unittest.TestCase):
             # The menuitem is there in 'real life' though.
             raise unittest.SkipTest("Fails with AT and this setup")
         item = self._getMenuItemByAction("listing_view")
-        if item is None:
-            # Pre Plone 5
-            item = self._getMenuItemByAction("folder_listing")
         self.assertFalse(item is None)
         self.assertEqual(item.title, "Standard view")
         item = self._getMenuItemByAction("@@listing_view")
-        if item is None:
-            # Pre Plone 5
-            item = self._getMenuItemByAction("@@folder_listing")
         self.assertEqual(item.title, "Standard view")
         item = self._getMenuItemByAction("++view++listing_view")
-        if item is None:
-            # Pre Plone 5
-            item = self._getMenuItemByAction("++view++folder_listing")
         self.assertEqual(item.title, "Standard view")
 
     def testNonExisting(self):
         """Attempt to retrieve a non-registered IBrowserMenuItem"""
         item = self._getMenuItemByAction("nonesuch.html")
         self.assertTrue(item is None)
-
-
-if six.PY2:
-    from plone.app.contentmenu.testing import PloneAppContentmenu
-    from plone.app.testing import FunctionalTesting
-    from plone.app.testing import IntegrationTesting
-    from plone.testing import z2
-
-    class PloneAppContentmenuAT(PloneAppContentmenu):
-        def setUpZope(self, app, configurationContext):
-            # prepare installing Products.ATContentTypes
-            import Products.ATContentTypes
-
-            self.loadZCML(package=Products.ATContentTypes)
-
-            z2.installProduct(app, "Products.Archetypes")
-            z2.installProduct(app, "Products.ATContentTypes")
-            z2.installProduct(app, "plone.app.blob")
-            # prepare installing plone.app.collection
-            try:
-                pkg_resources.get_distribution("plone.app.collection")
-                z2.installProduct(app, "plone.app.collection")
-            except pkg_resources.DistributionNotFound:
-                pass
-
-        def tearDownZope(self, app):
-            try:
-                pkg_resources.get_distribution("plone.app.collection")
-                z2.uninstallProduct(app, "plone.app.collection")
-            except pkg_resources.DistributionNotFound:
-                pass
-            z2.uninstallProduct(app, "plone.app.blob")
-            z2.uninstallProduct(app, "Products.ATContentTypes")
-            z2.uninstallProduct(app, "Products.Archetypes")
-
-        def setUpPloneSite(self, portal):
-            portal.portal_workflow.setDefaultChain("simple_publication_workflow")
-            # install Products.ATContentTypes manually if profile is available
-            # (this is only needed for Plone >= 5)
-            profiles = [x["id"] for x in portal.portal_setup.listProfileInfo()]
-            if "Products.ATContentTypes:default" in profiles:
-                applyProfile(portal, "Products.ATContentTypes:default")
-
-            # install plone.app.collections manually if profile is available
-            # (this is only needed for Plone >= 5)
-            if "plone.app.collection:default" in profiles:
-                applyProfile(portal, "plone.app.collection:default")
-
-    # AT test layers
-    PLONE_APP_CONTENTMENU_AT_FIXTURE = PloneAppContentmenuAT()
-    PLONE_APP_CONTENTMENU_AT_INTEGRATION_TESTING = IntegrationTesting(
-        bases=(PLONE_APP_CONTENTMENU_AT_FIXTURE,),
-        name="PloneAppContentmenuAT:Integration",
-    )
-    PLONE_APP_CONTENTMENU_AT_FUNCTIONAL_TESTING = FunctionalTesting(
-        bases=(PLONE_APP_CONTENTMENU_AT_FIXTURE,),
-        name="PloneAppContentmenuAT:Functional",
-    )
-
-    class TestDisplayViewsMenuAT(TestDisplayViewsMenu):
-        layer = PLONE_APP_CONTENTMENU_AT_INTEGRATION_TESTING
-
-    class TestActionsMenuAT(TestActionsMenu):
-        layer = PLONE_APP_CONTENTMENU_AT_INTEGRATION_TESTING
-
-    class TestDisplayMenuAT(TestDisplayMenu):
-        layer = PLONE_APP_CONTENTMENU_AT_INTEGRATION_TESTING
-
-    class TestContentMenuAT(TestContentMenu):
-        layer = PLONE_APP_CONTENTMENU_AT_INTEGRATION_TESTING
-
-    class TestManagePortletsMenuAT(TestManagePortletsMenu):
-        layer = PLONE_APP_CONTENTMENU_AT_INTEGRATION_TESTING
-
-    class TestWorkflowMenuAT(TestWorkflowMenu):
-        layer = PLONE_APP_CONTENTMENU_AT_INTEGRATION_TESTING
-
-    class TestFactoriesMenuAT(TestFactoriesMenu):
-        layer = PLONE_APP_CONTENTMENU_AT_INTEGRATION_TESTING

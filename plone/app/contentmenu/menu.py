@@ -1,5 +1,7 @@
 from AccessControl import getSecurityManager
 from Acquisition import aq_base
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from html import escape
 from operator import itemgetter
 from plone.app.content.browser.folderfactories import _allowedTypes
@@ -71,7 +73,7 @@ class ActionsSubMenuItem(BrowserSubMenuItem):
     def action(self):
         folder = self.context
         if not self.context_state.is_structural_folder():
-            folder = utils.parent(self.context)
+            folder = aq_parent(aq_inner(self.context))
         return folder.absolute_url() + "/folder_contents"
 
     @memoize
@@ -187,7 +189,7 @@ class DisplaySubMenuItem(BrowserSubMenuItem):
 
         # If this is a default page, also get menu items relative to the parent
         if isDefaultPage:
-            folder = ISelectableBrowserDefault(utils.parent(self.context), None)
+            folder = ISelectableBrowserDefault(aq_parent(aq_inner(self.context)), None)
 
         if folder is not None:
             if folder.canSetDefaultPage():
@@ -222,7 +224,7 @@ class DisplaySubMenuItem(BrowserSubMenuItem):
         # if its folder_contents
         context = self.context
         if self.context_state.is_default_page():
-            context = utils.parent(context)
+            context = aq_parent(aq_inner(context))
         if not getattr(context, "isPrincipiaFolderish", False):
             return False
         elif "index_html" not in context:
@@ -245,7 +247,7 @@ class DisplayMenu(BrowserMenu):
         if isDefaultPage:
             # If this is a default page, also get menu items relative to thr
             # parent
-            parent = utils.parent(obj)
+            parent = aq_parent(aq_inner(obj))
             folder = ISelectableBrowserDefault(parent, None)
 
         folderLayouts = []
