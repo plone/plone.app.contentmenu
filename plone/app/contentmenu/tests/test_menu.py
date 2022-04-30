@@ -1,32 +1,45 @@
+from OFS.Folder import Folder
 from plone.app.contentmenu.interfaces import IActionsMenu
 from plone.app.contentmenu.interfaces import IDisplayMenu
 from plone.app.contentmenu.interfaces import IFactoriesMenu
 from plone.app.contentmenu.interfaces import IPortletManagerMenu
 from plone.app.contentmenu.interfaces import IWorkflowMenu
-from plone.app.contentmenu.testing import (
-    PLONE_APP_CONTENTMENU_DX_INTEGRATION_TESTING,
-)  # noqa
+from plone.app.contentmenu.testing import PLONE_APP_CONTENTMENU_DX_INTEGRATION_TESTING
 from plone.app.contenttypes.testing import set_browserlayer
 from plone.app.testing import applyProfile
 from plone.app.testing import login
 from plone.app.testing import logout
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
+from plone.base.interfaces import INonStructuralFolder
+from plone.base.interfaces import ISelectableConstrainTypes
+from plone.base.utils import get_installer
+from plone.base.utils import unrestricted_construct_instance
 from plone.locking.interfaces import ILockable
 from Products.CMFCore.Expression import Expression
 from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.interfaces import INonStructuralFolder
-from Products.CMFPlone.interfaces import ISelectableConstrainTypes
-from Products.CMFPlone.tests import dummy
-from Products.CMFPlone.utils import _createObjectByType
-from Products.CMFPlone.utils import get_installer
 from zope.browsermenu.interfaces import IBrowserMenu
 from zope.component import getUtility
 from zope.interface import directlyProvides
 
 import pkg_resources
-import six
 import unittest
+
+
+class DummyFolder(Folder):
+    """Dummy Folder
+    First-class Zope object. Can be _setObject'ed.
+    """
+
+    id = "dummy_folder"
+    meta_type = "Dummy Folder"
+
+    def __init__(self, id=None, title=None, **kw):
+        self.__dict__.update(kw)
+        if id is not None:
+            self.id = id
+        if title is not None:
+            self.title = title
 
 
 class TestActionsMenu(unittest.TestCase):
@@ -98,7 +111,7 @@ class TestDisplayMenu(unittest.TestCase):
         )
 
     def testNonBrowserDefaultReturnsNothing(self):
-        f = dummy.Folder()
+        f = DummyFolder()
         self.folder._setObject("f1", f)
         actions = self.menu.getMenuItems(self.folder.f1, self.request)
         self.assertEqual(len(actions), 0)
@@ -696,7 +709,7 @@ class TestContentMenu(unittest.TestCase):
             return
         # We need to create an object that does not have
         # IBrowserDefault enabled
-        _createObjectByType("ATListCriterion", self.folder, "c1")
+        unrestricted_construct_instance("ATListCriterion", self.folder, "c1")
         items = self.menu.getMenuItems(self.folder.c1, self.request)
         self.assertEqual(
             [i for i in items if i["extra"]["id"] == "plone-contentmenu-display"], []
@@ -710,7 +723,7 @@ class TestContentMenu(unittest.TestCase):
             return
         # We need to create an object that is not
         # ISelectableBrowserDefault aware
-        _createObjectByType("ATListCriterion", self.folder, "c1")
+        unrestricted_construct_instance("ATListCriterion", self.folder, "c1")
         self.folder.c1.setTitle("Foo")
         self.folder.setDefaultPage("c1")
         items = self.menu.getMenuItems(self.folder.c1, self.request)

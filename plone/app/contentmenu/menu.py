@@ -1,5 +1,6 @@
 from AccessControl import getSecurityManager
 from Acquisition import aq_base
+from html import escape
 from operator import itemgetter
 from plone.app.content.browser.folderfactories import _allowedTypes
 from plone.app.contentmenu import PloneMessageFactory as _
@@ -13,6 +14,10 @@ from plone.app.contentmenu.interfaces import IPortletManagerMenu
 from plone.app.contentmenu.interfaces import IPortletManagerSubMenuItem
 from plone.app.contentmenu.interfaces import IWorkflowMenu
 from plone.app.contentmenu.interfaces import IWorkflowSubMenuItem
+from plone.base import utils
+from plone.base.interfaces.constrains import IConstrainTypes
+from plone.base.interfaces.constrains import ISelectableConstrainTypes
+from plone.base.interfaces.structure import INonStructuralFolder
 from plone.memoize.instance import memoize
 from plone.portlets.interfaces import ILocalPortletAssignable
 from plone.portlets.interfaces import IPortletManager
@@ -21,10 +26,6 @@ from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import _checkPermission
 from Products.CMFCore.utils import getToolByName
 from Products.CMFDynamicViewFTI.interfaces import ISelectableBrowserDefault
-from Products.CMFPlone import utils
-from Products.CMFPlone.interfaces.constrains import IConstrainTypes
-from Products.CMFPlone.interfaces.constrains import ISelectableConstrainTypes
-from Products.CMFPlone.interfaces.structure import INonStructuralFolder
 from zope.browsermenu.menu import BrowserMenu
 from zope.browsermenu.menu import BrowserSubMenuItem
 from zope.component import getMultiAdapter
@@ -38,19 +39,11 @@ import pkg_resources
 
 PMF = _  # used for dynamic messages we don't want to extract
 
-
-try:
-    from html import escape
-except ImportError:
-    from cgi import escape
-
 try:
     pkg_resources.get_distribution("Products.CMFPlacefulWorkflow")
     from Products.CMFPlacefulWorkflow.permissions import ManageWorkflowPolicies
 except pkg_resources.DistributionNotFound:
-    from Products.CMFCore.permissions import (
-        ManagePortal as ManageWorkflowPolicies,
-    )  # noqa
+    from Products.CMFCore.permissions import ManagePortal as ManageWorkflowPolicies
 
 
 @implementer(IActionsSubMenuItem)
@@ -324,9 +317,7 @@ class DisplayMenu(BrowserMenu):
                     "title": _(
                         "label_item_selected",
                         default="Item: ${contentitem}",
-                        mapping={
-                            "contentitem": escape(utils.safe_unicode(obj.Title()))
-                        },
+                        mapping={"contentitem": escape(utils.safe_text(obj.Title()))},
                     ),
                     "description": "",
                     "action": None,
@@ -499,7 +490,7 @@ class DisplayMenu(BrowserMenu):
                                 default="Item: ${contentitem}",
                                 mapping={
                                     "contentitem": escape(
-                                        utils.safe_unicode(defaultPageTitle)
+                                        utils.safe_text(defaultPageTitle)
                                     )
                                 },
                             ),

@@ -38,25 +38,13 @@ setup(
         test=[
             "plone.app.testing",
             "plone.app.contenttypes",
-            "six",
         ]
     ),
     install_requires=[
         "setuptools",
-        "plone.locking",
+        "plone.base" "plone.locking",
         "plone.memoize",
         "plone.app.content >=2.0a3",
-        "zope.browsermenu",
-        "zope.component",
-        "zope.contentprovider",
-        "zope.interface",
-        "zope.i18n",
-        "zope.i18nmessageid",
-        "zope.publisher",
-        "Acquisition",
-        "Products.CMFCore",
-        "Products.CMFDynamicViewFTI",
         "plone.protect >= 3.0.0a1",
-        "Zope2",
     ],
 )
