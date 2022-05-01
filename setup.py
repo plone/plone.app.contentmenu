@@ -42,7 +42,8 @@ setup(
     ),
     install_requires=[
         "setuptools",
-        "plone.base" "plone.locking",
+        "plone.base",
+        "plone.locking",
         "plone.memoize",
         "plone.app.content >=2.0a3",
         "plone.protect >= 3.0.0a1",
