@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from zope.browsermenu.interfaces import IBrowserMenu
 from zope.browsermenu.interfaces import IBrowserSubMenuItem
 from zope.browsermenu.interfaces import IMenuItemType
@@ -14,8 +13,7 @@ class IContentMenuView(IContentProvider):
     """
 
     def available():
-        """Determine whether the menu should be displayed at all.
-        """
+        """Determine whether the menu should be displayed at all."""
 
     def menu():
         """Create a list of dicts that can be used to render a menu.
@@ -24,6 +22,7 @@ class IContentMenuView(IContentProvider):
         selected (a boolean), icon (a URI), extra (a random payload), and
         submenu
         """
+
 
 # The content menu itself - menu items are registered as adapters to this
 # interface (this is signalled by marking the interface itself with the
@@ -57,8 +56,7 @@ class IContentMenuItem(Interface):
 
 
 class IActionsSubMenuItem(IBrowserSubMenuItem):
-    """The menu item linking to the actions menu.
-    """
+    """The menu item linking to the actions menu."""
 
 
 class IActionsMenu(IBrowserMenu):
@@ -69,8 +67,7 @@ class IActionsMenu(IBrowserMenu):
 
 
 class IDisplaySubMenuItem(IBrowserSubMenuItem):
-    """The menu item linking to the display menu.
-    """
+    """The menu item linking to the display menu."""
 
     def disabled(self):
         """Find out if the menu is visible but disabled."""
@@ -84,8 +81,7 @@ class IDisplayMenu(IBrowserMenu):
 
 
 class IFactoriesSubMenuItem(IBrowserSubMenuItem):
-    """The menu item linking to the factories menu.
-    """
+    """The menu item linking to the factories menu."""
 
 
 class IFactoriesMenu(IBrowserMenu):
@@ -97,8 +93,7 @@ class IFactoriesMenu(IBrowserMenu):
 
 
 class IWorkflowSubMenuItem(IBrowserSubMenuItem):
-    """The menu item linking to the workflow menu.
-    """
+    """The menu item linking to the workflow menu."""
 
 
 class IWorkflowMenu(IBrowserMenu):
@@ -110,8 +105,7 @@ class IWorkflowMenu(IBrowserMenu):
 
 
 class IPortletManagerSubMenuItem(IBrowserSubMenuItem):
-    """The menu item linking to the portlet manager menu.
-    """
+    """The menu item linking to the portlet manager menu."""
 
 
 class IPortletManagerMenu(IBrowserMenu):

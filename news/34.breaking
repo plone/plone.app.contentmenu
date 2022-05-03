@@ -1,0 +1,2 @@
+Use plone.base. Remove six and Archetypes specific code.
+[jensens]
