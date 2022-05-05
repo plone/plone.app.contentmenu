@@ -1,4 +1,6 @@
 from plone.app.contentmenu.interfaces import IContentMenuView
+from plone.registry.interfaces import IRegistry
+from Products.CMFPlone.interfaces.controlpanel import ISiteSchema
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.browsermenu.interfaces import IBrowserMenu
 from zope.component import getUtility
@@ -19,6 +21,11 @@ class ContentMenuProvider(ContentProviderBase):
 
     def available(self):
         return True
+
+    def toolbar_position(self):
+        registry = getUtility(IRegistry)
+        settings = registry.forInterface(ISiteSchema, prefix="plone", check=False)
+        return settings.toolbar_position
 
     def menu(self):
         menu = getUtility(IBrowserMenu, name="plone_contentmenu")

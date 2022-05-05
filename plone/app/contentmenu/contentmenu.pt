@@ -1,12 +1,13 @@
 <tal:contentactionmenus
     condition="view/available"
     define="menu view/menu;
-            icons python:context.restrictedTraverse('@@iconresolver');"
+            icons python:context.restrictedTraverse('@@iconresolver');
+            toolbar_pos view/toolbar_position"
     i18n:domain="plone">
   <tal:menus repeat="menuItem menu">
     <tal:def define="submenu menuItem/submenu;
                      identifier menuItem/extra/id">
-    <li tal:attributes="id menuItem/extra/id">
+    <li id="${menuItem/extra/id}" class="${python:'dropend' if (submenu and toolbar_pos == 'side') else ''}">
 
       <a href="#"
           i18n:attributes="title;"
@@ -15,66 +16,67 @@
                           title menuItem/description;"
           tal:define="state_class menuItem/extra/class | nothing;
                       state_class python:'label-%s' % state_class if state_class else ''"
-          class="nav-link${python:' dropdown-toggle collapsed' if submenu else ''}"
-          data-bs-toggle="collapse"
-          data-bs-target="#collapse-${identifier}"
-          aria-expanded="${python:'false' if submenu else None}">
+          class="${python:'nav-link dropdown-toggle' if submenu else ''}"
+          data-bs-toggle="dropdown"
+          data-bs-offset="0,0"
+          aria-expanded="${python:'false' if submenu else ''}">
 
         <tal:icon tal:replace="structure python:icons.tag(menuItem.get('icon','') and menuItem['icon'] or 'toolbar-action', tag_alt=menuItem.get('id','toolbarIcon'), tag_class='me-1')" />
 
-        <span
-            i18n:translate=""
-            tal:replace="menuItem/title">
-            Menu Title
-        </span>
-        <span
-            i18n:translate=""
-            class="ms-1 ${state_class}"
-            tal:content="menuItem/extra/stateTitle | nothing">
-              State title
+        <span class="toolbar-label">
+          <span
+              i18n:translate=""
+              tal:replace="menuItem/title">
+              Menu Title
+          </span>
+          <span
+              i18n:translate=""
+              class="ms-1 ${state_class}"
+              tal:content="menuItem/extra/stateTitle | nothing">
+                State title
+          </span>
         </span>
 
       </a>
 
-      <div id="collapse-${identifier}" class="collapse" data-bs-parent="#edit-zone"
-             tal:condition="submenu | nothing">
+      <ul class="dropdown-menu" tal:condition="submenu | nothing">
+        <li>
+          <h6 class="dropdown-header">${menuItem/title}</h6>
+        </li>
+        <li tal:repeat="subMenuItem submenu">
+          <tal:block define="extra_class subMenuItem/extra/class | string:">
+          <a class="dropdown-item ${extra_class}"
+              href="#"
+              i18n:attributes="title"
+              tal:attributes="href subMenuItem/action;
+                              title subMenuItem/description;
+                              id subMenuItem/extra/id | nothing;
+                              data-pat-plone-modal subMenuItem/extra/modal | nothing;"
+              tal:condition="subMenuItem/action">
 
-        <ul class="nav nav-pills flex-column small">
-          <li tal:repeat="subMenuItem submenu">
-            <tal:block define="extra_class subMenuItem/extra/class | string:">
-            <a class="nav-link ${extra_class}"
-                href="#"
-                i18n:attributes="title"
-                tal:attributes="href subMenuItem/action;
-                                title subMenuItem/description;
-                                id subMenuItem/extra/id | nothing;
-                                data-pat-plone-modal subMenuItem/extra/modal | nothing;"
-                tal:condition="subMenuItem/action">
+              <tal:icon tal:replace="structure python:icons.tag('check' if 'active' in extra_class else (subMenuItem.get('icon') or 'dot'), tag_alt=subMenuItem['title'])" />
 
-                <tal:icon tal:replace="structure python:icons.tag('check' if 'active' in extra_class else (subMenuItem.get('icon') or 'dot'), tag_alt=subMenuItem['title'], tag_class='me-1')" />
-
-              <tal:title
-                  content="structure subMenuItem/title"
-                  i18n:translate="">
-                    Title
-                </tal:title>
-            </a>
-            <span class="nav-link ${extra_class}"
+            <tal:title
+                content="structure subMenuItem/title"
+                i18n:translate="">
+                  Title
+            </tal:title>
+            <span class="${extra_class}"
                 tal:attributes="id subMenuItem/extra/id | nothing"
                 tal:condition="not:subMenuItem/action">
                 <tal:icon tal:condition="python:'active' in extra_class"
-                          tal:replace="structure python:icons.tag('check', tag_class='me-1')" />
+                          tal:replace="structure python:icons.tag('check')" />
                 <span
                   i18n:translate=""
                   tal:replace="structure subMenuItem/title">
                     Title
                 </span>
             </span>
-            </tal:block>
-          </li>
-          <li class="border-top my-2" tal:condition="not:repeat/menuItem/end"></li>
-        </ul>
-      </div>
+          </a>
+          </tal:block>
+        </li>
+      </ul>
+
     </li>
     </tal:def>
   </tal:menus>
