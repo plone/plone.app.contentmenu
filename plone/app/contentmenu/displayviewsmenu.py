@@ -1,9 +1,7 @@
-from AccessControl.SecurityManagement import getSecurityManager
+from AccessControl.security import checkPermission
 from plone.app.contentmenu.interfaces import IDisplayViewsMenu
 from zope.browsermenu.menu import BrowserMenu
 from zope.component import getAdapters
-from zope.component import getUtility
-from zope.security.interfaces import IPermission
 from zope.interface import implementer
 
 
@@ -16,8 +14,6 @@ class DisplayViewsMenu(BrowserMenu):
         if action.startswith("++view++"):
             action = action[8:]
 
-        sm = getSecurityManager()
-
         for name, item in getAdapters(
             (context, request), self.getMenuItemType()
         ):
@@ -26,7 +22,7 @@ class DisplayViewsMenu(BrowserMenu):
             if item_action.startswith("@@"):
                 item_action = item_action[2:]
 
-            if item_action == action:
-                permission = getUtility(IPermission, name=item.permission)
-                if sm.checkPermission(permission.title, context):
-                    return item
+            if item_action == action and checkPermission(
+                item.permission, context
+            ):
+                return item
