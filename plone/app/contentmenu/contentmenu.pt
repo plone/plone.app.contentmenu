@@ -15,7 +15,7 @@
                           title menuItem/description;"
           tal:define="state_class menuItem/extra/class | nothing;
                       state_class python:'label-%s' % state_class if state_class else ''"
-          class="${python:'nav-link dropdown-toggle collapsed' if submenu else ''}"
+          class="nav-link${python:' dropdown-toggle collapsed' if submenu else ''}"
           data-bs-toggle="collapse"
           data-bs-target="#collapse-${identifier}"
           aria-expanded="${python:'false' if submenu else None}">
