@@ -8,6 +8,24 @@ Changelog
 
 .. towncrier release notes start
 
+3.0.0a2 (2022-05-15)
+--------------------
+
+Breaking changes:
+
+
+- Use plone.base. Remove six and Archetypes specific code.
+  [jensens] (#34)
+
+
+Bug fixes:
+
+
+- Fixed permission handling on browser:menuItem [iham] (#26) (#26)
+- Fix contentview actions without submenu
+  [petschki] (#36)
+
+
 3.0.0a1 (2022-04-04)
 --------------------
 
