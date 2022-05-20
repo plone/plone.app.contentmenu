@@ -21,7 +21,7 @@
           data-bs-offset="0,0"
           aria-expanded="${python:'false' if submenu else ''}">
 
-        <tal:icon tal:replace="structure python:icons.tag(menuItem.get('icon','') and menuItem['icon'] or 'toolbar-action', tag_alt=menuItem.get('id','toolbarIcon'), tag_class='me-1')" />
+        <tal:icon tal:replace="structure python:icons.tag(menuItem.get('icon','') and menuItem['icon'] or 'toolbar-action', tag_class='me-1')" />
 
         <span class="toolbar-label">
           <span
@@ -54,7 +54,7 @@
                               data-pat-plone-modal subMenuItem/extra/modal | nothing;"
               tal:condition="subMenuItem/action">
 
-              <tal:icon tal:replace="structure python:icons.tag('check' if 'active' in extra_class else (subMenuItem.get('icon') or 'dot'), tag_alt=subMenuItem['title'])" />
+              <tal:icon tal:replace="structure python:icons.tag('check' if 'active' in extra_class else (subMenuItem.get('icon') or 'dot'))" />
 
             <tal:title
                 content="structure subMenuItem/title"
