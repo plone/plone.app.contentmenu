@@ -8,6 +8,23 @@ Changelog
 
 .. towncrier release notes start
 
+3.0.0a3 (2022-05-24)
+--------------------
+
+New features:
+
+
+- Reimplement dropout toolbar submenus and collapsed icons
+  [petschki] (#35)
+
+
+Bug fixes:
+
+
+- Remove alt tags from icons within links.
+  [agitator] (#38)
+
+
 3.0.0a2 (2022-05-15)
 --------------------
 
