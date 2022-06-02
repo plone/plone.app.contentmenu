@@ -37,6 +37,7 @@ from zope.component import queryMultiAdapter
 from zope.interface import implementer
 
 import pkg_resources
+import json
 
 
 PMF = _  # used for dynamic messages we don't want to extract
@@ -468,6 +469,11 @@ class DisplayMenu(BrowserMenu):
                                     "id": "contextSetDefaultPage",
                                     "separator": None,
                                     "class": "pat-plone-modal",
+                                    "modal": json.dumps({
+                                        "actionOptions": {
+                                            "redirectOnResponse": True,
+                                        },
+                                    }),
                                 },
                                 "submenu": None,
                             }
@@ -528,6 +534,11 @@ class DisplayMenu(BrowserMenu):
                                     "id": "contextChangeDefaultPage",
                                     "separator": None,
                                     "class": "pat-plone-modal",
+                                    "modal": json.dumps({
+                                        "actionOptions": {
+                                            "redirectOnResponse": True,
+                                        },
+                                    }),
                                 },
                                 "submenu": None,
                             }
