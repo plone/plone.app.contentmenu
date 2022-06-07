@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+3.0.0a4 (2022-06-07)
+--------------------
+
+Bug fixes:
+
+
+- Fix redirect when selecting an item as default view.
+  [petschki] (#3548)
+
+
 3.0.0a3 (2022-05-24)
 --------------------
 
