@@ -16,12 +16,12 @@
                           title menuItem/description;"
           tal:define="state_class menuItem/extra/class | nothing;
                       state_class python:'label-%s' % state_class if state_class else ''"
-          class="${python:'nav-link dropdown-toggle' if submenu else ''}"
+          class="${python:'nav-link dropdown-toggle' if submenu else 'nav-link'}"
           data-bs-toggle="dropdown"
           data-bs-offset="0,0"
           aria-expanded="${python:'false' if submenu else ''}">
 
-        <tal:icon tal:replace="structure python:icons.tag(menuItem.get('icon','') and menuItem['icon'] or 'toolbar-action', tag_class='me-1')" />
+        <tal:icon tal:replace="structure python:icons.tag(menuItem.get('icon','') and menuItem['icon'] or 'toolbar-action', tag_class='')" />
 
         <span class="toolbar-label">
           <span
@@ -31,7 +31,7 @@
           </span>
           <span
               i18n:translate=""
-              class="ms-1 ${state_class}"
+              class="${state_class}"
               tal:content="menuItem/extra/stateTitle | nothing">
                 State title
           </span>
@@ -45,7 +45,7 @@
         </li>
         <li tal:repeat="subMenuItem submenu">
           <tal:block define="extra_class subMenuItem/extra/class | string:">
-          <a class="dropdown-item ${extra_class}"
+          <a class="nav-link dropdown-item ${extra_class}"
               href="#"
               i18n:attributes="title"
               tal:attributes="href subMenuItem/action;
