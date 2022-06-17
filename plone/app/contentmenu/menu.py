@@ -910,7 +910,7 @@ class WorkflowMenu(BrowserMenu):
                     {
                         "title": _("workflow_policy", default="Policy..."),
                         "description": "",
-                        "action": url + "/placeful_workflow_configuration",
+                        "action": url + "/@@placeful-workflow-configuration",
                         "selected": False,
                         "icon": None,
                         "extra": {
