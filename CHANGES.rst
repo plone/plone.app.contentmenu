@@ -8,6 +8,18 @@ Changelog
 
 .. towncrier release notes start
 
+3.0.0b1 (2022-06-23)
+--------------------
+
+Bug fixes:
+
+
+- Toolbar width and wrapping tweaks.
+  [agitator] (#40)
+- adjust workflow policies link target
+  [1letter] (#41)
+
+
 3.0.0a4 (2022-06-07)
 --------------------
 
