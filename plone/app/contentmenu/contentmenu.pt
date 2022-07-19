@@ -7,7 +7,7 @@
   <tal:menus repeat="menuItem menu">
     <tal:def define="submenu menuItem/submenu;
                      identifier menuItem/extra/id">
-    <li id="${menuItem/extra/id}" class="${python:'dropend' if (submenu and toolbar_pos == 'side') else ''}">
+    <li id="${menuItem/extra/id}" class="${menuItem/extra/li_class|nothing} ${python:'dropend' if (submenu and toolbar_pos == 'side') else ''}">
 
       <a href="#"
           i18n:attributes="title;"
