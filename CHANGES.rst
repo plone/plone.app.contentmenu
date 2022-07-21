@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+3.0.0b2 (2022-07-21)
+--------------------
+
+Bug fixes:
+
+
+- Fix missing `menuItem/extra/li_class`.
+  [petschki] (#43)
+
+
 3.0.0b1 (2022-06-23)
 --------------------
 
