@@ -45,6 +45,13 @@
         </li>
         <li tal:repeat="subMenuItem submenu">
           <tal:block define="extra_class subMenuItem/extra/class | string:">
+          <h6 class="dropdown-header" tal:condition="subMenuItem/extra/separator|nothing">
+            <tal:title
+                content="structure subMenuItem/title"
+                i18n:translate="">
+                  Title
+            </tal:title>
+          </h6>
           <a class="nav-link dropdown-item ${extra_class}"
               href="#"
               i18n:attributes="title"
