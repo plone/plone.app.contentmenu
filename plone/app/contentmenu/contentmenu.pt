@@ -45,13 +45,23 @@
         </li>
         <li tal:repeat="subMenuItem submenu">
           <tal:block define="extra_class subMenuItem/extra/class | string:">
-          <h6 class="dropdown-header" tal:condition="subMenuItem/extra/separator|nothing">
-            <tal:title
-                content="structure subMenuItem/title"
-                i18n:translate="">
-                  Title
-            </tal:title>
-          </h6>
+          <tal:noaction tal:condition="not:subMenuItem/action" tal:define="is_separator subMenuItem/extra/separator|nothing">
+            <h6 class="dropdown-header" tal:condition="is_separator">
+              <tal:title
+                  content="structure subMenuItem/title"
+                  i18n:translate="">
+                    Title
+              </tal:title>
+            </h6>
+            <span class="nav-link dropdown-item ${extra_class}" tal:condition="not:is_separator">
+              <tal:icon tal:replace="structure python:icons.tag('check' if 'active' in extra_class else (subMenuItem.get('icon') or 'dot'))" />
+              <tal:title
+                  content="structure subMenuItem/title"
+                  i18n:translate="">
+                    Title
+              </tal:title>
+            </span>
+          </tal:noaction>
           <a class="nav-link dropdown-item ${extra_class}"
               href="#"
               i18n:attributes="title"
