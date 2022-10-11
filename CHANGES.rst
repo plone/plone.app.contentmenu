@@ -8,6 +8,17 @@ Changelog
 
 .. towncrier release notes start
 
+3.0.0b3 (2022-10-11)
+--------------------
+
+Bug fixes:
+
+
+- Fix Display menu in toolbar doesn't show the current selected item and it's selected template correctly
+  https://github.com/plone/plone.app.layout/issues/321
+  [mamico] (#44)
+
+
 3.0.0b2 (2022-07-21)
 --------------------
 
