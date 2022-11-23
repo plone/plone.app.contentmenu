@@ -46,7 +46,7 @@ setup(
         "plone.base",
         "plone.locking",
         "plone.memoize",
-        "plone.app.content >=2.0a3",
-        "plone.protect >= 3.0.0a1",
+        "plone.app.content >= 2.0",
+        "plone.protect >= 3.0.0",
     ],
 )
