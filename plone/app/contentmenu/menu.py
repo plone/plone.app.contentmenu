@@ -1025,7 +1025,7 @@ class PortletManagerMenu(BrowserMenu):
                 ),
                 "description": manager_name,
                 "action": addTokenToUrl(
-                    "{}/@@topbar-manage-portlets/{}".format(current_url, manager_name),
+                    f"{current_url}/@@topbar-manage-portlets/{manager_name}",
                     request,
                 ),
                 "selected": False,
