@@ -43,7 +43,6 @@ class DummyFolder(Folder):
 
 
 class TestActionsMenu(unittest.TestCase):
-
     layer = PLONE_APP_CONTENTMENU_DX_INTEGRATION_TESTING
 
     def setUp(self):

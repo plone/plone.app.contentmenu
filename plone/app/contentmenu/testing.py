@@ -7,7 +7,6 @@ from zope.configuration import xmlconfig
 
 
 class PloneAppContentmenu(PloneSandboxLayer):
-
     defaultBases = (PLONE_FIXTURE,)
 
     def setUpZope(self, app, configurationContext):
