@@ -36,8 +36,8 @@ from zope.component import getUtility
 from zope.component import queryMultiAdapter
 from zope.interface import implementer
 
-import pkg_resources
 import json
+import pkg_resources
 
 
 PMF = _  # used for dynamic messages we don't want to extract
