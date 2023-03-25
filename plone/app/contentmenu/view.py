@@ -1,6 +1,6 @@
 from plone.app.contentmenu.interfaces import IContentMenuView
+from plone.base.interfaces.controlpanel import ISiteSchema
 from plone.registry.interfaces import IRegistry
-from Products.CMFPlone.interfaces.controlpanel import ISiteSchema
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.browsermenu.interfaces import IBrowserMenu
 from zope.component import getUtility
