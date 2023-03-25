@@ -95,7 +95,7 @@ in ``menu.py`` the class looks like so::
             """Return menu item entries in a TAL-friendly form."""
             results = []
 
-            # here a single item is added. do what needed to add several entrys
+            # here a single item is added. do what needed to add several entries
             results.append({
                 'title': 'My item 1',
                 'description': 'An my item',
