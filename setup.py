@@ -39,7 +39,7 @@ setup(
     extras_require=dict(
         test=[
             "plone.app.testing",
-            "plone.app.contenttypes",
+            "plone.app.contenttypes[test]",
         ]
     ),
     install_requires=[
@@ -49,5 +49,9 @@ setup(
         "plone.memoize",
         "plone.app.content >= 2.0",
         "plone.protect >= 3.0.0",
+        "plone.portlets",
+        "plone.registry",
+        "zope.browsermenu",
+        "zope.contentprovider",
     ],
 )

@@ -14,15 +14,11 @@ class DisplayViewsMenu(BrowserMenu):
         if action.startswith("++view++"):
             action = action[8:]
 
-        for name, item in getAdapters(
-            (context, request), self.getMenuItemType()
-        ):
+        for name, item in getAdapters((context, request), self.getMenuItemType()):
             item_action = item.action
             # Normalize menu item action; never uses ++view++
             if item_action.startswith("@@"):
                 item_action = item_action[2:]
 
-            if item_action == action and checkPermission(
-                item.permission, context
-            ):
+            if item_action == action and checkPermission(item.permission, context):
                 return item

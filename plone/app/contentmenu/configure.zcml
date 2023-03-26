@@ -1,46 +1,48 @@
-<configure xmlns="http://namespaces.zope.org/zope"
-           xmlns:browser="http://namespaces.zope.org/browser"
-           xmlns:five="http://namespaces.zope.org/five"
-           i18n_domain="plone">
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:five="http://namespaces.zope.org/five"
+    i18n_domain="plone"
+    >
 
   <!-- Top level menu -->
   <browser:menu
-    id="plone_contentmenu"
-    title="Content menu - contains contextual actions related to the content"
-    interface=".interfaces.IContentMenuItem"
-    />
+      id="plone_contentmenu"
+      title="Content menu - contains contextual actions related to the content"
+      interface=".interfaces.IContentMenuItem"
+      />
 
   <!-- Sub-menus -->
 
   <browser:menu
-    id="plone_contentmenu_actions"
-    title="The 'actions' menu - allows the user to execute actions on an object"
-    class=".menu.ActionsMenu"
-    />
+      id="plone_contentmenu_actions"
+      title="The 'actions' menu - allows the user to execute actions on an object"
+      class=".menu.ActionsMenu"
+      />
 
   <browser:menu
-    id="plone_contentmenu_display"
-    title="The 'display' menu - allows the user to select the view of an object"
-    class=".menu.DisplayMenu"
-    />
-
-   <browser:menu
-    id="plone_contentmenu_factory"
-    title="The 'add' menu - allows the user to add new content items in the context"
-    class=".menu.FactoriesMenu"
-    />
+      id="plone_contentmenu_display"
+      title="The 'display' menu - allows the user to select the view of an object"
+      class=".menu.DisplayMenu"
+      />
 
   <browser:menu
-    id="plone_contentmenu_workflow"
-    title="The 'workflow' menu - allows the user to execute workflow transitions"
-    class=".menu.WorkflowMenu"
-    />
+      id="plone_contentmenu_factory"
+      title="The 'add' menu - allows the user to add new content items in the context"
+      class=".menu.FactoriesMenu"
+      />
 
   <browser:menu
-    id="plone_contentmenu_portletmanager"
-    title="The 'portlet' menu - allows the user to manage portlets"
-    class=".menu.PortletManagerMenu"
-    />
+      id="plone_contentmenu_workflow"
+      title="The 'workflow' menu - allows the user to execute workflow transitions"
+      class=".menu.WorkflowMenu"
+      />
+
+  <browser:menu
+      id="plone_contentmenu_portletmanager"
+      title="The 'portlet' menu - allows the user to manage portlets"
+      class=".menu.PortletManagerMenu"
+      />
 
   <!--
     The menu items in the contentMenu are all sub-menu items. Unfortunately,
@@ -68,40 +70,55 @@
       manage portlets menu - order=50
   -->
 
-  <adapter for="* *"
-           name="plone.contentmenu.actions"
-           factory=".menu.ActionsSubMenuItem"
-           provides=".interfaces.IContentMenuItem" />
+  <adapter
+      factory=".menu.ActionsSubMenuItem"
+      provides=".interfaces.IContentMenuItem"
+      for="*
+           *"
+      name="plone.contentmenu.actions"
+      />
 
-  <adapter for="* *"
-           name="plone.contentmenu.display"
-           factory=".menu.DisplaySubMenuItem"
-           provides=".interfaces.IContentMenuItem" />
+  <adapter
+      factory=".menu.DisplaySubMenuItem"
+      provides=".interfaces.IContentMenuItem"
+      for="*
+           *"
+      name="plone.contentmenu.display"
+      />
 
-  <adapter for="* *"
-           name="plone.contentmenu.factories"
-           factory=".menu.FactoriesSubMenuItem"
-           provides=".interfaces.IContentMenuItem" />
+  <adapter
+      factory=".menu.FactoriesSubMenuItem"
+      provides=".interfaces.IContentMenuItem"
+      for="*
+           *"
+      name="plone.contentmenu.factories"
+      />
 
-  <adapter for="* *"
-           name="plone.contentmenu.workflow"
-           factory=".menu.WorkflowSubMenuItem"
-           provides=".interfaces.IContentMenuItem" />
+  <adapter
+      factory=".menu.WorkflowSubMenuItem"
+      provides=".interfaces.IContentMenuItem"
+      for="*
+           *"
+      name="plone.contentmenu.workflow"
+      />
 
-  <adapter for="* *"
-           name="plone.contentmenu.portletmanager"
-           factory=".menu.PortletManagerSubMenuItem"
-           provides=".interfaces.IContentMenuItem" />
+  <adapter
+      factory=".menu.PortletManagerSubMenuItem"
+      provides=".interfaces.IContentMenuItem"
+      for="*
+           *"
+      name="plone.contentmenu.portletmanager"
+      />
 
   <!-- A content provider showing the menu -->
 
   <adapter
+      factory=".view.ContentMenuProvider"
+      provides="zope.contentprovider.interfaces.IContentProvider"
       for="*
            zope.publisher.interfaces.browser.IDefaultBrowserLayer
            *"
-      factory=".view.ContentMenuProvider"
       name="plone.contentmenu"
-      provides="zope.contentprovider.interfaces.IContentProvider"
       />
 
   <!-- The displayviews menu used to register user-visible titles -->
@@ -109,9 +126,7 @@
   <browser:menu
       id="plone_displayviews"
       title="Zope3 Views used as selectable content views"
-      description="Menu listing Zope3 views registered for use as dynamic views
-                   on CMF Content. Currently the only purpose of this menu is
-                   the registration of user-visible titles for these views"
+      description="Menu listing Zope3 views registered for use as dynamic views                    on CMF Content. Currently the only purpose of this menu is                    the registration of user-visible titles for these views"
       class=".displayviewsmenu.DisplayViewsMenu"
       />
 

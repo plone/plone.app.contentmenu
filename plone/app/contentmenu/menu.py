@@ -36,8 +36,9 @@ from zope.component import getUtility
 from zope.component import queryMultiAdapter
 from zope.interface import implementer
 
-import pkg_resources
 import json
+import pkg_resources
+import plone.locking  # noqa: F401
 
 
 PMF = _  # used for dynamic messages we don't want to extract
@@ -51,7 +52,6 @@ except pkg_resources.DistributionNotFound:
 
 @implementer(IActionsSubMenuItem)
 class ActionsSubMenuItem(BrowserSubMenuItem):
-
     title = _("label_actions_menu", default="Actions")
     description = _(
         "title_actions_menu", default="Actions for the current content item"
@@ -131,7 +131,6 @@ class ActionsMenu(BrowserMenu):
 
 @implementer(IDisplaySubMenuItem)
 class DisplaySubMenuItem(BrowserSubMenuItem):
-
     title = _("label_choose_template", default="Display")
     submenuId = "plone_contentmenu_display"
     icon = "toolbar-action/display"
@@ -469,11 +468,9 @@ class DisplayMenu(BrowserMenu):
                                     "id": "contextSetDefaultPage",
                                     "separator": None,
                                     "class": "pat-plone-modal",
-                                    "modal": json.dumps({
-                                        "actionOptions": {
-                                            "redirectOnResponse": True,
-                                        },
-                                    }),
+                                    "modal": json.dumps(
+                                        {"actionOptions": {"redirectOnResponse": True}}
+                                    ),
                                 },
                                 "submenu": None,
                             }
@@ -534,11 +531,9 @@ class DisplayMenu(BrowserMenu):
                                     "id": "contextChangeDefaultPage",
                                     "separator": None,
                                     "class": "pat-plone-modal",
-                                    "modal": json.dumps({
-                                        "actionOptions": {
-                                            "redirectOnResponse": True,
-                                        },
-                                    }),
+                                    "modal": json.dumps(
+                                        {"actionOptions": {"redirectOnResponse": True}}
+                                    ),
                                 },
                                 "submenu": None,
                             }
@@ -549,7 +544,6 @@ class DisplayMenu(BrowserMenu):
 
 @implementer(IFactoriesSubMenuItem)
 class FactoriesSubMenuItem(BrowserSubMenuItem):
-
     title = _("label_add_new_item", default="Add new\u2026")
     submenuId = "plone_contentmenu_factory"
     icon = "toolbar-action/factories"
@@ -736,7 +730,6 @@ class FactoriesMenu(BrowserMenu):
 
 @implementer(IWorkflowSubMenuItem)
 class WorkflowSubMenuItem(BrowserSubMenuItem):
-
     MANAGE_SETTINGS_PERMISSION = "Manage portal"
 
     title = _("label_state", default="State:")
@@ -810,7 +803,6 @@ class WorkflowSubMenuItem(BrowserSubMenuItem):
 
 @implementer(IWorkflowMenu)
 class WorkflowMenu(BrowserMenu):
-
     # BBB: These actions (url's) existed in old workflow definitions
     # but were never used. The scripts they reference don't exist in
     # a standard installation. We allow the menu to fail gracefully
@@ -927,7 +919,6 @@ class WorkflowMenu(BrowserMenu):
 
 @implementer(IPortletManagerSubMenuItem)
 class PortletManagerSubMenuItem(BrowserSubMenuItem):
-
     MANAGE_SETTINGS_PERMISSION = "Portlets: Manage portlets"
 
     title = _("manage_portlets_link", default="Manage portlets")
@@ -1025,7 +1016,7 @@ class PortletManagerMenu(BrowserMenu):
                 ),
                 "description": manager_name,
                 "action": addTokenToUrl(
-                    "{}/@@topbar-manage-portlets/{}".format(current_url, manager_name),
+                    f"{current_url}/@@topbar-manage-portlets/{manager_name}",
                     request,
                 ),
                 "selected": False,

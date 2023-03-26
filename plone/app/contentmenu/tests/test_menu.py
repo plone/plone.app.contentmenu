@@ -6,23 +6,18 @@ from plone.app.contentmenu.interfaces import IPortletManagerMenu
 from plone.app.contentmenu.interfaces import IWorkflowMenu
 from plone.app.contentmenu.testing import PLONE_APP_CONTENTMENU_DX_INTEGRATION_TESTING
 from plone.app.contenttypes.testing import set_browserlayer
-from plone.app.testing import applyProfile
-from plone.app.testing import login
 from plone.app.testing import logout
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.base.interfaces import INonStructuralFolder
 from plone.base.interfaces import ISelectableConstrainTypes
 from plone.base.utils import get_installer
-from plone.base.utils import unrestricted_construct_instance
-from plone.locking.interfaces import ILockable
 from Products.CMFCore.Expression import Expression
 from Products.CMFCore.utils import getToolByName
 from zope.browsermenu.interfaces import IBrowserMenu
 from zope.component import getUtility
 from zope.interface import directlyProvides
 
-import pkg_resources
 import unittest
 
 
@@ -43,7 +38,6 @@ class DummyFolder(Folder):
 
 
 class TestActionsMenu(unittest.TestCase):
-
     layer = PLONE_APP_CONTENTMENU_DX_INTEGRATION_TESTING
 
     def setUp(self):
