@@ -54,7 +54,21 @@
             tal:condition="submenu | nothing"
         >
           <li>
-            <h6 class="dropdown-header">${menuItem/title}</h6>
+            <h6 class="dropdown-header">
+              ${menuItem/title}
+              <tal:show-state-if-top tal:condition="python:toolbar_pos == 'top'">
+                <span class="${state_class}"
+                      tal:define="
+                        state_class menuItem/extra/class | nothing;
+                        state_class python:'label-%s' % state_class if state_class else '';
+                        state_title menuItem/extra/stateTitle|nothing;
+                      "
+                      tal:condition="state_title"
+                >
+                ${state_title}
+                </span>
+              </tal:show-state-if-top>
+            </h6>
           </li>
           <li tal:repeat="subMenuItem submenu">
             <tal:block define="
