@@ -113,7 +113,7 @@ class ActionsMenu(BrowserMenu):
             results.append(
                 {
                     "title": action["title"],
-                    "description": "",
+                    "description": action.get("description", ""),
                     "action": addTokenToUrl(action["url"], request),
                     "selected": False,
                     "icon": icon,
