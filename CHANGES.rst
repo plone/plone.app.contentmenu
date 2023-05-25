@@ -8,6 +8,18 @@ Changelog
 
 .. towncrier release notes start
 
+3.0.2 (2023-05-25)
+------------------
+
+Bug fixes:
+
+
+- Add description to actions' menu items
+  [kshitiz305] (#24)
+- Show workflow state title also when the toolbar is at the top.
+  [maurits] (#49)
+
+
 3.0.1 (2023-04-06)
 ------------------
 
