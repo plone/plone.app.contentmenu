@@ -4,3 +4,6 @@
 [meta]
 template = "default"
 commit-id = "7723aeaf"
+
+[pyproject]
+dependencies_ignores = "['Products.CMFPlacefulWorkflow', ]"
