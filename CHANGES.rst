@@ -8,6 +8,22 @@ Changelog
 
 .. towncrier release notes start
 
+3.0.3 (2023-09-14)
+------------------
+
+Bug fixes:
+
+
+- Fix "Add item to default page" modal form. [sverbois] (#54)
+
+
+Internal:
+
+
+- Update configuration files.
+  [plone devs] (7723aeaf)
+
+
 3.0.2 (2023-05-25)
 ------------------
 
