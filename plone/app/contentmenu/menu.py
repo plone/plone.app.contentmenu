@@ -711,6 +711,9 @@ class FactoriesMenu(BrowserMenu):
                         "id": "plone-contentmenu-add-to-default-page",
                         "separator": None,
                         "class": "pat-plone-modal",
+                        "modal": json.dumps(
+                            {"actionOptions": {"disableAjaxFormSubmit": True}}
+                        ),
                     },
                     "submenu": None,
                 }
