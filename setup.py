@@ -51,7 +51,6 @@ setup(
         "plone.protect >= 3.0.0",
         "plone.portlets",
         "plone.registry",
-        "zope.browsermenu",
-        "zope.contentprovider",
+        "Zope",
     ],
 )
