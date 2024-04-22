@@ -19,7 +19,7 @@
            aria-expanded="${python:'false' if submenu else ''}"
            href="#"
            data-bs-offset="0,0"
-           data-bs-toggle="dropdown"
+           data-bs-toggle="${python: 'dropdown' if submenu else ''}"
            tal:define="
              state_class menuItem/extra/class | nothing;
              state_class python:'label-%s' % state_class if state_class else '';
