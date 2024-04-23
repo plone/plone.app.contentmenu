@@ -8,6 +8,23 @@ Changelog
 
 .. towncrier release notes start
 
+3.0.4 (2024-04-23)
+------------------
+
+Bug fixes:
+
+
+- Check if "dropdown" is needed for menu items.
+  [szakitibi] (#61)
+
+
+Internal:
+
+
+- Update configuration files.
+  [plone devs] (6e36bcc4)
+
+
 3.0.3 (2023-09-14)
 ------------------
 
