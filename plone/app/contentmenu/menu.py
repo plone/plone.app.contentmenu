@@ -893,6 +893,11 @@ class WorkflowMenu(BrowserMenu):
                         "id": "workflow-transition-advanced",
                         "separator": "actionSeparator",
                         "class": "pat-plone-modal",
+                        "modal": json.dumps(
+                            {
+                                "modalSizeClass": "modal-xl",
+                            }
+                        ),
                     },
                     "submenu": None,
                 }
