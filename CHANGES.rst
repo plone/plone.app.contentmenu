@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+3.0.5 (2024-07-30)
+------------------
+
+Bug fixes:
+
+
+- Wider ``content_status_history`` modal.
+  [petschki] (#67)
+
+
 3.0.4 (2024-04-23)
 ------------------
 
