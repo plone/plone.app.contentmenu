@@ -896,7 +896,7 @@ class WorkflowMenu(BrowserMenu):
                         "modal": json.dumps(
                             {
                                 "modalSizeClass": "modal-xl",
-                                "actionOptions": {"redirectOnResponse": True}
+                                "actionOptions": {"redirectOnResponse": True},
                             }
                         ),
                     },
