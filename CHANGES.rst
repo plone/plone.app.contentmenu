@@ -8,6 +8,15 @@ Changelog
 
 .. towncrier release notes start
 
+3.0.6 (2024-08-21)
+------------------
+
+Bug fixes:
+
+
+- Fixes pat-plone-modal redirection issue after changing state from content menu [rohnsha0] (#3989)
+
+
 3.0.5 (2024-07-30)
 ------------------
 
