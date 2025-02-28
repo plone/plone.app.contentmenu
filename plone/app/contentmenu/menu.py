@@ -3,6 +3,8 @@ from Acquisition import aq_base
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from html import escape
+from importlib.metadata import distribution
+from importlib.metadata import PackageNotFoundError
 from operator import itemgetter
 from plone.app.content.browser.folderfactories import _allowedTypes
 from plone.app.contentmenu import PloneMessageFactory as _
@@ -37,16 +39,15 @@ from zope.component import queryMultiAdapter
 from zope.interface import implementer
 
 import json
-import pkg_resources
 import plone.locking  # noqa: F401
 
 
 PMF = _  # used for dynamic messages we don't want to extract
 
 try:
-    pkg_resources.get_distribution("Products.CMFPlacefulWorkflow")
+    distribution("Products.CMFPlacefulWorkflow")
     from Products.CMFPlacefulWorkflow.permissions import ManageWorkflowPolicies
-except pkg_resources.DistributionNotFound:
+except PackageNotFoundError:
     from Products.CMFCore.permissions import ManagePortal as ManageWorkflowPolicies
 
 
