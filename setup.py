@@ -38,7 +38,6 @@ setup(
         ]
     ),
     install_requires=[
-        "setuptools",
         "plone.base",
         "plone.locking",
         "plone.memoize",
