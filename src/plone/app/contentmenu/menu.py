@@ -41,7 +41,6 @@ from zope.interface import implementer
 import json
 import plone.locking  # noqa: F401
 
-
 PMF = _  # used for dynamic messages we don't want to extract
 
 try:
